@@ -38,7 +38,11 @@ function renderNews() {
         </div>
         <div class="news-body">
           <span class="news-cat-tag">${item.category}</span>
-          <div class="news-title-text">${item.title}</div>
+          <<div class="news-title-text">
+           <a href="${item.link}" target="_blank">
+                 ${item.title}
+          </a>
+          </div>
           <div class="news-excerpt">${item.content.replace(/\n/g, ' ')}</div>
         </div>
       </article>
