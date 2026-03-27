@@ -439,3 +439,15 @@ footer { background: #1E0E08; color: rgba(255,255,255,0.6); }
     background-position: center 30%;
   }
 }
+
+.committee-img-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.committee-img-wrapper img {
+  max-width: 50%;
+  height: auto;
+  border-radius: 8px;
+}
