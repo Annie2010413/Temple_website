@@ -20,4 +20,12 @@ const NEWS = [
     image: "",
     link: "https://www.facebook.com/share/p/14Xbg4LfsjC/"
   },
+  {
+    date: "2026/01/01",
+    category: "活動",
+    title: "🌸 白沙屯媽祖元旦蒞臨三重繞境進香 🌸",
+    content: "欣逢元旦佳節，恭迎 白沙屯拱天宮 天上聖母蒞臨新北三重，舉行盛大繞境進香活動，並駐駕 三重海清宮，為地方祈福佑民。",
+    image: "",
+    link: "https://www.facebook.com/share/p/18M9jqLXXa/"
+  },
 ];
