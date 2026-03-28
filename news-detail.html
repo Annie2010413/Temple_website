@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>最新消息詳情</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV（可選：你可以直接複製 index.html 的 navbar） -->
+
+  <section class="section section-white">
+    <div class="container">
+
+      <!-- 返回 -->
+      <button class="news-more-btn" onclick="history.back()">← 返回列表</button>
+
+      <!-- 標題 -->
+      <div class="section-header" style="margin-top: 20px;">
+        <div id="category" class="section-tag"></div>
+        <h1 id="title" class="section-title"></h1>
+        <div class="section-rule"></div>
+        <p id="date" style="margin-top:10px; color: var(--text-light);"></p>
+      </div>
+
+      <!-- 內容 -->
+      <div id="content" style="
+        max-width: 700px;
+        margin: 0 auto;
+        font-size: 1.05rem;
+        line-height: 2;
+        color: var(--text-mid);
+        white-space: pre-line;
+      "></div>
+
+    </div>
+  </section>
+
+  <script src="js/news.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("id"));
+
+    const news = NEWS.find(n => n.id === id);
+
+    if (news) {
+      document.getElementById("title").innerText = news.title;
+      document.getElementById("date").innerText = news.date;
+      document.getElementById("category").innerText = news.category;
+      document.getElementById("content").innerText = news.detail;
+    }
+  </script>
+
+</body>
+</html>

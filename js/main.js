@@ -31,17 +31,17 @@ function renderNews() {
     const month  = (parts[0] || '') + '/' + (parts[1] || '');
 
     return `
-      <article class="news-card reveal">
+      <article class="news-card reveal" onclick="handleClick(${item.id})">
         <div class="news-date-badge">
           <div class="nb-day">${day}</div>
           <div class="nb-month">${month}</div>
         </div>
         <div class="news-body">
           <span class="news-cat-tag">${item.category}</span>
-          <<div class="news-title-text">
-           <a href="${item.link}" target="_blank">
-                 ${item.title}
-          </a>
+          <div class="news-title-text">
+           <div class="news-title-text">
+            ${item.title}
+           </div>
           </div>
           <div class="news-excerpt">${item.content.replace(/\n/g, ' ')}</div>
         </div>
@@ -85,3 +85,19 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMarquee();
   observeReveal();
 });
+
+
+function handleClick(id) {
+  const item = NEWS.find(n => n.id === id);
+
+  if (!item) return;
+
+  // 👉 有 link → 開 FB
+  if (item.link) {
+    window.open(item.link, '_blank');
+  } 
+  // 👉 沒 link → 進 detail 頁
+  else {
+    window.location.href = `news-detail.html?id=${id}`;
+  }
+}
