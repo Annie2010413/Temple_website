@@ -317,7 +317,7 @@ a  { color: inherit; text-decoration: none; }
 }
 .deity-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
 .deity-icon  { font-size: 2.8rem; margin-bottom: 12px; }
-.deity-name  { font-size: 1.3rem; font-weight: 900; color: var(--red); letter-spacing: 0.12em; margin-bottom: 4px; }
+.deity-name  { font-size: 1.5rem; font-weight: 900; color: var(--red); letter-spacing: 0.12em; margin-bottom: 4px; }
 .deity-epithet { font-size: 1rem; color: var(--text-light); letter-spacing: 0.14em; margin-bottom: 10px; }
 .deity-desc  { font-size: 1.1rem; color: var(--text-mid); line-height: 1.85; }
 
