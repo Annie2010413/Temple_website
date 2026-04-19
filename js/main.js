@@ -27,7 +27,8 @@ function renderNews() {
 
   container.innerHTML = NEWS.map(item => {
     const parts  = item.date.split('/');
-    const day    = parts[2] || '';
+    // 這裡維持你要求的格式：15-16 與 2026/08
+    const day    = parts[2] || ''; 
     const month  = (parts[0] || '') + '/' + (parts[1] || '');
 
     return `
@@ -38,17 +39,12 @@ function renderNews() {
         </div>
         <div class="news-body">
           <span class="news-cat-tag">${item.category}</span>
-          <div class="news-title-text">
-           <div class="news-title-text">
-            ${item.title}
-           </div>
-          </div>
+          <div class="news-title-text">${item.title}</div>
           <div class="news-excerpt">${item.content.replace(/\n/g, ' ')}</div>
         </div>
       </article>
     `;
   }).join('');
-
   observeReveal();
 }
 
