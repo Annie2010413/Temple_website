@@ -23,64 +23,31 @@
         <p id="date" style="margin-top:10px; color: var(--text-light);"></p>
       </div>
 
+      <!-- 內容 -->
       <div id="content" style="
         max-width: 850px;
         margin: 0 auto;
         font-size: 2.3rem;
         line-height: 2;
-        color: var(--text-mid);
+        color: solid var(--text-mid);
         white-space: pre-line;
       "></div>
-
-    <div id="detail-img-wrapper" style="
-    display: none;          /* 預設隱藏，由 JS 控制顯示 */
-    justify-content: center; /* 水平置中 */
-    align-items: center;     /* 垂直置中（如有高度需求） */
-    width: 100%;            /* 寬度撐滿 */
-    margin: 30px 0;         /* 上下留白 */
-    ">
-    <img id="news-image" src="" alt="進香行程" style="
-      max-width: 100%;       /* 避免圖片超出螢幕 */
-      height: auto;          /* 比例縮放 */
-      display: block;        /* 消除下方空隙並允許 margin auto */
-      margin: 0 auto;        /* 再次確保居中 */
-      border-radius: 12px; 
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    ">
-    </div>
-      
-      
 
     </div>
   </section>
 
-  <script src="js/news.js"></script> 
-
+  <script src="js/news.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const id = Number(params.get("id"));
 
-    // 現在有了上面的 script，這裡才抓得到 NEWS
     const news = NEWS.find(n => n.id === id);
 
     if (news) {
       document.getElementById("title").innerText = news.title;
       document.getElementById("date").innerText = news.date;
       document.getElementById("category").innerText = news.category;
-      document.getElementById("content").innerText = news.detail || news.content;
-
-      const imgWrapper = document.getElementById("detail-img-wrapper");
-      const imgTag = document.getElementById("news-image");
-
-      if (news.image && news.image !== "") {
-        // 確保路徑正確，如果圖在根目錄就直接用 news.image
-        imgTag.src = news.image;        
-        imgWrapper.style.display = "block";
-      } else {
-        imgWrapper.style.display = "none";
-      }
-    } else {
-      document.getElementById("content").innerText = "找不到相關訊息";
+      document.getElementById("content").innerText = news.detail;
     }
   </script>
 
