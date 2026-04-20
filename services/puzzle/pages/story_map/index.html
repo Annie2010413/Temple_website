@@ -112,9 +112,9 @@
 <div class="inline-block bg-primary px-3 py-1 mb-4">
 <span class="text-on-primary text-[10px] uppercase tracking-[0.2em] font-headline">The Sacred Journey</span>
 </div>
-<h1 class="text-4xl md:text-6xl font-headline font-bold text-primary mb-4 tracking-tight">森羅殿之試：關卡地圖</h1>
+<h1 class="text-4xl md:text-6xl font-headline font-bold text-primary mb-4 tracking-tight">森羅殿之試：故事地圖</h1>
 <p class="text-lg text-on-surface-variant font-body leading-relaxed italic">
-                    「天理昭彰，報應不爽。」穿越時空的迷霧，揭開包公神像背後的塵封往事。每一道關卡，都是對智慧與正義的考驗。
+                    「天理昭彰，報應不爽。」沿著故事軸線追尋包公靈印的真相，每一章都是下一道試煉的前奏。
                 </p>
 </div>
 <div class="hidden md:block">
@@ -137,11 +137,11 @@
 </div>
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
 <div>
-<h2 class="text-2xl font-headline font-bold text-primary mb-1">第一關：神諭初現</h2>
-<p class="text-secondary font-body">於海清宮正殿尋找失落的密文，啟動包公靈印。</p>
+<h2 class="text-2xl font-headline font-bold text-primary mb-1">第一章：冥府之鑰</h2>
+<p class="text-secondary font-body">接下地府請託，故事正式展開。</p>
 </div>
 <div class="flex items-center gap-2 text-primary font-headline tracking-widest text-sm group-hover:gap-4 transition-all">
-                            立即挑戰 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                            立即閱讀 <span class="material-symbols-outlined text-lg">arrow_forward</span>
 </div>
 </div>
 </div>
@@ -156,7 +156,7 @@
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
-<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第二關：青天斷獄</h3>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第二章：殿門銅環</h3>
 <p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
 </div>
 </div>
@@ -171,7 +171,7 @@
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
-<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第三關：五鼠鬧東京</h3>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第三章：影牆密文</h3>
 <p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
 </div>
 </div>
@@ -186,7 +186,7 @@
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
-<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第四關：貍貓換太子</h3>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第四章：判官之秤</h3>
 <p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
 </div>
 </div>
@@ -197,8 +197,8 @@
 <div class="w-20 h-20 mb-6 flex items-center justify-center border border-outline-variant/50 rotate-45 group-hover:rotate-90 transition-transform duration-500">
 <span class="material-symbols-outlined text-4xl text-outline -rotate-45 group-hover:-rotate-90 transition-transform duration-500">token</span>
 </div>
-<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">終局：森羅歸位</h3>
-<p class="text-xs text-secondary font-headline tracking-widest uppercase mb-4">Ultimate Challenge</p>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第五章：鐘樓回音</h3>
+<p class="text-xs text-secondary font-headline tracking-widest uppercase mb-4">Story Archive</p>
 <div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">
                         未解鎖
                     </div>
@@ -237,4 +237,52 @@
             © 海清宮 Pao Kung Temple. All Rights Reserved.
         </p>
 </footer>
+<script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      return Math.max(1, Number(stored.unlockedStory) || 1);
+    } catch (_error) {
+      return 1;
+    }
+  }
+
+  function applyStoryMapState() {
+    const unlocked = Math.min(getProgress(), 5);
+    const progressText = document.querySelector("main .text-right span.block");
+    if (progressText) {
+      progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;
+    }
+
+    const mapGrid = document.querySelector("main .grid");
+    if (!mapGrid) return;
+    const cards = Array.from(mapGrid.children).slice(0, 5);
+
+    cards.forEach((card, index) => {
+      const chapter = index + 1;
+      const isUnlocked = chapter <= unlocked;
+      const target = `../story/index.html?chapter=${chapter}`;
+
+      if (isUnlocked) {
+        card.classList.add("cursor-pointer");
+        card.onclick = () => { window.location.href = target; };
+
+        const lockedVisual = card.querySelector(".material-symbols-outlined");
+        if (lockedVisual && lockedVisual.textContent.trim() === "lock") {
+          lockedVisual.textContent = "menu_book";
+        }
+        const hintText = card.querySelector("p.text-sm, p.text-xs");
+        if (hintText && hintText.textContent.includes("需完成")) {
+          hintText.textContent = "已解鎖，點擊閱讀";
+        }
+      } else {
+        card.onclick = null;
+      }
+    });
+  }
+
+  applyStoryMapState();
+</script>
 </body></html>

@@ -167,12 +167,13 @@
                         </h4>
 <p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-4">請輸入四位數字年份 (例如：1738)</p>
 <div class="relative">
-<input class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-2xl tracking-[1rem] py-3 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
+<input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-2xl tracking-[1rem] py-3 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
 </div>
 </div>
-<button class="w-full bg-primary text-on-primary py-4 font-headline font-bold tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
+<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-4 font-headline font-bold tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
                         提交驗證
                     </button>
+<p id="challenge-feedback" class="text-sm font-headline tracking-wide text-secondary"></p>
 <div class="flex justify-between items-center px-2">
 <div class="flex items-center gap-2 text-xs text-secondary">
 <span class="material-symbols-outlined text-sm">trending_up</span>
@@ -215,6 +216,29 @@
 </div>
 </footer>
 <script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    const defaults = { unlockedStory: 1, unlockedChallenge: 1 };
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      return {
+        unlockedStory: Math.max(1, Number(stored.unlockedStory) || 1),
+        unlockedChallenge: Math.max(1, Number(stored.unlockedChallenge) || 1)
+      };
+    } catch (_error) {
+      return defaults;
+    }
+  }
+
+  function saveProgress(progress) {
+    localStorage.setItem(GAME_PROGRESS_KEY, JSON.stringify(progress));
+  }
+
+  function normalizeAnswer(value) {
+    return value.replace(/\s+/g, "").toLowerCase();
+  }
+
   async function loadChallengeStage() {
     const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
     const response = await fetch("./challenges.json");
@@ -223,8 +247,15 @@
     }
 
     const stages = await response.json();
-    const stage = stages[String(stageNumber)] || stages["1"];
     const maxStage = Math.max(...Object.keys(stages).map(Number));
+    const progress = getProgress();
+    const allowedStage = Math.min(Math.max(stageNumber, 1), Math.max(progress.unlockedChallenge, 1));
+    const stage = stages[String(allowedStage)] || stages["1"];
+
+    if (allowedStage !== stageNumber) {
+      window.location.replace(`./index.html?stage=${allowedStage}`);
+      return;
+    }
 
     document.getElementById("challenge-level").textContent = stage.level;
     document.getElementById("challenge-title").textContent = stage.title;
@@ -265,6 +296,36 @@
       nextLink.href = `./index.html?stage=${stageNumber + 1}`;
       nextLink.textContent = "下一關";
     }
+
+    const input = document.getElementById("challenge-answer-input");
+    const submitButton = document.getElementById("challenge-submit-btn");
+    const feedback = document.getElementById("challenge-feedback");
+    const expectedAnswer = normalizeAnswer(stage.answer || "");
+
+    submitButton.onclick = () => {
+      const userAnswer = normalizeAnswer(input.value || "");
+      if (!userAnswer) {
+        feedback.textContent = "請先輸入答案。";
+        feedback.className = "text-sm font-headline tracking-wide text-secondary";
+        return;
+      }
+      if (userAnswer !== expectedAnswer) {
+        feedback.textContent = "答案不正確，再檢查一次線索。";
+        feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        return;
+      }
+
+      const latest = getProgress();
+      latest.unlockedChallenge = Math.max(latest.unlockedChallenge, Math.min(stageNumber + 1, maxStage));
+      latest.unlockedStory = Math.max(latest.unlockedStory, stageNumber + 1);
+      saveProgress(latest);
+
+      feedback.textContent = "答對了！正在前往下一段故事...";
+      feedback.className = "text-sm font-headline tracking-wide text-green-700";
+      setTimeout(() => {
+        window.location.href = `../story/index.html?chapter=${Math.min(stageNumber + 1, 7)}`;
+      }, 700);
+    };
   }
 
   loadChallengeStage().catch(() => {

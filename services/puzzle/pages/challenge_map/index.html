@@ -237,4 +237,67 @@
             © 海清宮 Pao Kung Temple. All Rights Reserved.
         </p>
 </footer>
+<script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      const unlockedChallenge = Math.max(1, Number(stored.unlockedChallenge) || 1);
+      const unlockedStory = Math.max(1, Number(stored.unlockedStory) || 1);
+      return Math.max(unlockedChallenge, unlockedStory - 1);
+    } catch (_error) {
+      return 1;
+    }
+  }
+
+  function applyChallengeMapState() {
+    const unlocked = Math.min(getProgress(), 5);
+    const progressText = document.querySelector("main .text-right span.block");
+    if (progressText) {
+      progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;
+    }
+
+    const mapGrid = document.querySelector("main .grid");
+    if (!mapGrid) return;
+    const cards = Array.from(mapGrid.children).slice(0, 5);
+
+    cards.forEach((card, index) => {
+      const stage = index + 1;
+      const isUnlocked = stage <= unlocked;
+      const target = `../challenge/index.html?stage=${stage}`;
+      const imageWrapper = card.querySelector(".h-48");
+      const lockIcon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
+        .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "lock_open");
+      const hintText = card.querySelector("p.text-sm, p.text-xs");
+
+      if (isUnlocked) {
+        card.classList.add("cursor-pointer");
+        card.onclick = () => { window.location.href = target; };
+
+        if (imageWrapper) {
+          imageWrapper.classList.remove("grayscale", "opacity-40");
+        }
+        if (lockIcon) {
+          lockIcon.textContent = "lock_open";
+          lockIcon.classList.add("text-primary");
+        }
+        if (hintText) {
+          hintText.textContent = "已解鎖，點擊前往";
+        }
+      } else {
+        card.onclick = null;
+        if (imageWrapper) {
+          imageWrapper.classList.add("grayscale", "opacity-40");
+        }
+        if (lockIcon) {
+          lockIcon.textContent = "lock";
+          lockIcon.classList.remove("text-primary");
+        }
+      }
+    });
+  }
+
+  applyChallengeMapState();
+</script>
 </body></html>

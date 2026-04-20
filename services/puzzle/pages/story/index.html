@@ -181,6 +181,20 @@
 </div>
 </footer>
 <script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      return {
+        unlockedStory: Math.max(1, Number(stored.unlockedStory) || 1),
+        unlockedChallenge: Math.max(1, Number(stored.unlockedChallenge) || 1)
+      };
+    } catch (_error) {
+      return { unlockedStory: 1, unlockedChallenge: 1 };
+    }
+  }
+
   async function loadStoryChapter() {
     const chapterNumber = Number(new URLSearchParams(window.location.search).get("chapter")) || 1;
     const response = await fetch("./chapters.json");
@@ -188,9 +202,15 @@
       throw new Error("Failed to load chapters.json");
     }
     const chapters = await response.json();
-    const chapter = chapters[String(chapterNumber)] || chapters["1"];
+    const progress = getProgress();
+    const allowedChapter = Math.min(Math.max(chapterNumber, 1), Math.max(progress.unlockedStory, 1));
+    const chapter = chapters[String(allowedChapter)] || chapters["1"];
     const maxChapter = Math.max(...Object.keys(chapters).map(Number));
-    const isLastChapter = chapterNumber >= maxChapter;
+
+    if (allowedChapter !== chapterNumber) {
+      window.location.replace(`./index.html?chapter=${allowedChapter}`);
+      return;
+    }
 
     document.getElementById("chapter-title").textContent = chapter.title;
     document.getElementById("chapter-badge").textContent = chapter.badge;
@@ -209,7 +229,7 @@
     const prevLink = document.getElementById("story-prev-link");
     const prevText = document.getElementById("story-prev-text");
 
-    if (chapterNumber <= 1) {
+    if (allowedChapter <= 1) {
       prevLink.style.visibility = "hidden";
       prevLink.setAttribute("aria-hidden", "true");
       prevLink.setAttribute("tabindex", "-1");
@@ -217,16 +237,19 @@
       prevLink.style.visibility = "visible";
       prevLink.removeAttribute("aria-hidden");
       prevLink.removeAttribute("tabindex");
-      prevLink.href = `./index.html?chapter=${chapterNumber - 1}`;
-      prevText.textContent = `返回上一章（第 ${chapterNumber - 1} 章）`;
+      prevLink.href = `./index.html?chapter=${allowedChapter - 1}`;
+      prevText.textContent = `返回上一章（第 ${allowedChapter - 1} 章）`;
     }
 
-    if (isLastChapter) {
-      nextLink.href = "../challenge/index.html";
-      nextText.textContent = "進入挑戰：開啟第一關";
+    if (allowedChapter <= 5) {
+      nextLink.href = `../challenge/index.html?stage=${allowedChapter}`;
+      nextText.textContent = `進入挑戰：第 ${allowedChapter} 關`;
+    } else if (allowedChapter >= maxChapter) {
+      nextLink.href = "../challenge_map/index.html";
+      nextText.textContent = "前往關卡地圖";
     } else {
-      nextLink.href = `./index.html?chapter=${chapterNumber + 1}`;
-      nextText.textContent = `前往下一章（第 ${chapterNumber + 1} 章）`;
+      nextLink.href = `./index.html?chapter=${allowedChapter + 1}`;
+      nextText.textContent = `前往下一章（第 ${allowedChapter + 1} 章）`;
     }
   }
 
