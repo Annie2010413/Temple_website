@@ -98,6 +98,7 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
+<div id="user-nav-slot"></div>
 </nav>
 
 </div>
@@ -178,20 +179,9 @@
 </div>
 </div>
 </footer>
+<script src="../../js/state.js"></script>
+<script src="../../js/nav-user.js"></script>
 <script>
-  const GAME_PROGRESS_KEY = "puzzle_game_progress";
-
-  function getProgress() {
-    try {
-      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
-      return {
-        unlockedStory: Math.max(1, Number(stored.unlockedStory) || 1),
-        unlockedChallenge: Math.max(1, Number(stored.unlockedChallenge) || 1)
-      };
-    } catch (_error) {
-      return { unlockedStory: 1, unlockedChallenge: 1 };
-    }
-  }
 
   async function loadStoryChapter() {
     const chapterNumber = Number(new URLSearchParams(window.location.search).get("chapter")) || 1;
@@ -200,7 +190,7 @@
       throw new Error("Failed to load chapters.json");
     }
     const chapters = await response.json();
-    const progress = getProgress();
+    const progress = await window.PuzzleState.getProgress();
     const allowedChapter = Math.min(Math.max(chapterNumber, 1), Math.max(progress.unlockedStory, 1));
     const chapter = chapters[String(allowedChapter)] || chapters["1"];
     const maxChapter = Math.max(...Object.keys(chapters).map(Number));
@@ -248,6 +238,15 @@
     } else {
       nextLink.href = `./index.html?chapter=${allowedChapter + 1}`;
       nextText.textContent = `前往下一章（第 ${allowedChapter + 1} 章）`;
+      if (allowedChapter === 6) {
+        nextLink.onclick = async (event) => {
+          event.preventDefault();
+          await window.PuzzleState.updateProgress({ unlockedStory: 7, unlockedChallenge: 5 });
+          window.location.href = "./index.html?chapter=7";
+        };
+      } else {
+        nextLink.onclick = null;
+      }
     }
   }
 

@@ -89,16 +89,17 @@
     box-shadow: 0 32px 64px -12px rgba(139, 46, 46, 0.08)
     }</style>
 </head>
-<body class="text-on-surface font-body parchment-texture selection:bg-primary-container selection:text-on-primary bg-background-light">
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
-<header class="bg-background-light/95 backdrop-blur-sm dark:bg-background-dark border-b border-primary/10 fixed top-0 left-0 right-0 z-50">
+<header class="bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20 fixed top-0 left-0 right-0 z-50">
 <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest uppercase">海清宮</div>
-<div class="hidden md:flex gap-8 items-center">
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div class="text-xl font-bold text-[#6c171a] font-headline tracking-widest">海清宮</div>
+<div class="hidden md:flex gap-8 items-center font-['Noto_Serif'] font-bold tracking-widest text-sm">
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#6c171a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div id="user-nav-slot"></div>
 </div>
 
 </nav>
@@ -238,22 +239,13 @@
             © 海清宮 Pao Kung Temple. All Rights Reserved.
         </p>
 </footer>
+<script src="../../js/state.js"></script>
+<script src="../../js/nav-user.js"></script>
 <script>
-  const GAME_PROGRESS_KEY = "puzzle_game_progress";
 
-  function getProgress() {
-    try {
-      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
-      const unlockedChallenge = Math.max(1, Number(stored.unlockedChallenge) || 1);
-      const unlockedStory = Math.max(1, Number(stored.unlockedStory) || 1);
-      return Math.max(unlockedChallenge, unlockedStory - 1);
-    } catch (_error) {
-      return 1;
-    }
-  }
-
-  function applyChallengeMapState() {
-    const unlocked = Math.min(getProgress(), 5);
+  async function applyChallengeMapState() {
+    const progress = await window.PuzzleState.getProgress();
+    const unlocked = Math.min(Math.max(progress.unlockedChallenge, progress.unlockedStory - 1), 5);
     const progressText = document.querySelector("main .text-right span.block");
     if (progressText) {
       progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;

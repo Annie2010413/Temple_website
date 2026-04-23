@@ -91,7 +91,7 @@
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
-<header class="sticky top-0 z-50 bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15">
+<header class="sticky top-0 z-50 bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20">
 <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
 <div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">
                 海清宮
@@ -101,6 +101,7 @@
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1 hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div id="user-nav-slot"></div>
 </div>
 
 </nav>
@@ -120,12 +121,22 @@
                         穿梭於古老廟宇的紅牆綠瓦間，解開塵封百年的神祕圖騰，一場結合歷史文化與實境解謎的奇幻旅程。
                     </p>
 <div class="flex flex-wrap gap-4">
-<a href="../challenge/index.html" class="inline-block bg-primary text-on-primary px-10 py-4 rounded-sm font-headline text-lg tracking-widest transition-all hover:brightness-110 editorial-shadow">
+<a href="../story/index.html?chapter=1" class="inline-block bg-primary text-on-primary px-10 py-4 rounded-sm font-headline text-lg tracking-widest transition-all hover:brightness-110 editorial-shadow">
                             即刻啟程
                         </a>
 <a href="../story/index.html" class="border border-primary/40 text-primary px-10 py-4 rounded-sm font-headline text-lg tracking-widest hover:bg-primary/5 transition-all">
                             探索故事
                         </a>
+</div>
+<div class="mt-4 flex flex-wrap items-stretch gap-3 text-sm">
+<button id="guest-start-btn" class="border border-primary/40 text-primary h-10 px-5 rounded-sm font-headline tracking-widest hover:bg-primary/5 transition-all">
+                            訪客模式開始
+                        </button>
+<div id="google-signin-container" class="h-10 flex items-center"></div>
+<button id="logout-btn" class="border border-primary/20 text-secondary h-10 px-5 rounded-sm font-headline tracking-widest hover:bg-primary/5 transition-all" style="display:none;">
+                            登出
+                        </button>
+<span id="auth-status" class="text-secondary">目前：訪客模式（僅本機儲存）</span>
 </div>
 </div>
 <div class="lg:col-span-5 relative">
@@ -204,4 +215,73 @@
             © 海清宮 Pao Kung Temple. All Rights Reserved.
         </div>
 </footer>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="../../js/auth-config.js"></script>
+<script src="../../js/state.js"></script>
+<script src="../../js/nav-user.js"></script>
+<script>
+  (function setupAuthEntry() {
+    const authStatus = document.getElementById("auth-status");
+    const guestBtn = document.getElementById("guest-start-btn");
+    const googleContainer = document.getElementById("google-signin-container");
+    const logoutBtn = document.getElementById("logout-btn");
+    const googleClientId = window.PUZZLE_GOOGLE_CLIENT_ID || "";
+
+    function refreshAuthStatus() {
+      const auth = window.PuzzleState.getAuth();
+      if (auth?.user?.name) {
+        authStatus.textContent = `目前：已登入 ${auth.user.name}（可跨裝置同步）`;
+        logoutBtn.style.display = "inline-block";
+      } else {
+        authStatus.textContent = "目前：訪客模式（僅本機儲存）";
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    guestBtn.onclick = () => {
+      window.location.href = "../story/index.html?chapter=1";
+    };
+
+    function setupGoogleButton() {
+      if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+        setTimeout(setupGoogleButton, 300);
+        return;
+      }
+      if (!googleClientId) {
+        authStatus.textContent = "請先在 services/puzzle/js/auth-config.js 設定 Google Client ID。";
+        return;
+      }
+
+      window.google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: async (response) => {
+          try {
+            await window.PuzzleState.signInWithGoogleIdToken(response.credential);
+            refreshAuthStatus();
+            document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
+          } catch (_error) {
+            authStatus.textContent = "Google 登入失敗，請確認後端與 Client ID 設定。";
+          }
+        }
+      });
+
+      window.google.accounts.id.renderButton(googleContainer, {
+        theme: "outline",
+        size: "large",
+        text: "signin_with",
+        shape: "rectangular",
+        width: 190
+      });
+    }
+
+    logoutBtn.onclick = () => {
+      window.PuzzleState.signOut();
+      refreshAuthStatus();
+      document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
+    };
+
+    refreshAuthStatus();
+    setupGoogleButton();
+  })();
+</script>
 </body></html>

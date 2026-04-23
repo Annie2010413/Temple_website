@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的進度｜海清宮實境解謎</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#fef9f1] text-[#1d1c17]">
+  <header class="sticky top-0 z-50 bg-[#fef9f1] border-b border-[#dcc0be]/40">
+    <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+      <div class="text-xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">海清宮</div>
+      <div class="hidden md:flex gap-8 items-center text-sm font-bold tracking-widest" style="font-family:'Noto Serif TC',serif;">
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map">遊戲關卡</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map">遊戲故事</a>
+        <div id="user-nav-slot"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">我的進度</h1>
+    <p id="profile-user" class="mt-2 text-[#755750]">讀取中...</p>
+
+    <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white border border-[#dcc0be] rounded p-5">
+        <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">故事進度</h2>
+        <p id="story-progress" class="mt-2 text-[#564241]">-</p>
+      </div>
+      <div class="bg-white border border-[#dcc0be] rounded p-5">
+        <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">關卡進度</h2>
+        <p id="challenge-progress" class="mt-2 text-[#564241]">-</p>
+      </div>
+    </section>
+
+    <section class="mt-6 bg-white border border-[#dcc0be] rounded p-5">
+      <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">快速操作</h2>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a id="continue-story" class="px-4 py-2 bg-[#6c171a] text-white rounded" href="../story/index.html?chapter=1">繼續故事</a>
+        <a id="continue-challenge" class="px-4 py-2 border border-[#6c171a] text-[#6c171a] rounded" href="../challenge/index.html?stage=1">繼續關卡</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../js/state.js"></script>
+  <script src="../../js/nav-user.js"></script>
+  <script>
+    (async function initProfile() {
+      const auth = window.PuzzleState.getAuth();
+      const progress = await window.PuzzleState.getProgress();
+
+      const userText = auth?.user?.name
+        ? `目前帳號：${auth.user.name}（${auth.user.email || "Google 登入"}）`
+        : "目前為訪客模式，進度僅儲存在本機。";
+
+      document.getElementById("profile-user").textContent = userText;
+      document.getElementById("story-progress").textContent = `已解鎖 ${progress.unlockedStory} / 7 章`;
+      document.getElementById("challenge-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 關`;
+
+      document.getElementById("continue-story").href = `../story/index.html?chapter=${Math.max(1, progress.unlockedStory)}`;
+      document.getElementById("continue-challenge").href = `../challenge/index.html?stage=${Math.max(1, progress.unlockedChallenge)}`;
+    })();
+  </script>
+</body>
+</html>

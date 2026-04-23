@@ -123,6 +123,7 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div id="user-nav-slot"></div>
 </div>
 
 </div>
@@ -245,25 +246,9 @@
             </p>
 </div>
 </footer>
+<script src="../../js/state.js"></script>
+<script src="../../js/nav-user.js"></script>
 <script>
-  const GAME_PROGRESS_KEY = "puzzle_game_progress";
-
-  function getProgress() {
-    const defaults = { unlockedStory: 1, unlockedChallenge: 1 };
-    try {
-      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
-      return {
-        unlockedStory: Math.max(1, Number(stored.unlockedStory) || 1),
-        unlockedChallenge: Math.max(1, Number(stored.unlockedChallenge) || 1)
-      };
-    } catch (_error) {
-      return defaults;
-    }
-  }
-
-  function saveProgress(progress) {
-    localStorage.setItem(GAME_PROGRESS_KEY, JSON.stringify(progress));
-  }
 
   function normalizeAnswer(value) {
     return value.replace(/\s+/g, "").toLowerCase();
@@ -278,7 +263,7 @@
 
     const stages = await response.json();
     const maxStage = Math.max(...Object.keys(stages).map(Number));
-    const progress = getProgress();
+    const progress = await window.PuzzleState.getProgress();
     const allowedStage = Math.min(Math.max(stageNumber, 1), Math.max(progress.unlockedChallenge, 1));
     const stage = stages[String(allowedStage)] || stages["1"];
 
@@ -338,7 +323,7 @@
     const feedback = document.getElementById("challenge-feedback");
     const expectedAnswer = normalizeAnswer(stage.answer || "");
 
-    submitButton.onclick = () => {
+    submitButton.onclick = async () => {
       const userAnswer = normalizeAnswer(input.value || "");
       if (!userAnswer) {
         feedback.textContent = "請先輸入答案。";
@@ -351,10 +336,11 @@
         return;
       }
 
-      const latest = getProgress();
-      latest.unlockedChallenge = Math.max(latest.unlockedChallenge, Math.min(stageNumber + 1, maxStage));
-      latest.unlockedStory = Math.max(latest.unlockedStory, stageNumber + 1);
-      saveProgress(latest);
+      const unlockedStoryTarget = stageNumber >= maxStage ? 7 : stageNumber + 1;
+      await window.PuzzleState.updateProgress({
+        unlockedChallenge: Math.min(stageNumber + 1, maxStage),
+        unlockedStory: unlockedStoryTarget
+      });
 
       feedback.textContent = "答對了！正在前往下一段故事...";
       feedback.className = "text-sm font-headline tracking-wide text-green-700";
