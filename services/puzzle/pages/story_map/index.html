@@ -262,21 +262,31 @@
       const chapter = index + 1;
       const isUnlocked = chapter <= unlocked;
       const target = `../story/index.html?chapter=${chapter}`;
+      const imageWrapper = card.querySelector(".h-48");
 
       if (isUnlocked) {
         card.classList.add("cursor-pointer");
         card.onclick = () => { window.location.href = target; };
 
+        if (imageWrapper) {
+          imageWrapper.classList.remove("grayscale", "opacity-40");
+        }
+
         const lockedVisual = card.querySelector(".material-symbols-outlined");
         if (lockedVisual && lockedVisual.textContent.trim() === "lock") {
           lockedVisual.textContent = "menu_book";
         }
+
         const hintText = card.querySelector("p.text-sm, p.text-xs");
         if (hintText && hintText.textContent.includes("需完成")) {
           hintText.textContent = "已解鎖，點擊閱讀";
         }
       } else {
         card.onclick = null;
+
+        if (imageWrapper) {
+          imageWrapper.classList.add("grayscale", "opacity-40");
+        }
       }
     });
   }
