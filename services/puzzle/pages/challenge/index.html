@@ -80,7 +80,39 @@
     }
 .paper-texture {
     background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCTRbfLmjBmgObp-Pdj4hzEL-wVy_FolY6LZ5823uh41yCcaAA4h-y-g8FCCRex5PDdFbV2deOOoOyCjWV7f8jLrZw6krEoHx6nCqQU2WXrDurRBcs5BwH0lIwdoYMLOQKymFTzIwEmJ6_q8PHaExiL5K9aec6Asv75xZngNHvjEXYGHKchojNc-mo3V2wi-3YLMaEi7-e65OAmGQqcjt8hKKPC4aBSbM-87cHWhX1A388dJtHqXDuGzLWtk06RykQpCoEsoQYkaNGI)
-    }</style>
+    }
+@media (max-height: 900px) {
+    #challenge-title {
+        font-size: 1.9rem !important;
+        line-height: 1.15 !important;
+    }
+    #challenge-subtitle,
+    #challenge-desc1,
+    #challenge-desc2,
+    #challenge-desc3 {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
+    }
+    #challenge-image-box {
+        aspect-ratio: 16 / 9 !important;
+    }
+    #challenge-answer-input {
+        font-size: 1rem !important;
+        padding-top: 0.35rem !important;
+        padding-bottom: 0.35rem !important;
+    }
+    #challenge-submit-btn,
+    #challenge-prev-link,
+    #challenge-next-link {
+        padding-top: 0.45rem !important;
+        padding-bottom: 0.45rem !important;
+        font-size: 0.82rem !important;
+    }
+    footer {
+        display: none !important;
+    }
+}
+</style>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 <nav class="sticky top-0 z-50 bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15">
@@ -95,21 +127,21 @@
 
 </div>
 </nav>
-<main class="max-w-7xl mx-auto px-6 py-12 md:py-20">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-<section class="lg:col-span-7 space-y-12">
+<main class="max-w-7xl mx-auto px-6 py-3 md:py-4">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+<section class="lg:col-span-7 space-y-4">
 <header class="space-y-4">
 <div id="challenge-level" class="inline-block bg-primary px-3 py-1 text-on-primary text-xs font-headline tracking-widest">
                         LEVEL 01
                     </div>
-<h1 id="challenge-title" class="text-5xl md:text-6xl font-headline font-black text-primary leading-tight">
+<h1 id="challenge-title" class="text-3xl md:text-4xl font-headline font-black text-primary leading-tight">
                         森羅殿之謎
                     </h1>
 <p id="challenge-subtitle" class="text-on-primary-fixed-variant font-semibold tracking-wide italic">
                         The Mystery of the Hall of Justice
                     </p>
 </header>
-<div class="prose prose-stone max-w-none text-on-surface-variant space-y-6 leading-relaxed text-lg">
+<div class="prose prose-stone max-w-none text-on-surface-variant space-y-2 leading-relaxed text-[0.95rem]">
 <p id="challenge-desc1">
                         在雲林三條崙的海清宮中，座落著巍峨的森羅殿。相傳每當夜深人靜之際，殿內的朱紅石柱會隱約浮現出不屬於這個時代的印記。包公座前的兩側，立著肅穆的威武石獅，其底座刻有繁複的雲紋。
                     </p>
@@ -120,58 +152,60 @@
                         你面前的石台上有一個空的凹槽，形狀如同一枚失落的官印。根據老廟祝留下的殘卷，這個凹槽指向了一個特定的年份——那一年，海清宮迎來了第一次的大規模修繕，也是正義之光重新綻放的時刻。
                     </p>
 </div>
-<div class="p-8 rounded-sm relative overflow-hidden group bg-[#fef9f1]" style="background-color: #fef9f1; border: 1px solid #dcc0be;">
+<div class="p-3 rounded-sm relative overflow-hidden group bg-[#fef9f1]" style="background-color: #fef9f1; border: 1px solid #dcc0be;">
 <div class="absolute top-4 right-4 text-primary/10 select-none"><span class="material-symbols-outlined text-8xl opacity-10" style="color: #8B2E2E">balance</span></div>
-<h3 class="font-headline font-bold text-primary mb-6 flex items-center gap-2">
+<h3 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
                         線索提示
                     </h3>
-  <details class="group border-b border-outline-variant/30 py-4">
+  <details class="group border-b border-outline-variant/30 py-1.5">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint1-title">第一則提示：關於「年代」</span>
+      <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
     </summary>
-    <p id="challenge-hint1-body" class="mt-4 text-on-surface-variant italic">
+    <p id="challenge-hint1-body" class="mt-2 text-on-surface-variant italic text-sm">
       查看廟口前的龍柱底座，刻有乾隆年間的字樣，但我們找的是「重建」的起始年份。
     </p>
   </details>
   
-  <details class="group py-4">
+  <details class="group py-1.5">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint2-title">第二則提示：具體對象</span>
+      <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
     </summary>
-    <p id="challenge-hint2-body" class="mt-4 text-on-surface-variant italic">
+    <p id="challenge-hint2-body" class="mt-2 text-on-surface-variant italic text-sm">
       關鍵數字隱藏在正門左側的捐獻碑林中，那是清乾隆年間的一個庚子年。
     </p>
   </details>
 </div>
 </section>
-<aside class="lg:col-span-5 space-y-8">
-<div class="relative aspect-[4/5] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
+<aside class="lg:col-span-5 space-y-3">
+<div id="challenge-image-box" class="relative aspect-[3/2] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
 <img id="challenge-image" alt="Visual Clue" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" data-alt="A majestic and ancient Chinese temple stone lion statue, weathered texture, mysterious atmosphere, mystical lighting, cinematic composition, high detail, historical feel, Noto Serif aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC07wZMY0Y8gccHcqmd_7VCBzDhA2fsJ7nHMpZ0euxxQj9sb-0p7RKpU5ubhRj_MKBYrugVf4-CAj1kEVNrTvzt_pcT4vbtfOTgGihdzuw2h_yYECZcX8nd5KoROIJdA6aRFUFyZ-dBNkblnu-weXQpa0xhHRHcNnoUmGozIdl49zhs0sPZjkhUFtsxL28t9TKn6Iwtpp8s-rB8PQEu_VRxlazR32-ACPyW1Lzdng2tWihxjpticBIwRLd9AX5Ehri8B39G7uBbncea"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
-<div class="absolute bottom-6 left-6 right-6">
-<div class="bg-surface/90 backdrop-blur-md p-4 text-xs font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
+<div class="absolute bottom-3 left-3 right-3">
+<div class="bg-surface/90 backdrop-blur-md p-2 text-[10px] font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">photo_camera</span>
 <span id="challenge-image-caption">現場所見：石柱基座之拓印</span>
                         </div>
 </div>
 </div>
-<div class="bg-surface-container-highest p-8 space-y-6">
+<div class="bg-surface-container-highest p-3 space-y-2">
 <div>
 <h4 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
 <span class="material-symbols-outlined">edit</span>
                             輸入解答
                         </h4>
-<p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-4">請輸入四位數字年份 (例如：1738)</p>
+<p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-2">請輸入四位數字年份 (例如：1738)</p>
 <div class="relative">
-<input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-2xl tracking-[1rem] py-3 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
+<input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-lg tracking-[0.55rem] py-1.5 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
 </div>
 </div>
-<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-4 font-headline font-bold tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
+<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.14em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
                         提交驗證
                     </button>
-<p id="challenge-feedback" class="text-sm font-headline tracking-wide text-secondary"></p>
-<div class="flex justify-between items-center px-2">
+<p id="challenge-feedback" class="text-xs font-headline tracking-wide text-secondary"></p>
+<div class="flex justify-between items-center px-1">
 <div class="flex items-center gap-2 text-xs text-secondary">
 <span class="material-symbols-outlined text-sm">trending_up</span>
 <span id="challenge-difficulty">難易度：中等</span>
@@ -181,28 +215,27 @@
 <span id="challenge-progress">當前進度：1 / 5</span>
                         </div>
 </div>
-<div class="grid grid-cols-2 gap-3 mt-4">
-<a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-3 font-headline font-bold tracking-[0.12em] hover:bg-primary/10 transition-all">上一關</a>
-<a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-3 font-headline font-bold tracking-[0.12em] hover:opacity-90 transition-all">下一關</a>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-2 font-headline font-bold tracking-[0.1em] hover:bg-primary/10 transition-all">上一關</a>
+<a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.1em] hover:opacity-90 transition-all">下一關</a>
 </div>
+<div class="grid grid-cols-2 gap-2">
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
+<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
 </div>
-<div class="grid grid-cols-2 gap-4">
-<div class="p-4 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-2 block">history_edu</span>
-<span class="text-[10px] uppercase tracking-widest text-secondary block">Lore Found</span>
-<span id="challenge-lore" class="font-headline font-bold text-sm">正氣傳說</span>
-</div>
-<div class="p-4 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-2 block">inventory_2</span>
-<span class="text-[10px] uppercase tracking-widest text-secondary block">Inventory</span>
-<span id="challenge-inventory" class="font-headline font-bold text-sm">3 道具</span>
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
+<span id="challenge-inventory" class="font-headline font-bold text-xs">3 道具</span>
 </div>
 </div>
 </aside>
 </div>
 </main>
 <footer class="bg-[#f2ede5] dark:bg-[#1d1c17] border-t border-[#dcc0be]/15">
-<div class="w-full py-8 flex flex-col items-center gap-4">
+<div class="w-full py-6 flex flex-col items-center gap-3">
 <div class="flex gap-6">
 <a class="text-[#755750] dark:text-[#e7e2da] font-['Newsreader'] text-xs uppercase tracking-tighter opacity-70 hover:opacity-100 transition-opacity" href="#">隱私政策</a>
 <a class="text-[#755750] dark:text-[#e7e2da] font-['Newsreader'] text-xs uppercase tracking-tighter opacity-70 hover:opacity-100 transition-opacity" href="#">聯繫我們</a>
