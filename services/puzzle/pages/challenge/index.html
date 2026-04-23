@@ -275,6 +275,12 @@
     const prevLink = document.getElementById("challenge-prev-link");
     const nextLink = document.getElementById("challenge-next-link");
 
+    if (progress.unlockedChallenge <= stageNumber) {
+      nextLink.style.display = "none";
+    } else {
+      nextLink.style.display = "block";
+    }
+
     if (stageNumber <= 1) {
       prevLink.style.visibility = "hidden";
       prevLink.setAttribute("aria-hidden", "true");
