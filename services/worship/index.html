@@ -174,7 +174,6 @@
     .modal-body { padding: 20px; }
     .modal-subtitle { color: #C0392B; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 8px; }
     .modal-desc { color: #5C3D2E; font-size: 0.95rem; line-height: 1.9; }
-    .modal-location { margin-top: 12px; padding: 8px 14px; background: #FFF8E7; border-left: 3px solid #DAA520; font-size: 0.85rem; color: #8B6914; }
     .modal-actions { display: flex; gap: 10px; padding: 0 20px 20px; flex-wrap: wrap; }
     .modal-action-btn {
       flex: 1; min-width: 120px; padding: 10px 16px;
@@ -237,23 +236,64 @@
     .overlay-btn.ghost { background: transparent; color: #DAA520; border: 2px solid #DAA520; }
     .overlay-btn.ghost:hover { background: rgba(218,165,32,0.12); }
 
-    /* ── 上香場景 ── */
-    .incense-scene {
-      position: relative; margin: 0 auto 10px;
-      width: 100%; max-width: 360px; height: 250px;
+    /* ── 上香場景（圖片版） ── */
+    .incense-stage {
+      position: relative;
+      width: 260px; height: 300px;
+      margin: 0 auto 12px;
+      overflow: visible;
+      background: #FFFDF7;
+      isolation: isolate;
     }
-    #smoke-canvas {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 360px; height: 250px;
+    /* 香爐：最前面（蓋住香炷底部），做出「插入」效果 */
+    .burner-img {
+      position: absolute; bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 230px; height: auto;
+      z-index: 2;
+      mix-blend-mode: multiply;   /* 保留：若香爐有白底也一併消除 */
     }
-    .bow-figure {
-      font-size: 2.8rem; margin: 0 auto 4px;
-      display: block; line-height: 1;
+    /* 香炷：用 flex 置中，不用 transform 避免建立 stacking context */
+    .sticks-wrap {
+      position: absolute; bottom: 140px;  /* ← 調整香炷高低就改這裡 */
+      left: 0; right: 0;
+      display: flex; justify-content: center;
+      visibility: hidden; /* 初始空香爐；點香才出現 */
     }
-    .bow-figure.bowing { animation: bowAnim 1.1s ease-in-out 3; }
-    @keyframes bowAnim {
-      0%,100% { transform: rotate(0deg) translateY(0); }
-      40%     { transform: rotate(30deg) translateY(5px); }
+    .stick-img {
+      height: 145px; width: auto; display: block;
+      mix-blend-mode: multiply;
+    }
+    /* 香炷從香爐內往上升，全程在 stage 內，白底不外露 */
+    @keyframes stickRise {
+      0%   { transform: translateY(80px); opacity: 0; }
+      30%  { opacity: 1; }
+      78%  { transform: translateY(-7px); }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .stick-img.drop { animation: stickRise 2.4s ease-out forwards; }
+
+    /* 煙霧：在 sticks-wrap 內部，top:0 自動貼著香炷頂端 */
+    .smoke-wrap {
+      position: absolute;
+      top: 0;            /* ← 香炷尖端，跟著 sticks-wrap 走 */
+      left: 0; right: 0; height: 1px;
+      overflow: visible; pointer-events: none;
+      z-index: 3; display: none;
+    }
+    .wisp {
+      position: absolute; bottom: 0;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(190,180,165,0.9);
+      filter: blur(3px); opacity: 0;
+      animation: wispRise var(--dur, 2s) var(--delay, 0s) ease-out infinite;
+    }
+    @keyframes wispRise {
+      /* --ys：讓左右香的煙往下偏，預設 0px（中間香） */
+      0%   { transform: translate(-50%, var(--ys, 0px)) scale(1);   opacity: 0; }
+      15%  { opacity: 0.7; }
+      55%  { transform: translate(calc(-50% + var(--d1, 4px)), calc(var(--ys, 0px) - 22px)) scale(2.2); opacity: 0.45; }
+      100% { transform: translate(calc(-50% + var(--d2,-3px)), calc(var(--ys, 0px) - 50px)) scale(3.2); opacity: 0; }
     }
 
     /* ── 擲筊 ── */
@@ -463,7 +503,6 @@
     <div class="modal-body">
       <div class="modal-subtitle" id="modal-subtitle"></div>
       <div class="modal-desc" id="modal-desc"></div>
-      <div class="modal-location" id="modal-location"></div>
     </div>
     <div class="modal-actions">
       <button class="modal-action-btn primary" onclick="openIncense()">上香祈福</button>
@@ -480,13 +519,18 @@
     <div class="overlay-title" id="incense-title">上香祈福</div>
     <div class="overlay-subtitle">虔誠禮拜，神明庇佑</div>
 
-    <div class="incense-scene">
-      <canvas id="smoke-canvas" width="360" height="250"></canvas>
+    <div class="incense-stage" id="incense-stage">
+      <div class="sticks-wrap" id="sticks-wrap">
+        <!-- smoke-wrap 在 sticks-wrap 頂端（top:0 = 香炷尖端） -->
+        <div class="smoke-wrap" id="smoke-wrap"></div>
+        <img src="香炷.png" class="stick-img">
+      </div>
+      <img src="香爐.png" class="burner-img">
     </div>
-    <span class="bow-figure" id="bow-figure">🧎</span>
 
     <div class="overlay-status" id="incense-status">點擊下方按鈕，恭敬上香</div>
     <div class="overlay-btn-row">
+      <button class="overlay-btn ghost" id="incense-cancel-btn" onclick="closeIncense()">取消</button>
       <button class="overlay-btn primary" id="incense-action-btn" onclick="doIncense()">點香上香</button>
       <button class="overlay-btn ghost" id="incense-done-btn" style="display:none" onclick="closeIncense()">完成參拜</button>
     </div>
@@ -548,19 +592,19 @@
 <script>
 /* ══════════ 神明資料庫 ══════════ */
 const DEITIES = {
-  baogong:   { name: '包府千歲', subtitle: '包青天・閻羅天子', photo: '../../photos/包公.jpg', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。', location: '一樓正殿・正中間' },
-  songzi:    { name: '送子觀音', subtitle: '大慈大悲觀世音菩薩化身', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。', location: '一樓正殿・右側' },
-  caishen:   { name: '財神爺', subtitle: '武財神', photo: '../../photos/包公.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。', location: '一樓正殿・正中間' },
-  huye:      { name: '虎爺', subtitle: '下壇將軍', photo: '../../photos/虎爺.jpg', desc: '虎爺安奉於供桌下方，為神明座騎與護衛。民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。', location: '一樓正殿・供桌下方（紅光照射處）' },
-  yuhuang:   { name: '玉皇大帝', subtitle: '天公・昊天金闕玉皇上帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。', location: '二樓神殿・正中間' },
-  tianguan:  { name: '天官財神', subtitle: '天官賜福', photo: '../../photos/天官財神.jpg', desc: '天官財神衣著皆為手工刺繡，做工精美。天官掌管賜福，信眾祈求財運亨通、福星高照。', location: '二樓神殿・左側（衣服皆為手繡）' },
-  xuantian:  { name: '玄天上帝', subtitle: '北極玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。與金母娘娘同側供奉，信眾祈求身體健康、護佑平安。', location: '二樓神殿・右下' },
-  jinmu:     { name: '金母娘娘', subtitle: '瑤池金母・王母娘娘', photo: '../../photos/玄天上帝.jpg', desc: '金母娘娘即瑤池金母（王母娘娘），為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。', location: '二樓神殿・右上' },
-  santaizi:  { name: '三太子', subtitle: '中壇元帥・哪吒太子', photo: '../../photos/三太子.jpg', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。', location: '一樓正殿・前方' },
-  shijia:    { name: '釋迦牟尼佛', subtitle: '佛祖・世尊', photo: '../../photos/釋迦牟尼.jpg', desc: '三樓為法嚴禪寺大殿，主祀釋迦牟尼佛。佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。', location: '三樓法嚴禪寺・正中間' },
-  guanyin:   { name: '觀世音菩薩', subtitle: '大慈大悲救苦救難觀世音菩薩', photo: '../../photos/觀世音菩薩.jpg', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。三樓的觀音像莊嚴慈祥。', location: '三樓法嚴禪寺・右側' },
-  dizang:    { name: '地藏王菩薩', subtitle: '大願地藏・幽冥教主', photo: '../../photos/地藏王菩薩.jpg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。', location: '三樓法嚴禪寺・左側' },
-  guansheng: { name: '關聖帝君', subtitle: '關公・武聖', photo: '../../photos/關聖帝君.jpg', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。木雕神龕精美，龍柱環繞。', location: '三樓法嚴禪寺・左邊' }
+  baogong:   { name: '包府千歲', subtitle: '包青天・閻羅天子', photo: '../../photos/包公.jpg', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。' },
+  songzi:    { name: '送子觀音', subtitle: '大慈大悲觀世音菩薩化身', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
+  caishen:   { name: '財神爺', subtitle: '武財神', photo: '../../photos/包公.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
+  huye:      { name: '虎爺', subtitle: '下壇將軍', photo: '../../photos/虎爺.jpg', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
+  yuhuang:   { name: '玉皇大帝', subtitle: '天公・昊天金闕玉皇上帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
+  tianguan:  { name: '天官財神', subtitle: '天官賜福', photo: '../../photos/天官財神.jpg', desc: '天官財神衣著皆為手工刺繡，做工精美。天官掌管賜福，信眾祈求財運亨通、福星高照。' },
+  xuantian:  { name: '玄天上帝', subtitle: '北極玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
+  jinmu:     { name: '金母娘娘', subtitle: '瑤池金母・王母娘娘', photo: '../../photos/玄天上帝.jpg', desc: '金母娘娘即瑤池金母（王母娘娘），為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
+  santaizi:  { name: '三太子', subtitle: '中壇元帥・哪吒太子', photo: '../../photos/三太子.jpg', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。' },
+  shijia:    { name: '釋迦牟尼佛', subtitle: '佛祖・世尊', photo: '../../photos/釋迦牟尼.jpg', desc: '佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。' },
+  guanyin:   { name: '觀世音菩薩', subtitle: '大慈大悲救苦救難觀世音菩薩', photo: '../../photos/觀世音菩薩.jpg', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。' },
+  dizang:    { name: '地藏王菩薩', subtitle: '大願地藏・幽冥教主', photo: '../../photos/地藏王菩薩.jpg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。' },
+  guansheng: { name: '關聖帝君', subtitle: '關公・武聖', photo: '../../photos/關聖帝君.jpg', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。' }
 };
 
 const FLOOR_INFO = {
@@ -571,6 +615,7 @@ const FLOOR_INFO = {
 
 let currentFloor = 1;
 let currentDeityName = '';
+let currentDeityKey  = '';
 
 /* ── 切換樓層 ── */
 function switchFloor(floor) {
@@ -586,13 +631,13 @@ function switchFloor(floor) {
 function showDeity(id) {
   const deity = DEITIES[id];
   if (!deity) return;
+  currentDeityKey  = id;
   currentDeityName = deity.name;
   document.getElementById('modal-title').textContent = deity.name;
   document.getElementById('modal-subtitle').textContent = deity.subtitle;
   document.getElementById('modal-photo').src = deity.photo;
   document.getElementById('modal-photo').alt = deity.name;
   document.getElementById('modal-desc').textContent = deity.desc;
-  document.getElementById('modal-location').textContent = deity.location;
   document.getElementById('deity-modal').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
@@ -608,165 +653,80 @@ document.getElementById('deity-modal').addEventListener('click', e => {
 /* ══════════════════════════════════════
    上 香  全螢幕動畫
 ══════════════════════════════════════ */
-let smokeParticles = [];
-let smokeRaf = null;
 let incenseLit = false;
 
 function openIncense() {
   closeModal();
   incenseLit = false;
-  smokeParticles = [];
-  stopSmoke();
+
+  // 重置香炷（隱藏、移除動畫 class，強制 reflow）
+  const sWrap = document.getElementById('sticks-wrap');
+  sWrap.style.visibility = 'hidden';
+  document.querySelectorAll('.stick-img').forEach(s => {
+    s.classList.remove('drop');
+    void s.offsetWidth;
+  });
+
+  // 隱藏並清空煙霧
+  const wrap = document.getElementById('smoke-wrap');
+  wrap.style.display = 'none';
+  wrap.innerHTML = '';
+
   document.getElementById('incense-title').textContent = `向 ${currentDeityName} 上香`;
   document.getElementById('incense-status').textContent = '點擊下方按鈕，恭敬上香';
   const btn = document.getElementById('incense-action-btn');
   btn.disabled = false;
   btn.textContent = '點香上香';
   btn.style.display = '';
+  document.getElementById('incense-cancel-btn').style.display = '';
   document.getElementById('incense-done-btn').style.display = 'none';
-  document.getElementById('bow-figure').classList.remove('bowing');
-  drawStaticIncense(false);
+
   document.getElementById('incense-overlay').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
 
 function closeIncense() {
-  stopSmoke();
+  const wrap = document.getElementById('smoke-wrap');
+  wrap.style.display = 'none';
+  wrap.innerHTML = '';
   document.getElementById('incense-overlay').classList.remove('show');
   document.body.style.overflow = '';
+  // 上香完畢 → 回到神明介紹頁面
+  if (currentDeityKey) showDeity(currentDeityKey);
 }
 
 document.getElementById('incense-overlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeIncense();
 });
 
-function stopSmoke() {
-  if (smokeRaf) { cancelAnimationFrame(smokeRaf); smokeRaf = null; }
-}
+/* 生成 CSS 煙霧粒子 */
+function startSmoke() {
+  const wrap = document.getElementById('smoke-wrap');
+  wrap.innerHTML = '';
+  wrap.style.display = 'block';
 
-/* 香爐靜態畫面 */
-function drawStaticIncense(lit) {
-  const canvas = document.getElementById('smoke-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-  drawIncenseScene(ctx, W, H, lit, []);
-}
+  // 三柱香的水平位置（相對 smoke-wrap，寬同 stage = 260px）
+  // 若煙位置跑偏，調整 xs 裡的數字；左右太高就調大 yOffsets[0/2]
+  const xs      = [85, 130, 175];
+  const yOffsets = ['14px', '0px', '14px']; // 左右香頂端比中間低 → 往下偏
+  const drifts = [
+    [ '6px', '-9px',  '4px'], ['-5px',  '7px', '-3px'],
+    [ '8px', '-5px',  '2px'], ['-7px',  '4px', '-6px'],
+    [ '3px', '-6px',  '7px'], ['-4px',  '8px', '-2px'],
+    [ '5px', '-3px',  '5px'], ['-6px',  '2px', '-7px'],
+    [ '7px', '-7px',  '3px'], ['-3px',  '5px', '-5px'],
+  ];
 
-/* 繪製香爐場景 */
-function drawIncenseScene(ctx, W, H, lit, particles) {
-  const cx = W / 2;
-  const burnerY = H - 55;
-  const burnerW = 88, burnerH = 52;
-  const bx = cx - burnerW / 2;
-
-  /* —— 香爐主體 —— */
-  // 爐身
-  const bodyGrad = ctx.createLinearGradient(bx, burnerY, bx + burnerW, burnerY + burnerH);
-  bodyGrad.addColorStop(0, '#DAA520');
-  bodyGrad.addColorStop(0.45, '#B8860B');
-  bodyGrad.addColorStop(1, '#7A5C00');
-  ctx.beginPath();
-  ctx.moveTo(bx + 10, burnerY);
-  ctx.lineTo(bx + burnerW - 10, burnerY);
-  ctx.lineTo(bx + burnerW - 4, burnerY + burnerH);
-  ctx.lineTo(bx + 4, burnerY + burnerH);
-  ctx.closePath();
-  ctx.fillStyle = bodyGrad;
-  ctx.fill();
-  ctx.strokeStyle = '#FFD700';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // 爐緣橢圓
-  ctx.beginPath();
-  ctx.ellipse(cx, burnerY + 6, 46, 10, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#C8960A';
-  ctx.fill();
-  ctx.strokeStyle = '#FFD700';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // 灰面（香插的地方）
-  ctx.beginPath();
-  ctx.ellipse(cx, burnerY + 6, 40, 7, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#D8D0B8';
-  ctx.fill();
-
-  // 爐腳（三支）
-  [bx + 14, cx, bx + burnerW - 14].forEach(fx => {
-    ctx.fillStyle = '#9A7200';
-    ctx.beginPath();
-    ctx.roundRect(fx - 5, burnerY + burnerH, 10, 14, 2);
-    ctx.fill();
-  });
-
-  // 爐上裝飾花紋
-  ctx.strokeStyle = 'rgba(255,215,0,0.35)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.ellipse(cx, burnerY + 28, 28, 12, 0, 0, Math.PI * 2);
-  ctx.stroke();
-
-  /* —— 三根香柱 —— */
-  const stickXs = [cx - 20, cx, cx + 20];
-  const baseY = burnerY + 4;
-  const tipY  = H - 195;
-
-  stickXs.forEach(sx => {
-    // 柱身
-    const stickGrad = ctx.createLinearGradient(sx, baseY, sx, tipY);
-    stickGrad.addColorStop(0, '#7B3F00');
-    stickGrad.addColorStop(1, '#A0522D');
-    ctx.beginPath();
-    ctx.moveTo(sx - 1.5, baseY);
-    ctx.lineTo(sx + 1.5, baseY);
-    ctx.lineTo(sx + 1.5, tipY + (lit ? 18 : 0));
-    ctx.lineTo(sx - 1.5, tipY + (lit ? 18 : 0));
-    ctx.closePath();
-    ctx.fillStyle = stickGrad;
-    ctx.fill();
-
-    if (lit) {
-      // 燃燒後灰白段
-      ctx.beginPath();
-      ctx.moveTo(sx - 1.5, tipY);
-      ctx.lineTo(sx + 1.5, tipY);
-      ctx.lineTo(sx + 1.5, tipY + 18);
-      ctx.lineTo(sx - 1.5, tipY + 18);
-      ctx.closePath();
-      ctx.fillStyle = '#B0A898';
-      ctx.fill();
-      // 火星光暈
-      const glow = ctx.createRadialGradient(sx, tipY, 0, sx, tipY, 12);
-      glow.addColorStop(0, 'rgba(255,140,0,0.95)');
-      glow.addColorStop(0.35, 'rgba(255,60,0,0.45)');
-      glow.addColorStop(1, 'rgba(255,40,0,0)');
-      ctx.beginPath();
-      ctx.arc(sx, tipY, 12, 0, Math.PI * 2);
-      ctx.fillStyle = glow;
-      ctx.fill();
-      // 亮點
-      ctx.beginPath();
-      ctx.arc(sx, tipY, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = '#FFCC00';
-      ctx.fill();
-    } else {
-      // 未點燃黑尖
-      ctx.beginPath();
-      ctx.arc(sx, tipY, 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#2A1A0A';
-      ctx.fill();
+  xs.forEach((x, si) => {
+    for (let i = 0; i < 8; i++) {
+      const d = drifts[(i + si * 3) % drifts.length];
+      const w = document.createElement('div');
+      w.className = 'wisp';
+      w.style.cssText = `left:${x}px;--ys:${yOffsets[si]};--d1:${d[0]};--d2:${d[1]};` +
+        `--dur:${(1.6 + Math.random()).toFixed(2)}s;` +
+        `--delay:${((i * 0.22 + si * 0.07) % 1.8).toFixed(2)}s;`;
+      wrap.appendChild(w);
     }
-  });
-
-  /* —— 煙霧粒子 —— */
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(210,205,195,${p.alpha})`;
-    ctx.fill();
   });
 }
 
@@ -778,56 +738,25 @@ function doIncense() {
   const btn = document.getElementById('incense-action-btn');
   btn.disabled = true;
   btn.textContent = '上香中…';
+  document.getElementById('incense-cancel-btn').style.display = 'none';
   document.getElementById('incense-status').textContent = '虔誠上香，祈求神明庇佑…';
-  document.getElementById('bow-figure').classList.add('bowing');
 
-  const canvas = document.getElementById('smoke-canvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const cx = W / 2;
-  const tipY = H - 195;
-  const stickXs = [cx - 20, cx, cx + 20];
+  // 顯示香炷，再播放插入動畫
+  document.getElementById('sticks-wrap').style.visibility = 'visible';
+  document.querySelectorAll('.stick-img').forEach(s => {
+    void s.offsetWidth;
+    s.classList.add('drop');
+  });
 
-  function Particle(sx) {
-    this.x = sx + (Math.random() - 0.5) * 3;
-    this.y = tipY - 4;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = -(0.7 + Math.random() * 0.9);
-    this.alpha = 0.5 + Math.random() * 0.3;
-    this.r = 2 + Math.random() * 2.5;
-    this.wobble = Math.random() * Math.PI * 2;
-  }
+  // 香炷動畫 2.4s 結束後開始飄煙
+  setTimeout(startSmoke, 2500);
 
-  let frame = 0;
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    drawIncenseScene(ctx, W, H, true, smokeParticles);
-
-    if (frame % 2 === 0) {
-      stickXs.forEach(sx => smokeParticles.push(new Particle(sx)));
-    }
-    smokeParticles = smokeParticles.filter(p => p.alpha > 0.02 && p.y > -10);
-    smokeParticles.forEach(p => {
-      p.wobble += 0.05;
-      p.x += p.vx + Math.sin(p.wobble) * 0.35;
-      p.y += p.vy;
-      p.alpha -= 0.005;
-      p.r += 0.04;
-    });
-
-    frame++;
-    smokeRaf = requestAnimationFrame(loop);
-  }
-  stopSmoke();
-  loop();
-
-  // 三鞠躬結束後顯示完成
+  // 顯示完成按鈕
   setTimeout(() => {
-    document.getElementById('bow-figure').classList.remove('bowing');
     document.getElementById('incense-status').textContent = '香已敬奉，神明賜福平安';
     btn.style.display = 'none';
     document.getElementById('incense-done-btn').style.display = '';
-  }, 3500);
+  }, 3000);
 }
 
 /* ══════════════════════════════════════
