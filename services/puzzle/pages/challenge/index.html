@@ -321,7 +321,6 @@
     const input = document.getElementById("challenge-answer-input");
     const submitButton = document.getElementById("challenge-submit-btn");
     const feedback = document.getElementById("challenge-feedback");
-    const expectedAnswer = normalizeAnswer(stage.answer || "");
 
     submitButton.onclick = async () => {
       const userAnswer = normalizeAnswer(input.value || "");
@@ -330,17 +329,20 @@
         feedback.className = "text-sm font-headline tracking-wide text-secondary";
         return;
       }
-      if (userAnswer !== expectedAnswer) {
-        feedback.textContent = "答案不正確，再檢查一次線索。";
+      let result;
+      try {
+        result = await window.PuzzleState.submitChallengeAnswer(stageNumber, userAnswer);
+      } catch (_error) {
+        feedback.textContent = "驗證失敗，請確認後端服務是否啟動。";
         feedback.className = "text-sm font-headline tracking-wide text-red-700";
         return;
       }
 
-      const unlockedStoryTarget = stageNumber >= maxStage ? 7 : stageNumber + 1;
-      await window.PuzzleState.updateProgress({
-        unlockedChallenge: Math.min(stageNumber + 1, maxStage),
-        unlockedStory: unlockedStoryTarget
-      });
+      if (!result.correct) {
+        feedback.textContent = "答案不正確，再檢查一次線索。";
+        feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        return;
+      }
 
       feedback.textContent = "答對了！正在前往下一段故事...";
       feedback.className = "text-sm font-headline tracking-wide text-green-700";

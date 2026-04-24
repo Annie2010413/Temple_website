@@ -4,6 +4,7 @@ const config = require("./config");
 const { connectDb } = require("./db");
 const authRoutes = require("./routes/auth");
 const progressRoutes = require("./routes/progress");
+const challengeRoutes = require("./routes/challenge");
 
 async function bootstrap() {
   await connectDb();
@@ -18,6 +19,7 @@ async function bootstrap() {
 
   app.use("/api/auth", authRoutes);
   app.use("/api/progress", progressRoutes);
+  app.use("/api/challenge", challengeRoutes);
 
   app.listen(config.port, () => {
     console.log(`Backend running on http://localhost:${config.port}`);

@@ -1,7 +1,53 @@
 (() => {
+  let googleReadyPromise = null;
+
   function getInitial(name, email) {
     const source = (name || email || "U").trim();
     return source.charAt(0).toUpperCase();
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) {
+        if (existing.dataset.loaded === "true") {
+          resolve();
+          return;
+        }
+        existing.addEventListener("load", () => resolve(), { once: true });
+        existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        script.dataset.loaded = "true";
+        resolve();
+      };
+      script.onerror = () => reject(new Error(`Failed to load ${src}`));
+      document.head.appendChild(script);
+    });
+  }
+
+  async function ensureGoogleReady() {
+    if (googleReadyPromise) return googleReadyPromise;
+
+    googleReadyPromise = (async () => {
+      if (!window.PUZZLE_GOOGLE_CLIENT_ID) {
+        await loadScript("../../js/auth-config.js");
+      }
+      if (!window.google?.accounts?.id) {
+        await loadScript("https://accounts.google.com/gsi/client");
+      }
+      if (!window.PUZZLE_GOOGLE_CLIENT_ID) {
+        throw new Error("Missing Google Client ID");
+      }
+    })();
+
+    return googleReadyPromise;
   }
 
   function createUserMenu() {
@@ -117,6 +163,63 @@
         window.location.reload();
       };
       menu.appendChild(logoutBtn);
+    } else {
+      const loginBtn = document.createElement("button");
+      loginBtn.type = "button";
+      loginBtn.textContent = "Google 登入";
+      loginBtn.style.width = "100%";
+      loginBtn.style.textAlign = "left";
+      loginBtn.style.padding = "8px 10px";
+      loginBtn.style.border = "none";
+      loginBtn.style.borderRadius = "6px";
+      loginBtn.style.background = "transparent";
+      loginBtn.style.color = "#5c403a";
+      loginBtn.style.cursor = "pointer";
+      loginBtn.onmouseenter = () => { loginBtn.style.background = "#f8f3eb"; };
+      loginBtn.onmouseleave = () => { loginBtn.style.background = "transparent"; };
+      const googleBtnWrap = document.createElement("div");
+      googleBtnWrap.style.display = "none";
+      googleBtnWrap.style.padding = "8px 10px 2px";
+
+      let googleRendered = false;
+      loginBtn.onclick = async () => {
+        if (googleBtnWrap.style.display === "block") {
+          googleBtnWrap.style.display = "none";
+          loginBtn.textContent = "Google 登入";
+          return;
+        }
+
+        loginBtn.textContent = "載入中...";
+        try {
+          await ensureGoogleReady();
+          if (!googleRendered) {
+            window.google.accounts.id.initialize({
+              client_id: window.PUZZLE_GOOGLE_CLIENT_ID,
+              callback: async (response) => {
+                await window.PuzzleState.signInWithGoogleIdToken(response.credential);
+                document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
+              }
+            });
+            window.google.accounts.id.renderButton(googleBtnWrap, {
+              theme: "outline",
+              size: "medium",
+              text: "signin_with",
+              shape: "rectangular",
+              width: 150
+            });
+            googleRendered = true;
+          }
+          googleBtnWrap.style.display = "block";
+          loginBtn.textContent = "收合 Google 登入";
+        } catch (_error) {
+          loginBtn.textContent = "Google 登入失敗";
+          setTimeout(() => {
+            loginBtn.textContent = "Google 登入";
+          }, 1400);
+        }
+      };
+      menu.appendChild(loginBtn);
+      menu.appendChild(googleBtnWrap);
     }
 
     trigger.onclick = () => {
