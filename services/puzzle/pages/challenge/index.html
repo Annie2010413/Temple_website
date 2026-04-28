@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;family=Newsreader:ital,wght@0,400;0,600;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#ece8e0",
+                        "on-tertiary-fixed": "#261a00",
+                        "on-primary-container": "#ffaaa5",
+                        "primary-container": "#8b2e2e",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fef9f1",
+                        "on-background": "#1d1c17",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#dcc0be",
+                        "on-secondary-fixed": "#2b1611",
+                        "on-secondary-container": "#7a5b54",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "primary-fixed-dim": "#ffb3af",
+                        "tertiary-container": "#654a00",
+                        "surface-variant": "#e7e2da",
+                        "surface-container-highest": "#e7e2da",
+                        "inverse-on-surface": "#f5f0e8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdf9e",
+                        "on-primary-fixed-variant": "#812727",
+                        "on-primary-fixed": "#410005",
+                        "outline": "#897270",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f1bf4c",
+                        "background": "#fef9f1",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#ffd7ce",
+                        "secondary": "#755750",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#a03e3d",
+                        "on-tertiary-container": "#eab946",
+                        "on-error": "#ffffff",
+                        "surface": "#fef9f1",
+                        "secondary-fixed": "#ffdad2",
+                        "surface-dim": "#ded9d2",
+                        "primary": "#6c171a",
+                        "secondary-fixed-dim": "#e5beb5",
+                        "primary-fixed": "#ffdad7",
+                        "inverse-primary": "#ffb3af",
+                        "inverse-surface": "#32302b",
+                        "on-surface": "#1d1c17",
+                        "on-surface-variant": "#564241",
+                        "surface-container": "#f2ede5",
+                        "surface-container-low": "#f8f3eb",
+                        "on-secondary-fixed-variant": "#5c403a",
+                        "tertiary": "#483400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif TC", "serif"],
+                        "body": ["Newsreader", "serif"],
+                        "label": ["Newsreader", "serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.paper-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCTRbfLmjBmgObp-Pdj4hzEL-wVy_FolY6LZ5823uh41yCcaAA4h-y-g8FCCRex5PDdFbV2deOOoOyCjWV7f8jLrZw6krEoHx6nCqQU2WXrDurRBcs5BwH0lIwdoYMLOQKymFTzIwEmJ6_q8PHaExiL5K9aec6Asv75xZngNHvjEXYGHKchojNc-mo3V2wi-3YLMaEi7-e65OAmGQqcjt8hKKPC4aBSbM-87cHWhX1A388dJtHqXDuGzLWtk06RykQpCoEsoQYkaNGI)
+    }</style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<nav class="sticky top-0 z-50 bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
+<div class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
+<a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
+<a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+</div>
+
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<section class="lg:col-span-7 space-y-12">
+<header class="space-y-4">
+<div id="challenge-level" class="inline-block bg-primary px-3 py-1 text-on-primary text-xs font-headline tracking-widest">
+                        LEVEL 01
+                    </div>
+<h1 id="challenge-title" class="text-5xl md:text-6xl font-headline font-black text-primary leading-tight">
+                        森羅殿之謎
+                    </h1>
+<p id="challenge-subtitle" class="text-on-primary-fixed-variant font-semibold tracking-wide italic">
+                        The Mystery of the Hall of Justice
+                    </p>
+</header>
+<div class="prose prose-stone max-w-none text-on-surface-variant space-y-6 leading-relaxed text-lg">
+<p id="challenge-desc1">
+                        在雲林三條崙的海清宮中，座落著巍峨的森羅殿。相傳每當夜深人靜之際，殿內的朱紅石柱會隱約浮現出不屬於這個時代的印記。包公座前的兩側，立著肅穆的威武石獅，其底座刻有繁複的雲紋。
+                    </p>
+<p id="challenge-desc2" class="font-semibold text-on-surface">
+                        「正氣凌雲，鐵面無私。欲開此門，必尋其根。」
+                    </p>
+<p id="challenge-desc3">
+                        你面前的石台上有一個空的凹槽，形狀如同一枚失落的官印。根據老廟祝留下的殘卷，這個凹槽指向了一個特定的年份——那一年，海清宮迎來了第一次的大規模修繕，也是正義之光重新綻放的時刻。
+                    </p>
+</div>
+<div class="p-8 rounded-sm relative overflow-hidden group bg-[#fef9f1]" style="background-color: #fef9f1; border: 1px solid #dcc0be;">
+<div class="absolute top-4 right-4 text-primary/10 select-none"><span class="material-symbols-outlined text-8xl opacity-10" style="color: #8B2E2E">balance</span></div>
+<h3 class="font-headline font-bold text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
+                        線索提示
+                    </h3>
+  <details class="group border-b border-outline-variant/30 py-4">
+    <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
+      <span id="challenge-hint1-title">第一則提示：關於「年代」</span>
+    </summary>
+    <p id="challenge-hint1-body" class="mt-4 text-on-surface-variant italic">
+      查看廟口前的龍柱底座，刻有乾隆年間的字樣，但我們找的是「重建」的起始年份。
+    </p>
+  </details>
+  
+  <details class="group py-4">
+    <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
+      <span id="challenge-hint2-title">第二則提示：具體對象</span>
+    </summary>
+    <p id="challenge-hint2-body" class="mt-4 text-on-surface-variant italic">
+      關鍵數字隱藏在正門左側的捐獻碑林中，那是清乾隆年間的一個庚子年。
+    </p>
+  </details>
+</div>
+</section>
+<aside class="lg:col-span-5 space-y-8">
+<div class="relative aspect-[4/5] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
+<img id="challenge-image" alt="Visual Clue" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" data-alt="A majestic and ancient Chinese temple stone lion statue, weathered texture, mysterious atmosphere, mystical lighting, cinematic composition, high detail, historical feel, Noto Serif aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC07wZMY0Y8gccHcqmd_7VCBzDhA2fsJ7nHMpZ0euxxQj9sb-0p7RKpU5ubhRj_MKBYrugVf4-CAj1kEVNrTvzt_pcT4vbtfOTgGihdzuw2h_yYECZcX8nd5KoROIJdA6aRFUFyZ-dBNkblnu-weXQpa0xhHRHcNnoUmGozIdl49zhs0sPZjkhUFtsxL28t9TKn6Iwtpp8s-rB8PQEu_VRxlazR32-ACPyW1Lzdng2tWihxjpticBIwRLd9AX5Ehri8B39G7uBbncea"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="bg-surface/90 backdrop-blur-md p-4 text-xs font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+<span id="challenge-image-caption">現場所見：石柱基座之拓印</span>
+                        </div>
+</div>
+</div>
+<div class="bg-surface-container-highest p-8 space-y-6">
+<div>
+<h4 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined">edit</span>
+                            輸入解答
+                        </h4>
+<p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-4">請輸入四位數字年份 (例如：1738)</p>
+<div class="relative">
+<input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-2xl tracking-[1rem] py-3 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
+</div>
+</div>
+<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-4 font-headline font-bold tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
+                        提交驗證
+                    </button>
+<p id="challenge-feedback" class="text-sm font-headline tracking-wide text-secondary"></p>
+<div class="flex justify-between items-center px-2">
+<div class="flex items-center gap-2 text-xs text-secondary">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span id="challenge-difficulty">難易度：中等</span>
+                        </div>
+<div class="flex items-center gap-2 text-xs text-secondary">
+<span class="material-symbols-outlined text-sm">person</span>
+<span id="challenge-progress">當前進度：1 / 5</span>
+                        </div>
+</div>
+<div class="grid grid-cols-2 gap-3 mt-4">
+<a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-3 font-headline font-bold tracking-[0.12em] hover:bg-primary/10 transition-all">上一關</a>
+<a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-3 font-headline font-bold tracking-[0.12em] hover:opacity-90 transition-all">下一關</a>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-2 block">history_edu</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary block">Lore Found</span>
+<span id="challenge-lore" class="font-headline font-bold text-sm">正氣傳說</span>
+</div>
+<div class="p-4 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-2 block">inventory_2</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary block">Inventory</span>
+<span id="challenge-inventory" class="font-headline font-bold text-sm">3 道具</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="bg-[#f2ede5] dark:bg-[#1d1c17] border-t border-[#dcc0be]/15">
+<div class="w-full py-8 flex flex-col items-center gap-4">
+<div class="flex gap-6">
+<a class="text-[#755750] dark:text-[#e7e2da] font-['Newsreader'] text-xs uppercase tracking-tighter opacity-70 hover:opacity-100 transition-opacity" href="#">隱私政策</a>
+<a class="text-[#755750] dark:text-[#e7e2da] font-['Newsreader'] text-xs uppercase tracking-tighter opacity-70 hover:opacity-100 transition-opacity" href="#">聯繫我們</a>
+</div>
+<p class="text-[#755750] dark:text-[#e7e2da] font-['Newsreader'] text-xs uppercase tracking-tighter opacity-70">
+                © 海清宮 Pao Kung Temple. All Rights Reserved.
+            </p>
+</div>
+</footer>
+<script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    const defaults = { unlockedStory: 1, unlockedChallenge: 1 };
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      return {
+        unlockedStory: Math.max(1, Number(stored.unlockedStory) || 1),
+        unlockedChallenge: Math.max(1, Number(stored.unlockedChallenge) || 1)
+      };
+    } catch (_error) {
+      return defaults;
+    }
+  }
+
+  function saveProgress(progress) {
+    localStorage.setItem(GAME_PROGRESS_KEY, JSON.stringify(progress));
+  }
+
+  function normalizeAnswer(value) {
+    return value.replace(/\s+/g, "").toLowerCase();
+  }
+
+  async function loadChallengeStage() {
+    const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
+    const response = await fetch("./challenges.json");
+    if (!response.ok) {
+      throw new Error("Failed to load challenges.json");
+    }
+
+    const stages = await response.json();
+    const maxStage = Math.max(...Object.keys(stages).map(Number));
+    const progress = getProgress();
+    const allowedStage = Math.min(Math.max(stageNumber, 1), Math.max(progress.unlockedChallenge, 1));
+    const stage = stages[String(allowedStage)] || stages["1"];
+
+    if (allowedStage !== stageNumber) {
+      window.location.replace(`./index.html?stage=${allowedStage}`);
+      return;
+    }
+
+    document.getElementById("challenge-level").textContent = stage.level;
+    document.getElementById("challenge-title").textContent = stage.title;
+    document.getElementById("challenge-subtitle").textContent = stage.subtitle;
+    document.getElementById("challenge-desc1").textContent = stage.desc1;
+    document.getElementById("challenge-desc2").textContent = stage.desc2;
+    document.getElementById("challenge-desc3").textContent = stage.desc3;
+    document.getElementById("challenge-hint1-title").textContent = stage.hint1Title;
+    document.getElementById("challenge-hint1-body").textContent = stage.hint1Body;
+    document.getElementById("challenge-hint2-title").textContent = stage.hint2Title;
+    document.getElementById("challenge-hint2-body").textContent = stage.hint2Body;
+    document.getElementById("challenge-image").src = stage.image;
+    document.getElementById("challenge-image-caption").textContent = stage.imageCaption;
+    document.getElementById("challenge-answer-help").textContent = stage.answerHelp;
+    document.getElementById("challenge-difficulty").textContent = stage.difficulty;
+    document.getElementById("challenge-progress").textContent = stage.progress;
+    document.getElementById("challenge-lore").textContent = stage.lore;
+    document.getElementById("challenge-inventory").textContent = stage.inventory;
+
+    const prevLink = document.getElementById("challenge-prev-link");
+    const nextLink = document.getElementById("challenge-next-link");
+
+    if (progress.unlockedChallenge <= stageNumber) {
+      nextLink.style.display = "none";
+    } else {
+      nextLink.style.display = "block";
+    }
+
+    if (stageNumber <= 1) {
+      prevLink.style.visibility = "hidden";
+      prevLink.setAttribute("aria-hidden", "true");
+      prevLink.setAttribute("tabindex", "-1");
+    } else {
+      prevLink.style.visibility = "visible";
+      prevLink.removeAttribute("aria-hidden");
+      prevLink.removeAttribute("tabindex");
+      prevLink.href = `./index.html?stage=${stageNumber - 1}`;
+    }
+
+    if (stageNumber >= maxStage) {
+      nextLink.href = "../challenge_map/index.html";
+      nextLink.textContent = "回到關卡地圖";
+    } else {
+      nextLink.href = `./index.html?stage=${stageNumber + 1}`;
+      nextLink.textContent = "下一關";
+    }
+
+    const input = document.getElementById("challenge-answer-input");
+    const submitButton = document.getElementById("challenge-submit-btn");
+    const feedback = document.getElementById("challenge-feedback");
+    const expectedAnswer = normalizeAnswer(stage.answer || "");
+
+    submitButton.onclick = () => {
+      const userAnswer = normalizeAnswer(input.value || "");
+      if (!userAnswer) {
+        feedback.textContent = "請先輸入答案。";
+        feedback.className = "text-sm font-headline tracking-wide text-secondary";
+        return;
+      }
+      if (userAnswer !== expectedAnswer) {
+        feedback.textContent = "答案不正確，再檢查一次線索。";
+        feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        return;
+      }
+
+      const latest = getProgress();
+      latest.unlockedChallenge = Math.max(latest.unlockedChallenge, Math.min(stageNumber + 1, maxStage));
+      latest.unlockedStory = Math.max(latest.unlockedStory, stageNumber + 1);
+      saveProgress(latest);
+
+      feedback.textContent = "答對了！正在前往下一段故事...";
+      feedback.className = "text-sm font-headline tracking-wide text-green-700";
+      setTimeout(() => {
+        window.location.href = `../story/index.html?chapter=${Math.min(stageNumber + 1, 7)}`;
+      }, 700);
+    };
+  }
+
+  loadChallengeStage().catch(() => {
+    document.getElementById("challenge-title").textContent = "關卡載入失敗";
+    document.getElementById("challenge-desc1").textContent = "請使用本機伺服器開啟頁面（例如 Live Server），不要直接以 file:// 開啟。";
+  });
+</script>
+</body></html>

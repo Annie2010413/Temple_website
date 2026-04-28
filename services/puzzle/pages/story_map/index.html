@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#ece8e0",
+                        "on-tertiary-fixed": "#261a00",
+                        "on-primary-container": "#ffaaa5",
+                        "primary-container": "#8b2e2e",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fef9f1",
+                        "on-background": "#1d1c17",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#dcc0be",
+                        "on-secondary-fixed": "#2b1611",
+                        "on-secondary-container": "#7a5b54",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "primary-fixed-dim": "#ffb3af",
+                        "tertiary-container": "#654a00",
+                        "surface-variant": "#e7e2da",
+                        "surface-container-highest": "#e7e2da",
+                        "inverse-on-surface": "#f5f0e8",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffdf9e",
+                        "on-primary-fixed-variant": "#812727",
+                        "on-primary-fixed": "#410005",
+                        "outline": "#897270",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#f1bf4c",
+                        "background": "#fef9f1",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#ffd7ce",
+                        "secondary": "#755750",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#a03e3d",
+                        "on-tertiary-container": "#eab946",
+                        "on-error": "#ffffff",
+                        "surface": "#fef9f1",
+                        "secondary-fixed": "#ffdad2",
+                        "surface-dim": "#ded9d2",
+                        "primary": "#6c171a",
+                        "secondary-fixed-dim": "#e5beb5",
+                        "primary-fixed": "#ffdad7",
+                        "inverse-primary": "#ffb3af",
+                        "inverse-surface": "#32302b",
+                        "on-surface": "#1d1c17",
+                        "on-surface-variant": "#564241",
+                        "surface-container": "#f2ede5",
+                        "surface-container-low": "#f8f3eb",
+                        "on-secondary-fixed-variant": "#5c403a",
+                        "tertiary": "#483400"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Newsreader"],
+                        "label": ["Newsreader"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.parchment-texture {
+    background-color: #f8f6f6;
+    background-image: radial-gradient(#dcc0be 0.5px, transparent 0.5px), radial-gradient(#dcc0be 0.5px, #f8f6f6 0.5px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    }
+.manuscript-shadow {
+    box-shadow: 0 32px 64px -12px rgba(139, 46, 46, 0.08)
+    }</style>
+</head>
+<body class="text-on-surface font-body parchment-texture selection:bg-primary-container selection:text-on-primary bg-background-light">
+<!-- TopNavBar -->
+<header class="bg-background-light/95 backdrop-blur-sm dark:bg-background-dark border-b border-primary/10 fixed top-0 left-0 right-0 z-50">
+<nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest uppercase">海清宮</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
+<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
+<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
+<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
+</div>
+
+</nav>
+</header>
+<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="mb-16 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="max-w-2xl">
+<div class="inline-block bg-primary px-3 py-1 mb-4">
+<span class="text-on-primary text-[10px] uppercase tracking-[0.2em] font-headline">The Sacred Journey</span>
+</div>
+<h1 class="text-4xl md:text-6xl font-headline font-bold text-primary mb-4 tracking-tight">森羅殿之試：故事地圖</h1>
+<p class="text-lg text-on-surface-variant font-body leading-relaxed italic">
+                    「天理昭彰，報應不爽。」沿著故事軸線追尋包公靈印的真相，每一章都是下一道試煉的前奏。
+                </p>
+</div>
+<div class="hidden md:block">
+<div class="text-right border-l-2 border-primary/20 pl-6">
+<span class="block text-3xl font-headline font-bold text-primary">01 / 05</span>
+<span class="text-xs uppercase tracking-widest text-secondary">已解鎖進度</span>
+</div>
+</div>
+</div>
+<!-- Level Grid / Map -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+<!-- Level 1 (Unlocked) -->
+<div class="md:col-span-8 group relative overflow-hidden bg-surface-container-lowest manuscript-shadow border border-primary/5 transition-all hover:border-primary/20 cursor-pointer">
+<div class="aspect-[21/9] w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Interior of a traditional ornate Chinese temple with dark wood, golden incense burners, and soft mystical smoke in atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArpp_NpuoceXnAFFObSEkgare5bOGxhtbD2LsbYlWAYkLXDOWFl-2Due3PHbBvsLTpFzsH-1WGo0mR6NWrZS91XxD8tZqoyWqXlFtHPQuLdyH1wVtHz0g7-kwku1479FtO_UmfcmKJ00QdnsX-DG3atAihJpp5rbqmKs57yuyIFf9fF6ZzeW9ucxKB6THmcAY6nCjSwIGICy8OUFYITA6cEmyWte3uuRSuUJgeNyTnT9n_dpwoYd_1mgPCuNwqSkgMLLR872oylblP"/>
+</div>
+<div class="p-8 relative">
+
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
+<div>
+<h2 class="text-2xl font-headline font-bold text-primary mb-1">第一章：冥府之鑰</h2>
+<p class="text-secondary font-body">接下地府請託，故事正式展開。</p>
+</div>
+<div class="flex items-center gap-2 text-primary font-headline tracking-widest text-sm group-hover:gap-4 transition-all">
+                            立即閱讀 <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Level 2 (Locked) -->
+<div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative group">
+<div class="h-full flex flex-col">
+<div class="h-48 overflow-hidden grayscale opacity-40">
+<img class="w-full h-full object-cover" data-alt="Ancient wooden Chinese script scroll lying on a textured desk with low key dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADNWCuwN2CQamBKFDKjxIs2Zj59oJpv7jJJp2ypicUBH67d3ZRGyjVTodf96mLqoSQpufNXyoTaqJSMeDfCOsoc5UCaYBo3c_-kysAYHxbpEkSpJdm-vOGRj6barz_E7b90Ohko-5aGLUA_A_dPUGYzwEru0oL1jxdK0K94pU367dHm0u42Szv0_cKThBzRwCNH3ulDWuDQxfSxdfeGt7y_RDkP-eipmDQG0_LeeiJG3zpvonlHyCVBm9d1rREro_KDm4daHUjQ4A1"/>
+</div>
+<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="mb-4 text-outline flex justify-center">
+<span class="material-symbols-outlined text-4xl">lock</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第二章：殿門銅環</h3>
+<p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
+</div>
+</div>
+</div>
+<!-- Level 3 (Locked) -->
+<div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative overflow-hidden group">
+<div class="h-full flex flex-col">
+<div class="h-48 overflow-hidden grayscale opacity-40">
+<img class="w-full h-full object-cover" data-alt="Close up of a dragon relief sculpture on a traditional Chinese stone wall with deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0ado91NL56GoLZIBZ2Q3OvsoKg_LTBvEf4dZ4C8jt-ylaIKfiFTpYMULcEDCgFZ86TkhOb-__XXaGlprpwdwVPukEOTTXwxW6eQtJ2_BsU9Memu7IF76vv_VZCrS5h1tivfyc3hVKGjj1L_hsz_bdKesMGHeuiYSZMn8biT8KiiuWUApGLRCI0Zj5XeYTJnFxGfZSRugsEev0IzWrDd_wB4vT8DfgN_AnkVj_imzr39XhXzaDskfykxIFDHMU7KakAU1g-MNgcmka"/>
+</div>
+<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="mb-4 text-outline flex justify-center">
+<span class="material-symbols-outlined text-4xl">lock</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第三章：影牆密文</h3>
+<p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
+</div>
+</div>
+</div>
+<!-- Level 4 (Locked) -->
+<div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative overflow-hidden group">
+<div class="h-full flex flex-col">
+<div class="h-48 overflow-hidden grayscale opacity-40">
+<img class="w-full h-full object-cover" data-alt="Dusk view of traditional Chinese temple eaves and glowing red lanterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgHy6aITVJ54C3czFm8l5QtXHfhyoliMBH2hxwMcOBlGchfalUq888uyrhASjFWRh5-9JRdbpz7KlUP5-HC_neZt--EsI8oEq5nT4T6qVwqjt7R21d-E9nMbtnoUGOLerPjw9Ei5LBnzmyH5jGpHfwAHlfIhmA3Lu8nyUArWI2EnAzHHGkvRRxY8SrgYkmYh0W_C4cHJ3UYgXuiPj4D4IoTiWNLKg-TSvQSxLPwozXnqlqcWb_Czu7YTHAhtU9ifpyR_0HTyJkQH5D"/>
+</div>
+<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="mb-4 text-outline flex justify-center">
+<span class="material-symbols-outlined text-4xl">lock</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第四章：判官之秤</h3>
+<p class="text-sm text-secondary font-body italic">需完成前一關卡解鎖</p>
+</div>
+</div>
+</div>
+<!-- Level 5 (Locked) - Final Challenge -->
+<div class="md:col-span-4 bg-surface-container-highest/50 manuscript-shadow border-2 border-dashed border-outline-variant/30 relative overflow-hidden group flex items-center justify-center p-8 text-center">
+<div class="flex flex-col items-center">
+<div class="w-20 h-20 mb-6 flex items-center justify-center border border-outline-variant/50 rotate-45 group-hover:rotate-90 transition-transform duration-500">
+<span class="material-symbols-outlined text-4xl text-outline -rotate-45 group-hover:-rotate-90 transition-transform duration-500">token</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">第五章：鐘樓回音</h3>
+<p class="text-xs text-secondary font-headline tracking-widest uppercase mb-4">Story Archive</p>
+<div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">
+                        未解鎖
+                    </div>
+</div>
+</div>
+</div>
+<!-- Special Mechanic Hint -->
+<div class="mt-16 bg-surface-container-low p-8 md:p-12 border-l-4 border-primary manuscript-shadow">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<div class="flex-shrink-0">
+<div class="w-16 h-16 bg-primary/5 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-3xl text-primary">auto_stories</span>
+</div>
+</div>
+<div class="flex-grow">
+<h4 class="text-lg font-headline font-bold text-primary mb-2">探員手記：靈感收集</h4>
+<p class="text-on-surface-variant leading-relaxed font-body">
+                        在每個關卡中，請留意那些隱藏在壁畫、楹聯與建築細節中的符號。收集完整的「天秤碎片」將能幫助你在終局中做出正確的審判。所有已收集的線索將同步至你的個人數位檔案。
+                    </p>
+</div>
+<div class="flex-shrink-0">
+<button class="text-sm font-headline font-bold text-primary border-b border-primary/40 hover:border-primary transition-all pb-1 tracking-widest">
+                        查看已收集線索
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-background-light border-t border-primary/10 w-full py-8 flex flex-col items-center gap-4">
+<div class="flex gap-6">
+<a class="font-['Newsreader'] text-xs uppercase tracking-tighter text-[#755750] dark:text-[#e7e2da] opacity-70 hover:opacity-100 transition-opacity" href="#">隱私政策</a>
+<a class="font-['Newsreader'] text-xs uppercase tracking-tighter text-[#755750] dark:text-[#e7e2da] opacity-70 hover:opacity-100 transition-opacity" href="#">聯繫我們</a>
+</div>
+<p class="font-['Newsreader'] text-xs uppercase tracking-tighter text-[#755750] dark:text-[#e7e2da] opacity-70">
+            © 海清宮 Pao Kung Temple. All Rights Reserved.
+        </p>
+</footer>
+<script>
+  const GAME_PROGRESS_KEY = "puzzle_game_progress";
+
+  function getProgress() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
+      return Math.max(1, Number(stored.unlockedStory) || 1);
+    } catch (_error) {
+      return 1;
+    }
+  }
+
+  function applyStoryMapState() {
+    const unlocked = Math.min(getProgress(), 5);
+    const progressText = document.querySelector("main .text-right span.block");
+    if (progressText) {
+      progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;
+    }
+
+    const mapGrid = document.querySelector("main .grid");
+    if (!mapGrid) return;
+    const cards = Array.from(mapGrid.children).slice(0, 5);
+
+    cards.forEach((card, index) => {
+      const chapter = index + 1;
+      const isUnlocked = chapter <= unlocked;
+      const target = `../story/index.html?chapter=${chapter}`;
+      const imageWrapper = card.querySelector(".h-48");
+
+      if (isUnlocked) {
+        card.classList.add("cursor-pointer");
+        card.onclick = () => { window.location.href = target; };
+
+        if (imageWrapper) {
+          imageWrapper.classList.remove("grayscale", "opacity-40");
+        }
+
+        const lockedVisual = card.querySelector(".material-symbols-outlined");
+        if (lockedVisual && lockedVisual.textContent.trim() === "lock") {
+          lockedVisual.textContent = "menu_book";
+        }
+
+        const hintText = card.querySelector("p.text-sm, p.text-xs");
+        if (hintText && hintText.textContent.includes("需完成")) {
+          hintText.textContent = "已解鎖，點擊閱讀";
+        }
+      } else {
+        card.onclick = null;
+
+        if (imageWrapper) {
+          imageWrapper.classList.add("grayscale", "opacity-40");
+        }
+      }
+    });
+  }
+
+  applyStoryMapState();
+</script>
+</body></html>
