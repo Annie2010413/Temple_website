@@ -89,23 +89,24 @@
     box-shadow: 0 32px 64px -12px rgba(139, 46, 46, 0.08)
     }</style>
 </head>
-<body class="text-on-surface font-body parchment-texture selection:bg-primary-container selection:text-on-primary bg-background-light">
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
-<header class="bg-background-light/95 backdrop-blur-sm dark:bg-background-dark border-b border-primary/10 fixed top-0 left-0 right-0 z-50">
+<header class="bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20 fixed top-0 left-0 right-0 z-50">
 <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest uppercase">海清宮</div>
-<div class="hidden md:flex gap-8 items-center">
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
-<a class="font-['Noto_Serif'] font-bold tracking-widest text-sm text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div class="text-xl font-bold text-[#6c171a] font-headline tracking-widest">海清宮</div>
+<div class="hidden md:flex gap-8 items-center font-['Noto_Serif'] font-bold tracking-widest text-sm">
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#6c171a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
+<div id="user-nav-slot"></div>
 </div>
 
 </nav>
 </header>
-<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+<main class="pt-24 pb-14 px-6 max-w-7xl mx-auto">
 <!-- Header Section -->
-<div class="mb-16 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="mb-10 text-center md:text-left flex flex-col md:flex-row justify-between items-end gap-4">
 <div class="max-w-2xl">
 <div class="inline-block bg-primary px-3 py-1 mb-4">
 <span class="text-on-primary text-[10px] uppercase tracking-[0.2em] font-headline">The Sacred Journey</span>
@@ -129,7 +130,7 @@
 <div class="aspect-[21/9] w-full overflow-hidden">
 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Interior of a traditional ornate Chinese temple with dark wood, golden incense burners, and soft mystical smoke in atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArpp_NpuoceXnAFFObSEkgare5bOGxhtbD2LsbYlWAYkLXDOWFl-2Due3PHbBvsLTpFzsH-1WGo0mR6NWrZS91XxD8tZqoyWqXlFtHPQuLdyH1wVtHz0g7-kwku1479FtO_UmfcmKJ00QdnsX-DG3atAihJpp5rbqmKs57yuyIFf9fF6ZzeW9ucxKB6THmcAY6nCjSwIGICy8OUFYITA6cEmyWte3uuRSuUJgeNyTnT9n_dpwoYd_1mgPCuNwqSkgMLLR872oylblP"/>
 </div>
-<div class="p-8 relative">
+<div class="p-6 relative">
 
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
 <div>
@@ -148,7 +149,7 @@
 <div class="h-48 overflow-hidden grayscale opacity-40">
 <img class="w-full h-full object-cover" data-alt="Ancient wooden Chinese script scroll lying on a textured desk with low key dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADNWCuwN2CQamBKFDKjxIs2Zj59oJpv7jJJp2ypicUBH67d3ZRGyjVTodf96mLqoSQpufNXyoTaqJSMeDfCOsoc5UCaYBo3c_-kysAYHxbpEkSpJdm-vOGRj6barz_E7b90Ohko-5aGLUA_A_dPUGYzwEru0oL1jxdK0K94pU367dHm0u42Szv0_cKThBzRwCNH3ulDWuDQxfSxdfeGt7y_RDkP-eipmDQG0_LeeiJG3zpvonlHyCVBm9d1rREro_KDm4daHUjQ4A1"/>
 </div>
-<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="p-6 flex-grow flex flex-col justify-center text-center">
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
@@ -163,7 +164,7 @@
 <div class="h-48 overflow-hidden grayscale opacity-40">
 <img class="w-full h-full object-cover" data-alt="Close up of a dragon relief sculpture on a traditional Chinese stone wall with deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0ado91NL56GoLZIBZ2Q3OvsoKg_LTBvEf4dZ4C8jt-ylaIKfiFTpYMULcEDCgFZ86TkhOb-__XXaGlprpwdwVPukEOTTXwxW6eQtJ2_BsU9Memu7IF76vv_VZCrS5h1tivfyc3hVKGjj1L_hsz_bdKesMGHeuiYSZMn8biT8KiiuWUApGLRCI0Zj5XeYTJnFxGfZSRugsEev0IzWrDd_wB4vT8DfgN_AnkVj_imzr39XhXzaDskfykxIFDHMU7KakAU1g-MNgcmka"/>
 </div>
-<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="p-6 flex-grow flex flex-col justify-center text-center">
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
@@ -178,7 +179,7 @@
 <div class="h-48 overflow-hidden grayscale opacity-40">
 <img class="w-full h-full object-cover" data-alt="Dusk view of traditional Chinese temple eaves and glowing red lanterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgHy6aITVJ54C3czFm8l5QtXHfhyoliMBH2hxwMcOBlGchfalUq888uyrhASjFWRh5-9JRdbpz7KlUP5-HC_neZt--EsI8oEq5nT4T6qVwqjt7R21d-E9nMbtnoUGOLerPjw9Ei5LBnzmyH5jGpHfwAHlfIhmA3Lu8nyUArWI2EnAzHHGkvRRxY8SrgYkmYh0W_C4cHJ3UYgXuiPj4D4IoTiWNLKg-TSvQSxLPwozXnqlqcWb_Czu7YTHAhtU9ifpyR_0HTyJkQH5D"/>
 </div>
-<div class="p-8 flex-grow flex flex-col justify-center text-center">
+<div class="p-6 flex-grow flex flex-col justify-center text-center">
 <div class="mb-4 text-outline flex justify-center">
 <span class="material-symbols-outlined text-4xl">lock</span>
 </div>
@@ -188,21 +189,26 @@
 </div>
 </div>
 <!-- Level 5 (Locked) - Final Challenge -->
-<div class="md:col-span-4 bg-surface-container-highest/50 manuscript-shadow border-2 border-dashed border-outline-variant/30 relative overflow-hidden group flex items-center justify-center p-8 text-center">
-<div class="flex flex-col items-center">
-<div class="w-20 h-20 mb-6 flex items-center justify-center border border-outline-variant/50 rotate-45 group-hover:rotate-90 transition-transform duration-500">
-<span class="material-symbols-outlined text-4xl text-outline -rotate-45 group-hover:-rotate-90 transition-transform duration-500">token</span>
+<div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative overflow-hidden group">
+<div class="h-full flex flex-col">
+<div class="h-48 overflow-hidden grayscale opacity-40">
+<img class="w-full h-full object-cover" data-alt="Ancient ceremonial altar in a traditional Chinese temple with dramatic golden light and mystical atmosphere" src="https://images.unsplash.com/photo-1519074069444-1ba4fff66d16?auto=format&fit=crop&w=1200&q=80"/>
+</div>
+<div class="p-6 flex-grow flex flex-col justify-center text-center">
+<div class="mb-4 text-outline flex justify-center">
+<span class="material-symbols-outlined text-4xl">lock</span>
 </div>
 <h3 class="text-xl font-headline font-bold text-on-surface-variant mb-2">終局：森羅歸位</h3>
-<p class="text-xs text-secondary font-headline tracking-widest uppercase mb-4">Ultimate Challenge</p>
+<p class="text-sm text-secondary font-body italic mb-4">需完成前一關卡解鎖</p>
 <div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">
                         未解鎖
                     </div>
 </div>
 </div>
 </div>
+</div>
 <!-- Special Mechanic Hint -->
-<div class="mt-16 bg-surface-container-low p-8 md:p-12 border-l-4 border-primary manuscript-shadow">
+<div class="mt-10 bg-surface-container-low p-6 md:p-8 border-l-4 border-primary manuscript-shadow">
 <div class="flex flex-col md:flex-row gap-8 items-center">
 <div class="flex-shrink-0">
 <div class="w-16 h-16 bg-primary/5 flex items-center justify-center border border-primary/20">
@@ -233,22 +239,13 @@
             © 海清宮 Pao Kung Temple. All Rights Reserved.
         </p>
 </footer>
+<script src="../../js/state.js"></script>
+<script src="../../js/nav-user.js"></script>
 <script>
-  const GAME_PROGRESS_KEY = "puzzle_game_progress";
 
-  function getProgress() {
-    try {
-      const stored = JSON.parse(localStorage.getItem(GAME_PROGRESS_KEY) || "{}");
-      const unlockedChallenge = Math.max(1, Number(stored.unlockedChallenge) || 1);
-      const unlockedStory = Math.max(1, Number(stored.unlockedStory) || 1);
-      return Math.max(unlockedChallenge, unlockedStory - 1);
-    } catch (_error) {
-      return 1;
-    }
-  }
-
-  function applyChallengeMapState() {
-    const unlocked = Math.min(getProgress(), 5);
+  async function applyChallengeMapState() {
+    const progress = await window.PuzzleState.getProgress();
+    const unlocked = Math.min(Math.max(progress.unlockedChallenge, progress.unlockedStory - 1), 5);
     const progressText = document.querySelector("main .text-right span.block");
     if (progressText) {
       progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;
@@ -266,6 +263,7 @@
       const lockIcon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
         .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "lock_open");
       const hintText = card.querySelector("p.text-sm, p.text-xs");
+      const lockBadge = card.querySelector("div.text-\\[10px\\].tracking-widest");
 
       if (isUnlocked) {
         card.classList.add("cursor-pointer");
@@ -281,6 +279,11 @@
         if (hintText) {
           hintText.textContent = "已解鎖，點擊前往";
         }
+        if (lockBadge) {
+          lockBadge.textContent = "已解鎖";
+          lockBadge.classList.remove("text-secondary");
+          lockBadge.classList.add("text-primary");
+        }
       } else {
         card.onclick = null;
         if (imageWrapper) {
@@ -289,6 +292,11 @@
         if (lockIcon) {
           lockIcon.textContent = "lock";
           lockIcon.classList.remove("text-primary");
+        }
+        if (lockBadge) {
+          lockBadge.textContent = "未解鎖";
+          lockBadge.classList.remove("text-primary");
+          lockBadge.classList.add("text-secondary");
         }
       }
     });

@@ -54,10 +54,103 @@
   <a href="../../committee.html">管理委員會名單</a>
 </div>
 
+<style>
+/* ── 線上點燈 專屬樣式 ── */
+.light-intro {
+  max-width: 720px; margin: 0 auto 40px; text-align: center;
+  color: var(--text-mid); line-height: 2;
+}
+.lamp-cards {
+  display: flex; gap: 20px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 40px;
+}
+.lamp-card {
+  border: 2px solid var(--border);
+  border-radius: 12px; padding: 22px 28px;
+  width: 200px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  background: var(--warm-white);
+}
+.lamp-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.lamp-card.selected {
+  border-color: var(--red); background: var(--red-bg);
+}
+.lamp-card .lamp-icon { font-size: 2.4rem; margin-bottom: 8px; }
+.lamp-card .lamp-name { font-size: 1.1rem; font-weight: 700; color: var(--red); letter-spacing: 0.1em; }
+.lamp-card .lamp-price { font-size: 0.95rem; color: var(--gold); font-weight: 600; margin-top: 4px; }
+.lamp-card .lamp-desc { font-size: 0.82rem; color: var(--text-light); margin-top: 6px; line-height: 1.6; }
+
+.light-form-wrap {
+  max-width: 600px; margin: 0 auto;
+  background: var(--warm-white); border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 36px 40px;
+  box-shadow: var(--shadow-sm);
+}
+.form-section-title {
+  font-size: 1rem; font-weight: 700; color: var(--red);
+  letter-spacing: 0.12em; margin-bottom: 20px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-red);
+}
+.form-row { margin-bottom: 20px; }
+.form-row label {
+  display: block; font-size: 0.9rem; font-weight: 600;
+  color: var(--text-mid); margin-bottom: 6px; letter-spacing: 0.05em;
+}
+.form-row label .required { color: var(--red); margin-left: 2px; }
+.form-row input, .form-row select {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 1rem;
+  font-family: inherit; color: var(--text-dark);
+  background: var(--cream); transition: border-color 0.2s;
+}
+.form-row input:focus, .form-row select:focus {
+  outline: none; border-color: var(--red);
+  background: var(--warm-white);
+}
+.form-row input.error, .form-row select.error { border-color: var(--red-light); }
+.form-hint { font-size: 0.8rem; color: var(--text-light); margin-top: 5px; }
+.form-err-msg { font-size: 0.8rem; color: var(--red-light); margin-top: 4px; display: none; }
+
+/* 匯款資訊框 */
+.payment-box {
+  background: var(--gold-bg); border: 1.5px solid var(--gold-light);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;
+}
+.payment-box h4 { color: var(--gold); font-size: 1rem; letter-spacing: 0.1em; margin-bottom: 12px; }
+.payment-box .payment-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.92rem; padding: 4px 0; border-bottom: 1px dashed rgba(184,134,11,0.2);
+}
+.payment-box .payment-row:last-child { border-bottom: none; }
+.payment-box .payment-row span:first-child { color: var(--text-mid); }
+.payment-box .payment-row strong { color: var(--text-dark); font-weight: 700; }
+.payment-note { font-size: 0.82rem; color: var(--text-light); margin-top: 10px; line-height: 1.7; }
+
+.light-submit-btn {
+  width: 100%; padding: 14px;
+  background: var(--red); color: white;
+  border: none; border-radius: 10px;
+  font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em;
+  cursor: pointer; font-family: inherit;
+  transition: background 0.2s, transform 0.15s;
+}
+.light-submit-btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+/* 成功訊息 */
+.success-box {
+  display: none; text-align: center; padding: 48px 24px;
+}
+.success-box .success-icon { font-size: 3rem; margin-bottom: 16px; }
+.success-box h3 { font-size: 1.4rem; color: var(--red); margin-bottom: 12px; }
+.success-box p { color: var(--text-mid); line-height: 2; }
+</style>
+
 <section class="section section-white">
   <div class="container">
 
-    <button class="news-more-btn" onclick="location.href=&apos;../../index.html&apos;" style="font-size: 1.2rem; margin-bottom: 20px;">← 返回首頁</button>
+    <button class="news-more-btn" onclick="location.href='../../index.html'" style="font-size: 1.2rem; margin-bottom: 20px;">← 返回首頁</button>
 
     <div class="section-header" style="margin-top: 10px;">
       <div class="section-tag">ONLINE SERVICE</div>
@@ -66,12 +159,185 @@
       <p style="margin-top: 14px; color: var(--text-light);">線上服務 ＞ 線上點燈</p>
     </div>
 
-    <div style="max-width: 800px; margin: 0 auto; min-height: 400px; display: flex; align-items: center; justify-content: center;">
-      <p style="color: var(--text-light); font-size: 1.2rem; letter-spacing: 0.1em;">🚧 頁面建置中，敬請期待 🚧</p>
+    <p class="light-intro">
+      祈求神明庇佑，為您或家人點亮一盞心燈。<br>
+      填妥資料並完成匯款後，廟方確認收款即安排點燈，並於三個工作天內以簡訊或 Email 通知。
+    </p>
+
+    <!-- 燈種選擇 -->
+    <div class="lamp-cards">
+      <div class="lamp-card" data-lamp="光明燈" onclick="selectLamp(this)">
+        <div class="lamp-icon">🕯️</div>
+        <div class="lamp-name">光明燈</div>
+        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-desc">一般祈福，為自身或家人祈求平安、順遂</div>
+      </div>
+      <div class="lamp-card" data-lamp="太歲燈" onclick="selectLamp(this)">
+        <div class="lamp-icon">🌟</div>
+        <div class="lamp-name">太歲燈</div>
+        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-desc">當年犯太歲者點，化解流年不利</div>
+      </div>
+      <div class="lamp-card" data-lamp="財神燈" onclick="selectLamp(this)">
+        <div class="lamp-icon">💰</div>
+        <div class="lamp-name">財神燈</div>
+        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-desc">經商求財者點，招財進寶、生意興隆</div>
+      </div>
+    </div>
+
+    <!-- 表單 + 成功訊息 -->
+    <div class="light-form-wrap">
+
+      <div id="success-box" class="success-box">
+        <div class="success-icon">🙏</div>
+        <h3>感謝您的點燈申請</h3>
+        <p>廟方確認匯款後，將以您留下的聯絡方式通知點燈完成。<br>祝福您闔家平安、萬事順遂。</p>
+      </div>
+
+      <form id="light-form" novalidate>
+
+        <p class="form-section-title">一、選擇燈種</p>
+        <div class="form-row">
+          <label>燈種<span class="required">＊</span></label>
+          <select id="lamp-type" required>
+            <option value="">── 請選擇燈種 ──</option>
+            <option value="光明燈">光明燈（每盞 $600）</option>
+            <option value="太歲燈">太歲燈（每盞 $600）</option>
+            <option value="財神燈">財神燈（每盞 $600）</option>
+          </select>
+          <div class="form-err-msg" id="err-lamp">請選擇燈種</div>
+        </div>
+
+        <p class="form-section-title">二、點燈人資料</p>
+        <div class="form-row">
+          <label>點燈人姓名<span class="required">＊</span></label>
+          <input type="text" id="name" placeholder="請輸入姓名" required>
+          <div class="form-err-msg" id="err-name">請輸入姓名</div>
+        </div>
+        <div class="form-row">
+          <label>出生年月日（西元年）<span class="required">＊</span></label>
+          <input type="date" id="birthday" required>
+          <div class="form-err-msg" id="err-birthday">請填寫出生年月日</div>
+        </div>
+        <div class="form-row">
+          <label>住址<span class="required">＊</span></label>
+          <input type="text" id="address" placeholder="縣市＋區＋街道門號" required>
+          <div class="form-err-msg" id="err-address">請填寫住址</div>
+        </div>
+        <div class="form-row">
+          <label>手機號碼<span class="required">＊</span></label>
+          <input type="tel" id="phone" placeholder="09xxxxxxxx" required>
+          <div class="form-err-msg" id="err-phone">請填寫有效的手機號碼（09 開頭 10 碼）</div>
+        </div>
+        <div class="form-row">
+          <label>Email（選填）</label>
+          <input type="email" id="email" placeholder="可選填，方便廟方以電子郵件通知">
+          <div class="form-err-msg" id="err-email">Email 格式不正確</div>
+        </div>
+
+        <p class="form-section-title">三、匯款確認</p>
+        <!-- 匯款資訊（待廟方確認後填入正確帳號） -->
+        <div class="payment-box">
+          <h4>廟方收款帳號</h4>
+          <div class="payment-row"><span>銀行名稱</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>銀行代碼</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>帳號</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>戶名</span><strong>三重海清宮包公廟管理委員會</strong></div>
+          <div class="payment-row"><span>金額</span><strong id="payment-amount">每盞 $600</strong></div>
+          <p class="payment-note">請於填寫申請後 3 日內完成匯款，並填入匯款後五碼。逾期未匯款者，申請視為失效。</p>
+        </div>
+        <div class="form-row">
+          <label>匯款後五碼<span class="required">＊</span></label>
+          <input type="text" id="transfer-code" placeholder="請輸入匯款帳號後五碼" maxlength="5" required>
+          <div class="form-hint">完成匯款後，填入您匯款帳號的最後 5 位數字，方便廟方核對。</div>
+          <div class="form-err-msg" id="err-transfer">請填寫 5 位數字匯款後五碼</div>
+        </div>
+
+        <button type="submit" class="light-submit-btn" id="submit-btn">送出申請</button>
+        <div id="submit-error" style="display:none; margin-top:14px; padding:10px 14px; background:#fdecea; border:1px solid #f5c6c2; border-radius:8px; color:#a94442; font-size:0.9rem; text-align:center;"></div>
+      </form>
     </div>
 
   </div>
 </section>
+
+<script>
+// 點擊燈卡 → 同步更新 select
+function selectLamp(card) {
+  document.querySelectorAll('.lamp-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('lamp-type').value = card.dataset.lamp;
+  clearErr('lamp');
+}
+
+// select 改變 → 同步更新燈卡
+document.getElementById('lamp-type').addEventListener('change', function() {
+  const val = this.value;
+  document.querySelectorAll('.lamp-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.lamp === val);
+  });
+});
+
+function showErr(id) {
+  document.getElementById('err-' + id).style.display = 'block';
+}
+function clearErr(id) {
+  document.getElementById('err-' + id).style.display = 'none';
+}
+
+// 部署 Apps Script 後，把網頁應用程式網址貼到這裡
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzHMR57p_OVHkKwgMhLVU2hXlDMu89wPmKMRbl8XbZJjF69q25sRpSB6H0wHAywQPtGEg/exec';
+
+document.getElementById('light-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  let valid = true;
+
+  const lamp = document.getElementById('lamp-type').value;
+  const name = document.getElementById('name').value.trim();
+  const birthday = document.getElementById('birthday').value;
+  const address = document.getElementById('address').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const code = document.getElementById('transfer-code').value.trim();
+
+  if (!lamp)    { showErr('lamp');     valid = false; } else clearErr('lamp');
+  if (!name)    { showErr('name');     valid = false; } else clearErr('name');
+  if (!birthday){ showErr('birthday'); valid = false; } else clearErr('birthday');
+  if (!address) { showErr('address');  valid = false; } else clearErr('address');
+  if (!/^09\d{8}$/.test(phone)) { showErr('phone'); valid = false; } else clearErr('phone');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email'); valid = false; } else clearErr('email');
+  if (!/^\d{5}$/.test(code))    { showErr('transfer'); valid = false; } else clearErr('transfer');
+
+  if (!valid) return;
+
+  const btn = document.getElementById('submit-btn');
+  const errBox = document.getElementById('submit-error');
+  btn.disabled = true;
+  btn.textContent = '送出中...';
+  errBox.style.display = 'none';
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        lamp, name, birthday, address, phone, email, transferCode: code
+      })
+    });
+
+    document.getElementById('light-form').style.display = 'none';
+    document.getElementById('success-box').style.display = 'block';
+    document.querySelector('.lamp-cards').style.display = 'none';
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '送出申請';
+    errBox.textContent = '送出失敗，請稍後再試或改撥打廟方電話：(02)8976-1766';
+    errBox.style.display = 'block';
+  }
+});
+</script>
 
 <footer>
   <div class="footer-main">
