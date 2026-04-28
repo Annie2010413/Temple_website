@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; }
     .game-wrapper {
-      max-width: 900px; margin: 0 auto; padding: 20px;
+      max-width: 900px; margin: 0 auto; padding: 4px 20px 20px;
       font-family: 'Noto Serif TC', serif;
       user-select: none;
     }
@@ -77,7 +77,7 @@
     .stairs-btn {
       position: absolute; z-index: 10; padding: 10px 16px;
       background: linear-gradient(180deg, #8B4513, #654321);
-      border: 2px solid #DAA520; color: #FFD700;
+      border: 2px solid #DAA520; color: #E8C270;
       font-family: 'Noto Serif TC', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em;
       cursor: pointer; border-radius: 6px; transition: all 0.3s;
       box-shadow: 0 3px 10px rgba(0,0,0,0.3);
@@ -108,7 +108,7 @@
     }
     .shrine-top::after {
       content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-      width: 20px; height: 8px; background: #FFD700; border-radius: 50% 50% 0 0;
+      width: 20px; height: 8px; background: #E8C270; border-radius: 50% 50% 0 0;
     }
     .shrine-icon {
       width: 100%; height: 75%;
@@ -120,7 +120,7 @@
     .shrine-frame.small .shrine-icon { font-size: 2rem; }
     .shrine-label {
       position: absolute; bottom: 0; left: 0; right: 0;
-      background: rgba(139,0,0,0.85); color: #FFD700;
+      background: rgba(139,0,0,0.85); color: #E8C270;
       font-size: 0.7rem; font-weight: 700; text-align: center;
       padding: 3px 2px; letter-spacing: 0.1em; border-top: 1px solid #DAA520;
     }
@@ -146,7 +146,7 @@
       cursor: pointer; border-radius: 6px; transition: all 0.3s;
     }
     .floor-tab:hover { background: #FDF0EE; }
-    .floor-tab.active { background: #8B0000; color: #FFD700; box-shadow: 0 3px 10px rgba(139,0,0,0.3); }
+    .floor-tab.active { background: #8B0000; color: #E8C270; box-shadow: 0 3px 10px rgba(139,0,0,0.3); }
 
     /* Modal */
     .modal-overlay {
@@ -158,19 +158,22 @@
     .modal-overlay.show { display: flex; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .modal-content {
-      background: #FAF7F2; border: 3px solid #DAA520; border-radius: 12px;
+      background: #FFFDF7; border: 2px solid rgba(218,165,32,0.5); border-radius: 16px;
       max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5); animation: slideUp 0.3s ease;
+      box-shadow: 0 8px 40px rgba(139,0,0,0.14), 0 0 0 1px rgba(218,165,32,0.15);
+      animation: slideUp 0.3s ease;
     }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-header {
-      background: linear-gradient(135deg, #8B0000, #C0392B); padding: 16px 20px;
-      border-radius: 9px 9px 0 0; display: flex; justify-content: space-between; align-items: center;
+      background: #FFFDF7; padding: 20px 20px 14px;
+      border-radius: 14px 14px 0 0;
+      border-bottom: 1px solid rgba(218,165,32,0.25);
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-title { color: #FFD700; font-size: 1.4rem; font-weight: 900; letter-spacing: 0.2em; }
-    .modal-close { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 1.5rem; cursor: pointer; padding: 4px 8px; transition: color 0.2s; }
-    .modal-close:hover { color: white; }
-    .modal-photo { width: 100%; max-height: 350px; object-fit: contain; background: #1A1A1A; }
+    .modal-title { color: #8B0000; font-size: 1.4rem; font-weight: 900; letter-spacing: 0.2em; }
+    .modal-close { background: none; border: none; color: #bbb; font-size: 1.4rem; cursor: pointer; padding: 4px 8px; transition: color 0.2s; }
+    .modal-close:hover { color: #8B0000; }
+    .modal-photo { width: 100%; max-height: 350px; object-fit: contain; background: #F5EDE0; }
     .modal-body { padding: 20px; }
     .modal-subtitle { color: #C0392B; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 8px; }
     .modal-desc { color: #5C3D2E; font-size: 0.95rem; line-height: 1.9; }
@@ -178,7 +181,7 @@
     .modal-action-btn {
       flex: 1; min-width: 120px; padding: 10px 16px;
       font-family: 'Noto Serif TC', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em;
-      border: 2px solid #C0392B; background: #FAF7F2; color: #C0392B;
+      border: 2px solid #C0392B; background: #FFFDF7; color: #C0392B;
       cursor: pointer; border-radius: 6px; transition: all 0.25s; text-align: center;
     }
     .modal-action-btn:hover { background: #C0392B; color: white; }
@@ -355,6 +358,7 @@
     .jb-result {
       min-height: 46px; font-size: 1.1rem; font-weight: 900;
       color: #8B0000; letter-spacing: 0.15em; line-height: 1.6;
+      white-space: pre-line;
       opacity: 0; transition: opacity 0.5s; margin-bottom: 18px;
     }
     .jb-result.show { opacity: 1; }
@@ -429,7 +433,7 @@
 
     <button class="news-more-btn" onclick="location.href='../../index.html'" style="font-size: 1.2rem; margin-bottom: 20px;">← 返回首頁</button>
 
-    <div class="section-header" style="margin-top: 10px;">
+    <div class="section-header" style="margin-top: 10px; margin-bottom: 0; padding-bottom: 0;">
       <div class="section-tag">VIRTUAL TOUR</div>
       <h2 class="section-title">線上<em>參拜</em></h2>
       <div class="section-rule"></div>
@@ -483,11 +487,6 @@
       </div>
     </div>
 
-    <!-- 樓層說明 -->
-    <div class="info-panel" id="info-panel">
-      <p class="floor-name">一樓</p>
-      <p>主祀包府千歲（包公），另有送子觀音、財神爺、虎爺。點擊神龕即可參拜。</p>
-    </div>
 
   </div>
 </section>
@@ -542,7 +541,8 @@
   <div class="overlay-card">
     <button class="overlay-close" onclick="closeJiaobei()">✕</button>
     <div class="overlay-title" id="jiaobei-title">擲筊問事</div>
-    <p class="jb-hint-text">心中默念所求之事，點擊擲筊</p>
+    <p class="overlay-subtitle">請在心中默念您的姓名、出生年月日及所求之事</p>
+    <p class="jb-hint-text">默念完畢後，點擊擲筊</p>
 
     <div class="jb-stage">
       <!-- 投擲動畫：左右各一塊，分別顯示圖片的左半/右半 -->
@@ -623,7 +623,6 @@ function switchFloor(floor) {
   document.getElementById(`floor-${floor}`).style.display = 'block';
   document.querySelectorAll('.floor-tab').forEach((tab, i) => tab.classList.toggle('active', i + 1 === floor));
   const info = FLOOR_INFO[floor];
-  document.getElementById('info-panel').innerHTML = `<p class="floor-name">${info.name}</p><p>${info.desc}</p>`;
   currentFloor = floor;
 }
 
@@ -830,7 +829,7 @@ function throwJiaobei() {
     text   = '聖筊　神明已應允';
     imgSrc = '聖筊.png';
   } else if (rand < 0.75) {
-    text   = '笑筊　可能是您的問題敘述不清、事情尚不明朗、問題太急或是神明認為這件事不需特別指示';
+    text   = '笑筊\n可能是您的問題敘述不清、事情尚不明朗、問題太急或是神明認為這件事不需特別指示';
     imgSrc = '笑筊.png';
   } else {
     text   = '陰筊　暫時不許，改天再問';

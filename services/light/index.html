@@ -57,7 +57,7 @@
 <style>
 /* ── 線上點燈 專屬樣式 ── */
 .light-intro {
-  max-width: 720px; margin: 0 auto 40px; text-align: center;
+  max-width: 720px; margin: -20px auto 40px; text-align: center;
   color: var(--text-mid); line-height: 2;
 }
 .lamp-cards {
@@ -76,6 +76,12 @@
   border-color: var(--red); background: var(--red-bg);
 }
 .lamp-card .lamp-icon { font-size: 2.4rem; margin-bottom: 8px; }
+.lamp-card .lamp-icon-img {
+  width: 80px; height: 80px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+  display: block;
+}
 .lamp-card .lamp-name { font-size: 1.1rem; font-weight: 700; color: var(--red); letter-spacing: 0.1em; }
 .lamp-card .lamp-price { font-size: 0.95rem; color: var(--gold); font-weight: 600; margin-top: 4px; }
 .lamp-card .lamp-desc { font-size: 0.82rem; color: var(--text-light); margin-top: 6px; line-height: 1.6; }
@@ -172,25 +178,25 @@
     <!-- 燈種選擇 -->
     <div class="lamp-cards">
       <div class="lamp-card" data-lamp="光明燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">🕯️</div>
+        <img src="光明燈.png" alt="光明燈" class="lamp-icon-img">
         <div class="lamp-name">光明燈</div>
         <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">一般祈福，為自身或家人祈求平安、順遂</div>
       </div>
       <div class="lamp-card" data-lamp="太歲燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">🌟</div>
+        <img src="十二生肖盤.png" alt="太歲燈" class="lamp-icon-img">
         <div class="lamp-name">太歲燈</div>
         <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">當年犯太歲者點，化解流年不利</div>
       </div>
       <div class="lamp-card" data-lamp="財神燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">💰</div>
+        <img src="聚寶盆.png" alt="財神燈" class="lamp-icon-img">
         <div class="lamp-name">財神燈</div>
         <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">經商求財者點，招財進寶、生意興隆</div>
       </div>
       <div class="lamp-card" data-lamp="契子燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">👶</div>
+        <img src="長命鎖.png" alt="契子燈" class="lamp-icon-img">
         <div class="lamp-name">契子燈</div>
         <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">認神明為契父母，祈求孩童平安健康、順利成長</div>
