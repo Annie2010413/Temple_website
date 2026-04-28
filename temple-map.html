@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>線上參拜｜三重海清宮包公廟</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ══════════ 遊戲全域 ══════════ */
+    * { box-sizing: border-box; }
+    .game-wrapper {
+      max-width: 900px; margin: 0 auto; padding: 20px;
+      font-family: 'Noto Serif TC', serif;
+      user-select: none;
+    }
+
+    /* ══════════ 樓層場景 ══════════ */
+    .floor-scene {
+      position: relative;
+      width: 100%; height: 520px;
+      border: 3px solid #8B0000;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    /* 背景層 */
+    .floor-bg {
+      position: absolute; inset: 0;
+    }
+
+    /* 一樓背景 */
+    .bg-1f {
+      background:
+        /* 天花板 */
+        linear-gradient(180deg, #3D0C02 0%, #5C1A0A 8%, transparent 8%),
+        /* 地板 */
+        linear-gradient(0deg, #1A1A1A 0%, #2D2D2D 12%, transparent 12%),
+        /* 牆壁 */
+        linear-gradient(180deg, #D4A574 8%, #E8D5B7 30%, #F0E0C8 60%, #D4A574 88%);
+    }
+
+    /* 二樓背景 */
+    .bg-2f {
+      background:
+        linear-gradient(180deg, #3D0C02 0%, #5C1A0A 8%, transparent 8%),
+        linear-gradient(0deg, #1A1A1A 0%, #2D2D2D 12%, transparent 12%),
+        linear-gradient(180deg, #C9956B 8%, #E2C9A8 30%, #EDD8BC 60%, #C9956B 88%);
+    }
+
+    /* 三樓背景 */
+    .bg-3f {
+      background:
+        linear-gradient(180deg, #2A0800 0%, #4A1508 8%, transparent 8%),
+        linear-gradient(0deg, #1A1A1A 0%, #2D2D2D 12%, transparent 12%),
+        linear-gradient(180deg, #B8845A 8%, #D9BFA0 30%, #E8D4B8 60%, #B8845A 88%);
+    }
+
+    /* ══════════ 裝飾元素 ══════════ */
+
+    /* 龍柱 */
+    .dragon-pillar {
+      position: absolute;
+      width: 40px;
+      top: 8%; bottom: 12%;
+      border-radius: 6px;
+      z-index: 2;
+    }
+    .dragon-pillar.left { left: 60px; }
+    .dragon-pillar.right { right: 60px; }
+    .dragon-pillar-inner {
+      width: 100%; height: 100%;
+      background: linear-gradient(180deg, #C0392B, #8B0000, #C0392B, #8B0000, #C0392B);
+      border-radius: 6px;
+      border: 2px solid #DAA520;
+      position: relative;
+      overflow: hidden;
+    }
+    .dragon-pillar-inner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        180deg,
+        transparent 0px, transparent 20px,
+        rgba(218,165,32,0.3) 20px, rgba(218,165,32,0.3) 22px,
+        transparent 22px, transparent 40px
+      );
+    }
+
+    /* 香爐 */
+    .incense-burner-game {
+      position: absolute;
+      bottom: 12%; left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+    .burner-svg { width: 80px; height: 60px; }
+
+    /* 供桌 */
+    .altar-table {
+      position: absolute;
+      bottom: 12%; left: 50%;
+      transform: translateX(-50%);
+      width: 300px; height: 50px;
+      background: linear-gradient(180deg, #8B4513, #654321, #4A2F1A);
+      border: 2px solid #DAA520;
+      border-radius: 4px;
+      z-index: 3;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .altar-table::before {
+      content: '';
+      position: absolute; top: -8px; left: -10px; right: -10px; height: 10px;
+      background: linear-gradient(180deg, #DAA520, #B8860B);
+      border-radius: 4px 4px 0 0;
+    }
+    .altar-table-text {
+      position: absolute;
+      width: 100%; text-align: center;
+      top: 50%; transform: translateY(-50%);
+      color: #FFD700; font-size: 1rem;
+      font-weight: 900; letter-spacing: 0.3em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    /* 匾額 */
+    .plaque {
+      position: absolute;
+      top: 10%; left: 50%;
+      transform: translateX(-50%);
+      background: #1A0A00;
+      border: 3px solid #DAA520;
+      padding: 8px 28px;
+      z-index: 4;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .plaque-text {
+      color: #FFD700; font-size: 1.4rem;
+      font-weight: 900; letter-spacing: 0.4em;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
+
+    /* 燈籠 */
+    .lantern {
+      position: absolute;
+      width: 28px; height: 42px;
+      z-index: 6;
+    }
+    .lantern-body {
+      width: 28px; height: 34px;
+      background: radial-gradient(ellipse at center, #FF6B35, #C0392B, #8B0000);
+      border-radius: 50%;
+      border: 1px solid #DAA520;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 15px rgba(255,107,53,0.5);
+    }
+    .lantern-char {
+      color: #FFD700; font-size: 0.6rem; font-weight: 900;
+    }
+    .lantern-tassel {
+      width: 2px; height: 10px;
+      background: #DAA520;
+      margin: 0 auto;
+    }
+    .lantern-string {
+      width: 1px; height: 12px;
+      background: #DAA520;
+      margin: 0 auto;
+    }
+
+    /* 光明燈塔 */
+    .light-tower {
+      position: absolute;
+      width: 50px;
+      bottom: 18%;
+      z-index: 4;
+    }
+    .light-tower.left-tower { left: 120px; }
+    .light-tower.right-tower { right: 120px; }
+    .tower-body {
+      width: 50px; height: 120px;
+      background: linear-gradient(180deg, #FFD700, #DAA520, #B8860B);
+      border-radius: 8px 8px 4px 4px;
+      border: 2px solid #8B6914;
+      position: relative;
+      overflow: hidden;
+    }
+    .tower-body::after {
+      content: '';
+      position: absolute; inset: 4px;
+      background: repeating-linear-gradient(
+        180deg,
+        #C0392B 0px, #C0392B 8px,
+        #FFD700 8px, #FFD700 10px
+      );
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+    .tower-top {
+      width: 30px; height: 20px;
+      background: #228B22;
+      border-radius: 50% 50% 0 0;
+      margin: 0 auto -2px;
+    }
+
+    /* 磁磚壁畫 */
+    .wall-tile {
+      position: absolute;
+      width: 60px; height: 80px;
+      border: 2px solid #DAA520;
+      background: linear-gradient(135deg, #FFF8DC, #FAEBD7);
+      z-index: 1;
+      overflow: hidden;
+    }
+    .wall-tile::after {
+      content: '🏔️';
+      position: absolute;
+      font-size: 2rem;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.4;
+    }
+
+    /* 樓梯按鈕 */
+    .stairs-btn {
+      position: absolute;
+      z-index: 10;
+      padding: 10px 16px;
+      background: linear-gradient(180deg, #8B4513, #654321);
+      border: 2px solid #DAA520;
+      color: #FFD700;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+    .stairs-btn:hover {
+      background: linear-gradient(180deg, #A0522D, #8B4513);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+    .stairs-btn.up { right: 12px; top: 50%; }
+    .stairs-btn.down { right: 12px; top: 60%; }
+
+    /* ══════════ 神明神龕 ══════════ */
+    .deity-spot {
+      position: absolute;
+      z-index: 5;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .deity-spot:hover { transform: scale(1.05); }
+    .deity-spot:hover .deity-glow { opacity: 1; }
+
+    .deity-shrine {
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center;
+    }
+
+    /* 神龕框架 */
+    .shrine-frame {
+      width: 90px; height: 120px;
+      background: linear-gradient(180deg, #5C1A0A, #3D0C02);
+      border: 3px solid #DAA520;
+      border-radius: 8px 8px 4px 4px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .shrine-frame.main {
+      width: 110px; height: 145px;
+    }
+    .shrine-frame.small {
+      width: 75px; height: 100px;
+    }
+
+    /* 神龕頂部裝飾 */
+    .shrine-top {
+      position: absolute;
+      top: -12px; left: -8px; right: -8px;
+      height: 16px;
+      background: linear-gradient(180deg, #C0392B, #8B0000);
+      border: 2px solid #DAA520;
+      border-radius: 6px 6px 0 0;
+      z-index: 1;
+    }
+    .shrine-top::after {
+      content: '';
+      position: absolute;
+      top: -6px; left: 50%;
+      transform: translateX(-50%);
+      width: 20px; height: 8px;
+      background: #FFD700;
+      border-radius: 50% 50% 0 0;
+    }
+
+    /* 神像區 */
+    .shrine-icon {
+      width: 100%; height: 75%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+      background: linear-gradient(180deg, rgba(139,0,0,0.3), transparent);
+    }
+    .shrine-frame.main .shrine-icon { font-size: 3.2rem; }
+    .shrine-frame.small .shrine-icon { font-size: 2rem; }
+
+    /* 神明名牌 */
+    .shrine-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(139,0,0,0.85);
+      color: #FFD700;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 3px 2px;
+      letter-spacing: 0.1em;
+      border-top: 1px solid #DAA520;
+    }
+    .shrine-frame.main .shrine-label { font-size: 0.85rem; padding: 5px; }
+
+    /* 發光效果 */
+    .deity-glow {
+      position: absolute;
+      inset: -10px;
+      border-radius: 12px;
+      background: radial-gradient(ellipse at center, rgba(255,215,0,0.25), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* 點擊提示 */
+    .click-hint {
+      font-size: 0.65rem;
+      color: #DAA520;
+      text-align: center;
+      margin-top: 4px;
+      letter-spacing: 0.05em;
+      animation: hintPulse 2s ease-in-out infinite;
+    }
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ══════════ 樓層指示器 ══════════ */
+    .floor-indicator {
+      display: flex; justify-content: center;
+      gap: 12px; margin: 16px 0;
+    }
+    .floor-tab {
+      padding: 10px 24px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.15em;
+      border: 2px solid #8B0000;
+      background: #FAF7F2;
+      color: #8B0000;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+    .floor-tab:hover { background: #FDF0EE; }
+    .floor-tab.active {
+      background: #8B0000; color: #FFD700;
+      box-shadow: 0 3px 10px rgba(139,0,0,0.3);
+    }
+
+    /* ══════════ 神明詳情 Modal ══════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 1000;
+      justify-content: center; align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .modal-overlay.show { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: #FAF7F2;
+      border: 3px solid #DAA520;
+      border-radius: 12px;
+      max-width: 500px; width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #8B0000, #C0392B);
+      padding: 16px 20px;
+      border-radius: 9px 9px 0 0;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-title {
+      color: #FFD700;
+      font-size: 1.4rem; font-weight: 900;
+      letter-spacing: 0.2em;
+    }
+    .modal-close {
+      background: none; border: none;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.5rem; cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: white; }
+
+    .modal-photo {
+      width: 100%; max-height: 350px;
+      object-fit: contain;
+      background: #1A1A1A;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+    .modal-subtitle {
+      color: #C0392B;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 8px;
+    }
+    .modal-desc {
+      color: #5C3D2E;
+      font-size: 0.95rem;
+      line-height: 1.9;
+    }
+    .modal-location {
+      margin-top: 12px;
+      padding: 8px 14px;
+      background: #FFF8E7;
+      border-left: 3px solid #DAA520;
+      font-size: 0.85rem;
+      color: #8B6914;
+    }
+
+    /* 互動按鈕 */
+    .modal-actions {
+      display: flex; gap: 10px;
+      padding: 0 20px 20px;
+      flex-wrap: wrap;
+    }
+    .modal-action-btn {
+      flex: 1; min-width: 120px;
+      padding: 10px 16px;
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 0.1em;
+      border: 2px solid #C0392B;
+      background: #FAF7F2;
+      color: #C0392B;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.25s;
+      text-align: center;
+    }
+    .modal-action-btn:hover {
+      background: #C0392B; color: white;
+    }
+    .modal-action-btn.primary {
+      background: #C0392B; color: white;
+    }
+    .modal-action-btn.primary:hover {
+      background: #8B0000;
+    }
+
+    /* ══════════ 擲筊 Mini Game ══════════ */
+    .jiaobei-game {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    .jiaobei-game.show { display: block; }
+    .jiaobei-mini-pair {
+      display: flex; gap: 30px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    .jiaobei-mini {
+      width: 40px; height: 65px;
+    }
+    .jiaobei-mini.throwing {
+      animation: throwMini 0.8s ease-in-out;
+    }
+    @keyframes throwMini {
+      0%   { transform: translateY(0) rotate(0deg); }
+      30%  { transform: translateY(-80px) rotate(180deg); }
+      50%  { transform: translateY(-90px) rotate(360deg); }
+      70%  { transform: translateY(-40px) rotate(540deg); }
+      100% { transform: translateY(0) rotate(720deg); }
+    }
+    .jiaobei-mini-result {
+      font-size: 1.3rem; font-weight: 900;
+      color: #C0392B; letter-spacing: 0.2em;
+      min-height: 40px;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .jiaobei-mini-result.show { opacity: 1; }
+
+    /* ══════════ 角色 ══════════ */
+    .player-character {
+      position: absolute;
+      bottom: 3%; left: 50%;
+      transform: translateX(-50%);
+      z-index: 8;
+      text-align: center;
+      transition: left 0.5s ease;
+    }
+    .player-body {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      animation: playerBob 2s ease-in-out infinite;
+    }
+    @keyframes playerBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .player-label {
+      font-size: 0.6rem;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-top: 2px;
+    }
+
+    /* ══════════ 地板裝飾 ══════════ */
+    .floor-tiles {
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 12%;
+      z-index: 1;
+    }
+    .floor-tiles-1f {
+      background:
+        repeating-linear-gradient(90deg,
+          #2D2D2D 0px, #2D2D2D 59px,
+          #DAA520 59px, #DAA520 60px
+        ),
+        linear-gradient(180deg, #333 0%, #1A1A1A 100%);
+    }
+    .floor-tiles-2f {
+      background:
+        repeating-linear-gradient(90deg,
+          #3D2D1D 0px, #3D2D1D 59px,
+          #8B6914 59px, #8B6914 60px
+        ),
+        linear-gradient(180deg, #4A3728 0%, #2D1F14 100%);
+    }
+    .floor-tiles-3f {
+      background:
+        repeating-linear-gradient(90deg,
+          #2A2A2A 0px, #2A2A2A 59px,
+          #666 59px, #666 60px
+        ),
+        linear-gradient(180deg, #383838 0%, #1E1E1E 100%);
+    }
+
+    /* ══════════ 頂部裝飾橫樑 ══════════ */
+    .ceiling-beam {
+      position: absolute;
+      top: 8%; left: 0; right: 0;
+      height: 8px;
+      background: linear-gradient(180deg, #DAA520, #8B6914);
+      z-index: 3;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* ══════════ 對聯 ══════════ */
+    .couplet {
+      position: absolute;
+      top: 12%;
+      width: 26px;
+      background: #C0392B;
+      border: 2px solid #DAA520;
+      border-radius: 4px;
+      padding: 6px 3px;
+      z-index: 3;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .couplet.left-c { left: 15px; }
+    .couplet.right-c { right: 15px; }
+    .couplet-text {
+      writing-mode: vertical-rl;
+      color: #FFD700;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      line-height: 1;
+    }
+
+    /* ══════════ 煙霧效果 ══════════ */
+    .smoke-particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: rgba(200,200,200,0.4);
+      border-radius: 50%;
+      z-index: 7;
+      pointer-events: none;
+    }
+
+    /* ══════════ 說明面板 ══════════ */
+    .info-panel {
+      background: #FFF8E7;
+      border: 2px solid #DAA520;
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .info-panel p {
+      color: #5C3D2E;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .info-panel .floor-name {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #8B0000;
+      letter-spacing: 0.15em;
+    }
+
+    /* ══════════ RWD ══════════ */
+    @media (max-width: 600px) {
+      .floor-scene { height: 420px; }
+      .shrine-frame { width: 65px; height: 85px; }
+      .shrine-frame.main { width: 80px; height: 110px; }
+      .shrine-frame.small { width: 55px; height: 75px; }
+      .shrine-icon { font-size: 1.8rem !important; }
+      .shrine-frame.main .shrine-icon { font-size: 2.2rem !important; }
+      .shrine-label { font-size: 0.55rem !important; }
+      .dragon-pillar { width: 25px; }
+      .dragon-pillar.left { left: 30px; }
+      .dragon-pillar.right { right: 30px; }
+      .altar-table { width: 200px; }
+      .plaque { padding: 6px 16px; }
+      .plaque-text { font-size: 1rem; }
+      .light-tower { width: 35px; }
+      .light-tower.left-tower { left: 65px; }
+      .light-tower.right-tower { right: 65px; }
+      .tower-body { width: 35px; height: 85px; }
+      .stairs-btn { padding: 8px 10px; font-size: 0.75rem; }
+      .floor-tab { padding: 8px 16px; font-size: 0.85rem; }
+      .couplet { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div id="topbar">
+  <span>歡迎蒞臨 三重海清宮包公廟 官方網站</span>
+  <span>開放時間：每日 06:00 – 18:00</span>
+</div>
+<nav id="navbar">
+  <div class="nav-logo-block">
+    <div class="nav-logo-icon">⚖️</div>
+    <div class="nav-logo-text">
+      <div class="nav-logo-main">三重海清宮</div>
+      <div style="font-size:0.7rem;letter-spacing:2px;">PAO KUNG TEMPLE</div>
+    </div>
+  </div>
+  <ul>
+    <li><a href="index.html">首頁</a></li>
+    <li><a href="temple-map.html" style="color:var(--red);border-color:var(--red);">線上參拜</a></li>
+    <li><a href="worship.html">線上拜拜</a></li>
+    <li><a href="index.html#deities">神明介紹</a></li>
+    <li><a href="index.html#contact">聯絡我們</a></li>
+  </ul>
+  <button id="menu-toggle" aria-label="開啟選單"><span></span><span></span><span></span></button>
+</nav>
+<div id="mobile-menu">
+  <a href="index.html">首頁</a>
+  <a href="temple-map.html" style="color:var(--red);font-weight:900;">🏯 線上參拜</a>
+  <a href="worship.html">🙏 線上拜拜</a>
+  <a href="index.html#deities">神明介紹</a>
+  <a href="index.html#contact">聯絡我們</a>
+</div>
+
+<!-- ══════════ 主要遊戲區 ══════════ -->
+<section class="section section-gray">
+  <div class="section-header">
+    <div class="section-tag">VIRTUAL TOUR</div>
+    <h2 class="section-title">線上<em>參拜</em></h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="game-wrapper">
+
+    <!-- 樓層切換 -->
+    <div class="floor-indicator">
+      <button class="floor-tab active" onclick="switchFloor(1)">一樓 正殿</button>
+      <button class="floor-tab" onclick="switchFloor(2)">二樓 神殿</button>
+      <button class="floor-tab" onclick="switchFloor(3)">三樓 佛殿</button>
+    </div>
+
+    <!-- ══════════ 一樓 ══════════ -->
+    <div class="floor-scene" id="floor-1" style="display:block;">
+      <div class="floor-bg bg-1f"></div>
+      <div class="floor-tiles floor-tiles-1f"></div>
+      <div class="ceiling-beam"></div>
+
+      <!-- 對聯 -->
+      <div class="couplet left-c"><div class="couplet-text">清廉是法水萬古流芳</div></div>
+      <div class="couplet right-c"><div class="couplet-text">薄面如明鏡分辨忠奸</div></div>
+
+      <!-- 匾額 -->
+      <div class="plaque"><div class="plaque-text">爽理陰陽</div></div>
+
+      <!-- 龍柱 -->
+      <div class="dragon-pillar left"><div class="dragon-pillar-inner"></div></div>
+      <div class="dragon-pillar right"><div class="dragon-pillar-inner"></div></div>
+
+      <!-- 燈籠 -->
+      <div class="lantern" style="left:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">海</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+      <div class="lantern" style="right:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">清</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+
+      <!-- 光明燈塔 -->
+      <div class="light-tower left-tower">
+        <div class="tower-top"></div>
+        <div class="tower-body"></div>
+      </div>
+      <div class="light-tower right-tower">
+        <div class="tower-top"></div>
+        <div class="tower-body"></div>
+      </div>
+
+      <!-- 神明 -->
+      <div class="deity-spot" style="left:50%;top:22%;transform:translateX(-50%);" onclick="showDeity('baogong')">
+        <div class="deity-shrine">
+          <div class="shrine-frame main">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">⚖️</div>
+            <div class="shrine-label">包府千歲</div>
+          </div>
+          <div class="click-hint">▲ 點擊參拜</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:18%;top:28%;" onclick="showDeity('songzi')">
+        <div class="deity-shrine">
+          <div class="shrine-frame small">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🙏</div>
+            <div class="shrine-label">送子觀音</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="right:14%;top:28%;" onclick="showDeity('caishen')">
+        <div class="deity-shrine">
+          <div class="shrine-frame small">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">💰</div>
+            <div class="shrine-label">財神爺</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:50%;bottom:3%;transform:translateX(-50%);" onclick="showDeity('huye')">
+        <div class="deity-shrine">
+          <div class="shrine-frame small" style="width:60px;height:55px;">
+            <div class="deity-glow"></div>
+            <div class="shrine-icon" style="font-size:1.5rem;">🐯</div>
+            <div class="shrine-label" style="font-size:0.6rem;">虎爺</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 供桌 -->
+      <div class="altar-table">
+        <div class="altar-table-text">海 清 宮</div>
+      </div>
+
+      <!-- 樓梯 -->
+      <button class="stairs-btn up" onclick="switchFloor(2)">⬆ 上二樓</button>
+
+      <!-- 角色 -->
+      <div class="player-character">
+        <div class="player-body">🧑</div>
+        <div class="player-label">信眾</div>
+      </div>
+    </div>
+
+    <!-- ══════════ 二樓 ══════════ -->
+    <div class="floor-scene" id="floor-2" style="display:none;">
+      <div class="floor-bg bg-2f"></div>
+      <div class="floor-tiles floor-tiles-2f"></div>
+      <div class="ceiling-beam"></div>
+
+      <div class="plaque"><div class="plaque-text">神 殿</div></div>
+
+      <div class="dragon-pillar left"><div class="dragon-pillar-inner"></div></div>
+      <div class="dragon-pillar right"><div class="dragon-pillar-inner"></div></div>
+
+      <div class="lantern" style="left:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">福</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+      <div class="lantern" style="right:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">壽</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+
+      <!-- 神明 -->
+      <div class="deity-spot" style="left:50%;top:22%;transform:translateX(-50%);" onclick="showDeity('yuhuang')">
+        <div class="deity-shrine">
+          <div class="shrine-frame main">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">👑</div>
+            <div class="shrine-label">玉皇大帝</div>
+          </div>
+          <div class="click-hint">▲ 點擊參拜</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:12%;top:26%;" onclick="showDeity('tianguan')">
+        <div class="deity-shrine">
+          <div class="shrine-frame">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🧧</div>
+            <div class="shrine-label">天官財神</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="right:8%;top:26%;" onclick="showDeity('xuantian')">
+        <div class="deity-shrine">
+          <div class="shrine-frame">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">⚔️</div>
+            <div class="shrine-label">玄天上帝</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:50%;bottom:16%;transform:translateX(-50%);" onclick="showDeity('santaizi')">
+        <div class="deity-shrine">
+          <div class="shrine-frame small">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🔥</div>
+            <div class="shrine-label">三太子</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <button class="stairs-btn up" onclick="switchFloor(3)">⬆ 上三樓</button>
+      <button class="stairs-btn down" onclick="switchFloor(1)">⬇ 回一樓</button>
+
+      <div class="player-character">
+        <div class="player-body">🧑</div>
+        <div class="player-label">信眾</div>
+      </div>
+    </div>
+
+    <!-- ══════════ 三樓 ══════════ -->
+    <div class="floor-scene" id="floor-3" style="display:none;">
+      <div class="floor-bg bg-3f"></div>
+      <div class="floor-tiles floor-tiles-3f"></div>
+      <div class="ceiling-beam"></div>
+
+      <div class="plaque"><div class="plaque-text">法嚴禪寺</div></div>
+
+      <div class="dragon-pillar left"><div class="dragon-pillar-inner"></div></div>
+      <div class="dragon-pillar right"><div class="dragon-pillar-inner"></div></div>
+
+      <div class="lantern" style="left:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">佛</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+      <div class="lantern" style="right:70px;top:10%;">
+        <div class="lantern-string"></div>
+        <div class="lantern-body"><span class="lantern-char">光</span></div>
+        <div class="lantern-tassel"></div>
+      </div>
+
+      <!-- 神明 -->
+      <div class="deity-spot" style="left:50%;top:20%;transform:translateX(-50%);" onclick="showDeity('shijia')">
+        <div class="deity-shrine">
+          <div class="shrine-frame main">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🪷</div>
+            <div class="shrine-label">釋迦牟尼佛</div>
+          </div>
+          <div class="click-hint">▲ 點擊參拜</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="right:8%;top:24%;" onclick="showDeity('guanyin')">
+        <div class="deity-shrine">
+          <div class="shrine-frame">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🪷</div>
+            <div class="shrine-label">觀世音菩薩</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:12%;top:24%;" onclick="showDeity('dizang')">
+        <div class="deity-shrine">
+          <div class="shrine-frame">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">📿</div>
+            <div class="shrine-label">地藏王菩薩</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <div class="deity-spot" style="left:30%;bottom:18%;" onclick="showDeity('guansheng')">
+        <div class="deity-shrine">
+          <div class="shrine-frame small">
+            <div class="deity-glow"></div>
+            <div class="shrine-top"></div>
+            <div class="shrine-icon">🗡️</div>
+            <div class="shrine-label">關聖帝君</div>
+          </div>
+          <div class="click-hint">▲ 點擊</div>
+        </div>
+      </div>
+
+      <button class="stairs-btn down" onclick="switchFloor(2)" style="top:50%;">⬇ 回二樓</button>
+
+      <div class="player-character">
+        <div class="player-body">🧑</div>
+        <div class="player-label">信眾</div>
+      </div>
+    </div>
+
+    <!-- 樓層說明 -->
+    <div class="info-panel" id="info-panel">
+      <p class="floor-name">一樓・正殿</p>
+      <p>主祀包府千歲（包公），另有送子觀音、財神爺、虎爺。點擊神龕即可參拜。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ 神明 Modal ══════════ -->
+<div class="modal-overlay" id="deity-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title"></span>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <img class="modal-photo" id="modal-photo" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-location" id="modal-location"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-action-btn primary" onclick="startJiaobei()">🌙 擲筊問事</button>
+      <button class="modal-action-btn" onclick="closeModal()">🙏 結束參拜</button>
+    </div>
+
+    <!-- 擲筊小遊戲 -->
+    <div class="jiaobei-game" id="jiaobei-game">
+      <p style="color:#5C3D2E;font-size:0.9rem;margin-bottom:8px;">心中默念所求之事，點擊擲筊</p>
+      <div class="jiaobei-mini-pair">
+        <div class="jiaobei-mini" id="jm-left">
+          <svg viewBox="0 0 40 65"><path d="M20 3C9 3,4 25,4 38C4 55,13 62,20 62C27 62,36 55,36 38C36 25,31 3,20 3Z" fill="#C0392B" stroke="#8B0000" stroke-width="1.5"/></svg>
+        </div>
+        <div class="jiaobei-mini" id="jm-right">
+          <svg viewBox="0 0 40 65"><path d="M20 3C9 3,4 25,4 38C4 55,13 62,20 62C27 62,36 55,36 38C36 25,31 3,20 3Z" fill="#C0392B" stroke="#8B0000" stroke-width="1.5"/></svg>
+        </div>
+      </div>
+      <button class="modal-action-btn primary" onclick="throwMiniJiaobei()" style="margin:0 auto;">🌙 擲筊</button>
+      <div class="jiaobei-mini-result" id="jm-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="brand-name">⚖️ 三重海清宮</div>
+      <p>主祀閻羅天子包公，傳承祖廟正統香火。</p>
+    </div>
+    <div class="footer-col">
+      <h4>快速連結</h4>
+      <a href="index.html">首頁</a>
+      <a href="temple-map.html">線上參拜</a>
+      <a href="worship.html">線上拜拜</a>
+    </div>
+    <div class="footer-col">
+      <h4>信仰服務</h4>
+      <a href="#">點光明燈</a>
+      <a href="#">化解冤親</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 三重海清宮包公廟 版權所有</span></div>
+</footer>
+
+<script>
+/* ══════════ 神明資料庫 ══════════ */
+const DEITIES = {
+  baogong: {
+    name: '包府千歲',
+    subtitle: '包青天・閻羅天子',
+    photo: 'photos/包公.jpg',
+    desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。',
+    location: '📍 一樓正殿・正中間'
+  },
+  songzi: {
+    name: '送子觀音',
+    subtitle: '大慈大悲觀世音菩薩化身',
+    photo: 'photos/送子觀音.jpg',
+    desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。',
+    location: '📍 一樓正殿・右側'
+  },
+  caishen: {
+    name: '財神爺',
+    subtitle: '武財神',
+    photo: 'photos/包公.jpg',
+    desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。',
+    location: '📍 一樓正殿・正中間'
+  },
+  huye: {
+    name: '虎爺',
+    subtitle: '下壇將軍',
+    photo: 'photos/虎爺.jpg',
+    desc: '虎爺安奉於供桌下方，為神明座騎與護衛。民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。',
+    location: '📍 一樓正殿・供桌下方（紅光照射處）'
+  },
+  yuhuang: {
+    name: '玉皇大帝',
+    subtitle: '天公・昊天金闕玉皇上帝',
+    photo: 'photos/玉皇大帝.jpg',
+    desc: '玉皇大帝為道教最高神祇，統御天界萬神。信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。',
+    location: '📍 二樓神殿・正中間'
+  },
+  tianguan: {
+    name: '天官財神',
+    subtitle: '天官賜福',
+    photo: 'photos/天官財神.jpg',
+    desc: '天官財神衣著皆為手工刺繡，做工精美。天官掌管賜福，信眾祈求財運亨通、福星高照。',
+    location: '📍 二樓神殿・左側（衣服皆為手繡）'
+  },
+  xuantian: {
+    name: '玄天上帝',
+    subtitle: '北極玄天上帝・金母娘娘',
+    photo: 'photos/玄天上帝.jpg',
+    desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。同龕另有金母娘娘（瑤池金母），護佑女性信眾。',
+    location: '📍 二樓神殿・右側'
+  },
+  santaizi: {
+    name: '三太子',
+    subtitle: '中壇元帥・哪吒太子',
+    photo: 'photos/三太子.jpg',
+    desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。',
+    location: '📍 二樓神殿'
+  },
+  shijia: {
+    name: '釋迦牟尼佛',
+    subtitle: '佛祖・世尊',
+    photo: 'photos/釋迦牟尼.jpg',
+    desc: '三樓為法嚴禪寺大殿，主祀釋迦牟尼佛。佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。',
+    location: '📍 三樓法嚴禪寺・正中間'
+  },
+  guanyin: {
+    name: '觀世音菩薩',
+    subtitle: '大慈大悲救苦救難觀世音菩薩',
+    photo: 'photos/觀世音菩薩.jpg',
+    desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。三樓的觀音像莊嚴慈祥。',
+    location: '📍 三樓法嚴禪寺・右側'
+  },
+  dizang: {
+    name: '地藏王菩薩',
+    subtitle: '大願地藏・幽冥教主',
+    photo: 'photos/地藏王菩薩.jpg',
+    desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。',
+    location: '📍 三樓法嚴禪寺・左側'
+  },
+  guansheng: {
+    name: '關聖帝君',
+    subtitle: '關公・武聖',
+    photo: 'photos/關聖帝君.jpg',
+    desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。木雕神龕精美，龍柱環繞。',
+    location: '📍 三樓法嚴禪寺・左邊'
+  }
+};
+
+const FLOOR_INFO = {
+  1: { name: '一樓・正殿', desc: '主祀包府千歲（包公），另有送子觀音、財神爺、虎爺。點擊神龕即可參拜。' },
+  2: { name: '二樓・神殿', desc: '供奉玉皇大帝、天官財神、玄天上帝、金母娘娘、三太子。' },
+  3: { name: '三樓・法嚴禪寺', desc: '佛教殿堂，供奉釋迦牟尼佛、觀世音菩薩、地藏王菩薩、關聖帝君、十八羅漢。' }
+};
+
+let currentFloor = 1;
+
+/* ── 切換樓層 ── */
+function switchFloor(floor) {
+  document.querySelectorAll('.floor-scene').forEach(el => el.style.display = 'none');
+  document.getElementById(`floor-${floor}`).style.display = 'block';
+
+  document.querySelectorAll('.floor-tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i + 1 === floor);
+  });
+
+  const info = FLOOR_INFO[floor];
+  document.getElementById('info-panel').innerHTML = `
+    <p class="floor-name">${info.name}</p>
+    <p>${info.desc}</p>
+  `;
+
+  currentFloor = floor;
+}
+
+/* ── 顯示神明詳情 ── */
+function showDeity(id) {
+  const deity = DEITIES[id];
+  if (!deity) return;
+
+  document.getElementById('modal-title').textContent = deity.name;
+  document.getElementById('modal-subtitle').textContent = deity.subtitle;
+  document.getElementById('modal-photo').src = deity.photo;
+  document.getElementById('modal-photo').alt = deity.name;
+  document.getElementById('modal-desc').textContent = deity.desc;
+  document.getElementById('modal-location').textContent = deity.location;
+
+  // 重置擲筊
+  document.getElementById('jiaobei-game').classList.remove('show');
+  document.getElementById('jm-result').classList.remove('show');
+
+  document.getElementById('deity-modal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('deity-modal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// 點擊背景關閉
+document.getElementById('deity-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+/* ── 擲筊 ── */
+function startJiaobei() {
+  document.getElementById('jiaobei-game').classList.add('show');
+}
+
+let isThrowing = false;
+function throwMiniJiaobei() {
+  if (isThrowing) return;
+  isThrowing = true;
+
+  const left = document.getElementById('jm-left');
+  const right = document.getElementById('jm-right');
+  const result = document.getElementById('jm-result');
+
+  result.classList.remove('show');
+  left.classList.add('throwing');
+  right.classList.add('throwing');
+  right.style.animationDelay = '0.1s';
+
+  setTimeout(() => {
+    left.classList.remove('throwing');
+    right.classList.remove('throwing');
+    right.style.animationDelay = '';
+
+    const rand = Math.random();
+    let text;
+    if (rand < 0.5) {
+      text = '🎉 聖筊！神明允許了';
+      left.style.transform = '';
+      right.style.transform = 'scaleY(-1)';
+    } else if (rand < 0.75) {
+      text = '😊 笑筊，神明在笑你，再問一次';
+      left.style.transform = '';
+      right.style.transform = '';
+    } else {
+      text = '🙏 陰筊，暫時不許，改天再問';
+      left.style.transform = 'scaleY(-1)';
+      right.style.transform = 'scaleY(-1)';
+    }
+
+    result.textContent = text;
+    result.classList.add('show');
+    isThrowing = false;
+  }, 1000);
+}
+
+/* ── 手機選單 ── */
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+menuToggle?.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+mobileMenu?.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+});
+document.addEventListener('click', (e) => {
+  if (!menuToggle?.contains(e.target) && !mobileMenu?.contains(e.target))
+    mobileMenu?.classList.remove('open');
+});
+
+/* ── 鍵盤切換樓層 ── */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowUp' && currentFloor < 3) switchFloor(currentFloor + 1);
+  if (e.key === 'ArrowDown' && currentFloor > 1) switchFloor(currentFloor - 1);
+});
+</script>
+
+</body>
+</html>

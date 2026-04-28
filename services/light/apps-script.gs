@@ -75,7 +75,7 @@ function doPost(e) {
       "'" + (data.phone || ''),         // 加單引號前綴，強制純文字，保留開頭0
       data.email || '',
       "'" + (data.transferCode || ''),  // 同上
-      600
+      Number(data.amount) || ''
     ]]);
 
     return ContentService

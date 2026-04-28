@@ -2,3 +2,5 @@
 backend/node_modules
 backend/.env
 services/puzzle/js/auth-config.js
+
+廟的地圖.pdf

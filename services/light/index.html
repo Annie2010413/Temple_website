@@ -57,7 +57,7 @@
 <style>
 /* ── 線上點燈 專屬樣式 ── */
 .light-intro {
-  max-width: 720px; margin: 0 auto 40px; text-align: center;
+  max-width: 720px; margin: -20px auto 40px; text-align: center;
   color: var(--text-mid); line-height: 2;
 }
 .lamp-cards {
@@ -76,6 +76,12 @@
   border-color: var(--red); background: var(--red-bg);
 }
 .lamp-card .lamp-icon { font-size: 2.4rem; margin-bottom: 8px; }
+.lamp-card .lamp-icon-img {
+  width: 80px; height: 80px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+  display: block;
+}
 .lamp-card .lamp-name { font-size: 1.1rem; font-weight: 700; color: var(--red); letter-spacing: 0.1em; }
 .lamp-card .lamp-price { font-size: 0.95rem; color: var(--gold); font-weight: 600; margin-top: 4px; }
 .lamp-card .lamp-desc { font-size: 0.82rem; color: var(--text-light); margin-top: 6px; line-height: 1.6; }
@@ -143,6 +149,10 @@
   display: none; text-align: center; padding: 48px 24px;
 }
 .success-box .success-icon { font-size: 3rem; margin-bottom: 16px; }
+.success-box .success-icon-img {
+  width: 120px; height: auto; margin: 0 auto 20px;
+  display: block;
+}
 .success-box h3 { font-size: 1.4rem; color: var(--red); margin-bottom: 12px; }
 .success-box p { color: var(--text-mid); line-height: 2; }
 </style>
@@ -161,28 +171,35 @@
 
     <p class="light-intro">
       祈求神明庇佑，為您或家人點亮一盞心燈。<br>
-      填妥資料並完成匯款後，廟方確認收款即安排點燈，並於三個工作天內以簡訊或 Email 通知。
+      各燈種費用請來電洽詢，填妥資料並完成匯款後，廟方確認收款即安排點燈，並於三個工作天內以簡訊或 Email 通知。<br>
+      <strong style="color: var(--red);">電洽：(02) 8976-1766　／　0919-357-408</strong>
     </p>
 
     <!-- 燈種選擇 -->
     <div class="lamp-cards">
       <div class="lamp-card" data-lamp="光明燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">🕯️</div>
+        <img src="光明燈.png" alt="光明燈" class="lamp-icon-img">
         <div class="lamp-name">光明燈</div>
-        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">一般祈福，為自身或家人祈求平安、順遂</div>
       </div>
       <div class="lamp-card" data-lamp="太歲燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">🌟</div>
+        <img src="十二生肖盤.png" alt="太歲燈" class="lamp-icon-img">
         <div class="lamp-name">太歲燈</div>
-        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">當年犯太歲者點，化解流年不利</div>
       </div>
       <div class="lamp-card" data-lamp="財神燈" onclick="selectLamp(this)">
-        <div class="lamp-icon">💰</div>
+        <img src="聚寶盆.png" alt="財神燈" class="lamp-icon-img">
         <div class="lamp-name">財神燈</div>
-        <div class="lamp-price">每盞 $600</div>
+        <div class="lamp-price">費用請電洽</div>
         <div class="lamp-desc">經商求財者點，招財進寶、生意興隆</div>
+      </div>
+      <div class="lamp-card" data-lamp="契子燈" onclick="selectLamp(this)">
+        <img src="長命鎖.png" alt="契子燈" class="lamp-icon-img">
+        <div class="lamp-name">契子燈</div>
+        <div class="lamp-price">費用請電洽</div>
+        <div class="lamp-desc">認神明為契父母，祈求孩童平安健康、順利成長</div>
       </div>
     </div>
 
@@ -190,7 +207,7 @@
     <div class="light-form-wrap">
 
       <div id="success-box" class="success-box">
-        <div class="success-icon">🙏</div>
+        <img src="光明燈.png" alt="光明燈" class="success-icon-img">
         <h3>感謝您的點燈申請</h3>
         <p>廟方確認匯款後，將以您留下的聯絡方式通知點燈完成。<br>祝福您闔家平安、萬事順遂。</p>
       </div>
@@ -202,9 +219,10 @@
           <label>燈種<span class="required">＊</span></label>
           <select id="lamp-type" required>
             <option value="">── 請選擇燈種 ──</option>
-            <option value="光明燈">光明燈（每盞 $600）</option>
-            <option value="太歲燈">太歲燈（每盞 $600）</option>
-            <option value="財神燈">財神燈（每盞 $600）</option>
+            <option value="光明燈">光明燈</option>
+            <option value="太歲燈">太歲燈</option>
+            <option value="財神燈">財神燈</option>
+            <option value="契子燈">契子燈</option>
           </select>
           <div class="form-err-msg" id="err-lamp">請選擇燈種</div>
         </div>
@@ -244,8 +262,13 @@
           <div class="payment-row"><span>銀行代碼</span><strong>（待填入）</strong></div>
           <div class="payment-row"><span>帳號</span><strong>（待填入）</strong></div>
           <div class="payment-row"><span>戶名</span><strong>三重海清宮包公廟管理委員會</strong></div>
-          <div class="payment-row"><span>金額</span><strong id="payment-amount">每盞 $600</strong></div>
-          <p class="payment-note">請於填寫申請後 3 日內完成匯款，並填入匯款後五碼。逾期未匯款者，申請視為失效。</p>
+          <div class="payment-row"><span>金額</span><strong>依電洽金額匯款</strong></div>
+          <p class="payment-note">各燈種費用請先來電洽詢：(02) 8976-1766 或 0919-357-408。<br>請於填寫申請後 3 日內完成匯款，並填入匯款金額與匯款後五碼。逾期未匯款者，申請視為失效。</p>
+        </div>
+        <div class="form-row">
+          <label>匯款金額<span class="required">＊</span></label>
+          <input type="number" id="amount" placeholder="請輸入匯款金額（新台幣）" min="1" required>
+          <div class="form-err-msg" id="err-amount">請填寫匯款金額</div>
         </div>
         <div class="form-row">
           <label>匯款後五碼<span class="required">＊</span></label>
@@ -299,6 +322,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
   const address = document.getElementById('address').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
+  const amount = document.getElementById('amount').value.trim();
   const code = document.getElementById('transfer-code').value.trim();
 
   if (!lamp)    { showErr('lamp');     valid = false; } else clearErr('lamp');
@@ -307,6 +331,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
   if (!address) { showErr('address');  valid = false; } else clearErr('address');
   if (!/^09\d{8}$/.test(phone)) { showErr('phone'); valid = false; } else clearErr('phone');
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email'); valid = false; } else clearErr('email');
+  if (!amount || Number(amount) <= 0) { showErr('amount'); valid = false; } else clearErr('amount');
   if (!/^\d{5}$/.test(code))    { showErr('transfer'); valid = false; } else clearErr('transfer');
 
   if (!valid) return;
@@ -323,7 +348,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        lamp, name, birthday, address, phone, email, transferCode: code
+        lamp, name, birthday, address, phone, email, amount, transferCode: code
       })
     });
 
