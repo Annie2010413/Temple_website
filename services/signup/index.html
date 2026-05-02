@@ -54,10 +54,93 @@
   <a href="../../committee.html">管理委員會名單</a>
 </div>
 
+<style>
+.signup-intro {
+  max-width: 720px; margin: -20px auto 40px; text-align: center;
+  color: var(--text-mid); line-height: 2;
+}
+.activity-cards {
+  display: flex; gap: 20px; justify-content: center;
+  flex-wrap: wrap; margin-bottom: 40px;
+}
+.activity-card {
+  border: 2px solid var(--border); border-radius: 12px;
+  padding: 22px 20px; width: 210px; text-align: center;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  background: var(--warm-white);
+}
+.activity-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.activity-card.selected { border-color: var(--red); background: var(--red-bg); }
+.activity-card .act-img { width: 100px; height: 100px; margin: 0 auto 10px; display: block; object-fit: contain; }
+.activity-card .act-name { font-size: 1.1rem; font-weight: 700; color: var(--red); letter-spacing: 0.1em; }
+.activity-card .act-price { font-size: 0.95rem; color: var(--gold); font-weight: 600; margin-top: 4px; }
+.activity-card .act-desc { font-size: 0.82rem; color: var(--text-light); margin-top: 6px; line-height: 1.6; }
+.signup-form-wrap {
+  max-width: 600px; margin: 0 auto; background: var(--warm-white);
+  border-radius: 16px; border: 1px solid var(--border);
+  padding: 36px 40px; box-shadow: var(--shadow-sm);
+}
+.form-section-title {
+  font-size: 1rem; font-weight: 700; color: var(--red);
+  letter-spacing: 0.12em; margin-bottom: 20px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-red);
+}
+.form-row { margin-bottom: 20px; }
+.form-row label {
+  display: block; font-size: 0.9rem; font-weight: 600;
+  color: var(--text-mid); margin-bottom: 6px; letter-spacing: 0.05em;
+}
+.form-row label .required { color: var(--red); margin-left: 2px; }
+.form-row input, .form-row select {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 1rem; font-family: inherit;
+  color: var(--text-dark); background: var(--cream);
+  transition: border-color 0.2s; box-sizing: border-box;
+}
+.form-row input:focus, .form-row select:focus {
+  outline: none; border-color: var(--red); background: var(--warm-white);
+}
+.form-hint { font-size: 0.8rem; color: var(--text-light); margin-top: 5px; }
+.form-err-msg { font-size: 0.8rem; color: var(--red-light); margin-top: 4px; display: none; }
+#row-id-number { display: none; }
+.amount-fixed {
+  padding: 10px 14px; background: var(--cream);
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 1rem; color: var(--red); font-weight: 700;
+  letter-spacing: 0.05em; display: none;
+}
+.payment-box {
+  background: var(--gold-bg); border: 1.5px solid var(--gold-light);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;
+}
+.payment-box h4 { color: var(--gold); font-size: 1rem; letter-spacing: 0.1em; margin-bottom: 12px; }
+.payment-box .payment-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.92rem; padding: 4px 0;
+  border-bottom: 1px dashed rgba(184,134,11,0.2);
+}
+.payment-box .payment-row:last-child { border-bottom: none; }
+.payment-box .payment-row span:first-child { color: var(--text-mid); }
+.payment-box .payment-row strong { color: var(--text-dark); font-weight: 700; }
+.payment-note { font-size: 0.82rem; color: var(--text-light); margin-top: 10px; line-height: 1.7; }
+.signup-submit-btn {
+  width: 100%; padding: 14px; background: var(--red); color: white;
+  border: none; border-radius: 10px; font-size: 1.1rem;
+  font-weight: 700; letter-spacing: 0.15em; cursor: pointer;
+  font-family: inherit; transition: background 0.2s, transform 0.15s;
+}
+.signup-submit-btn:hover { background: var(--red-dark); transform: translateY(-1px); }
+.signup-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.success-box { display: none; text-align: center; padding: 48px 24px; }
+.success-box .success-icon { font-size: 3rem; margin-bottom: 16px; }
+.success-box h3 { font-size: 1.4rem; color: var(--red); margin-bottom: 12px; }
+.success-box p { color: var(--text-mid); line-height: 2; }
+</style>
+
 <section class="section section-white">
   <div class="container">
 
-    <button class="news-more-btn" onclick="location.href=&apos;../../index.html&apos;" style="font-size: 1.2rem; margin-bottom: 20px;">← 返回首頁</button>
+    <button class="news-more-btn" onclick="location.href='../../index.html'" style="font-size: 1.2rem; margin-bottom: 20px;">← 返回首頁</button>
 
     <div class="section-header" style="margin-top: 10px;">
       <div class="section-tag">ONLINE SERVICE</div>
@@ -66,12 +149,256 @@
       <p style="margin-top: 14px; color: var(--text-light);">線上服務 ＞ 活動報名</p>
     </div>
 
-    <div style="max-width: 800px; margin: 0 auto; min-height: 400px; display: flex; align-items: center; justify-content: center;">
-      <p style="color: var(--text-light); font-size: 1.2rem; letter-spacing: 0.1em;">🚧 頁面建置中，敬請期待 🚧</p>
+    <p class="signup-intro">
+      歡迎報名參加本宮各項活動。填妥資料並完成匯款後，廟方確認收款即完成報名，<br>
+      並於三個工作天內以簡訊或 Email 通知。<br>
+      <strong style="color: var(--red);">電洽：(02) 8976-1766　／　0919-357-408</strong>
+    </p>
+
+    <!-- 活動卡片 -->
+    <div class="activity-cards">
+
+      <!-- 南巡進香 -->
+      <div class="activity-card" data-activity="南巡進香" onclick="selectActivity(this)">
+        <img class="act-img" src="南巡進香.png" alt="南巡進香">
+        <div class="act-name">南巡進香</div>
+        <div class="act-price">2,800 元</div>
+        <div class="act-desc">丙午年祖廟南巡進香<br>需填身份證字號</div>
+      </div>
+
+      <!-- 平安餐 -->
+      <div class="activity-card" data-activity="平安餐" onclick="selectActivity(this)">
+        <img class="act-img" src="平安餐.png" alt="平安餐">
+        <div class="act-name">平安餐</div>
+        <div class="act-price">500 元</div>
+        <div class="act-desc">今年平安餐報名<br>地點：三重海清宮</div>
+      </div>
+
+      <!-- 拜斗登記 -->
+      <div class="activity-card" data-activity="拜斗登記" onclick="selectActivity(this)">
+        <img class="act-img" src="拜斗.png" alt="拜斗登記">
+        <div class="act-name">拜斗登記</div>
+        <div class="act-price">1,000 ～ 60,000 元</div>
+        <div class="act-desc">農曆 10 月中旬舉行<br>隨喜善緣</div>
+      </div>
+
+    </div>
+
+
+    <!-- 表單 -->
+    <div class="signup-form-wrap">
+
+      <div id="success-box" class="success-box">
+        <div class="success-icon">🏮</div>
+        <h3>感謝您的報名申請</h3>
+        <p>廟方確認匯款後，將以您留下的聯絡方式通知報名完成。<br>祝福您闔家平安、萬事順遂。</p>
+      </div>
+
+      <form id="signup-form" novalidate>
+
+        <p class="form-section-title">一、選擇活動</p>
+        <div class="form-row">
+          <label>活動類型<span class="required">＊</span></label>
+          <select id="activity-type" required onchange="onSelectChange()">
+            <option value="">── 請選擇活動 ──</option>
+            <option value="南巡進香">南巡進香（2,800 元）</option>
+            <option value="平安餐">平安餐（500 元）</option>
+            <option value="拜斗登記">拜斗登記（1,000 ～ 60,000 元）</option>
+          </select>
+          <div class="form-err-msg" id="err-activity">請選擇活動類型</div>
+        </div>
+
+        <p class="form-section-title">二、報名人資料</p>
+        <div class="form-row">
+          <label>申請人姓名<span class="required">＊</span></label>
+          <input type="text" id="name" placeholder="請輸入姓名" required>
+          <div class="form-err-msg" id="err-name">請輸入姓名</div>
+        </div>
+        <div class="form-row">
+          <label>出生年月日（西元年）<span class="required">＊</span></label>
+          <input type="date" id="birthday" required>
+          <div class="form-err-msg" id="err-birthday">請填寫出生年月日</div>
+        </div>
+        <div class="form-row">
+          <label>住址<span class="required">＊</span></label>
+          <input type="text" id="address" placeholder="縣市＋區＋街道門號" required>
+          <div class="form-err-msg" id="err-address">請填寫住址</div>
+        </div>
+        <div class="form-row">
+          <label>手機號碼<span class="required">＊</span></label>
+          <input type="tel" id="phone" placeholder="09xxxxxxxx" required>
+          <div class="form-err-msg" id="err-phone">請填寫有效的手機號碼（09 開頭 10 碼）</div>
+        </div>
+
+        <div class="form-row" id="row-id-number">
+          <label>身分證字號<span class="required">＊</span></label>
+          <input type="text" id="id-number" placeholder="請輸入身分證字號" maxlength="10">
+          <div class="form-err-msg" id="err-id">請填寫身分證字號</div>
+        </div>
+
+        <div class="form-row">
+          <label>Email（選填）</label>
+          <input type="email" id="email" placeholder="可選填，方便廟方以電子郵件通知">
+          <div class="form-err-msg" id="err-email">Email 格式不正確</div>
+        </div>
+
+        <p class="form-section-title">三、匯款確認</p>
+        <div class="payment-box">
+          <h4>廟方收款帳號</h4>
+          <div class="payment-row"><span>銀行名稱</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>銀行代碼</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>帳號</span><strong>（待填入）</strong></div>
+          <div class="payment-row"><span>戶名</span><strong>三重海清宮包公廟管理委員會</strong></div>
+          <p class="payment-note">請於填寫申請後 3 日內完成匯款，並填入匯款金額與匯款後五碼。逾期未匯款者，申請視為失效。</p>
+        </div>
+
+        <div class="form-row">
+          <label>匯款金額<span class="required">＊</span></label>
+          <div class="amount-fixed" id="amount-display"></div>
+          <input type="number" id="amount" placeholder="請輸入匯款金額（新台幣）" min="1" required>
+          <div class="form-err-msg" id="err-amount">請填寫匯款金額</div>
+        </div>
+        <div class="form-row">
+          <label>匯款後五碼<span class="required">＊</span></label>
+          <input type="text" id="transfer-code" placeholder="請輸入匯款帳號後五碼" maxlength="5" required>
+          <div class="form-hint">完成匯款後，填入您匯款帳號的最後 5 位數字，方便廟方核對。</div>
+          <div class="form-err-msg" id="err-transfer">請填寫 5 位數字匯款後五碼</div>
+        </div>
+
+        <button type="submit" class="signup-submit-btn" id="submit-btn">送出申請</button>
+        <div id="submit-error" style="display:none; margin-top:14px; padding:10px 14px; background:#fdecea; border:1px solid #f5c6c2; border-radius:8px; color:#a94442; font-size:0.9rem; text-align:center;"></div>
+
+      </form>
     </div>
 
   </div>
 </section>
+
+<script>
+const ACTIVITY_CONFIG = {
+  "南巡進香": { amount: 2800, fixed: true,  needId: true  },
+  "平安餐":   { amount: 500,  fixed: true,  needId: false },
+  "拜斗登記": { amount: null, fixed: false, needId: false }
+};
+
+function selectActivity(card) {
+  document.querySelectorAll('.activity-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  const val = card.dataset.activity;
+  document.getElementById('activity-type').value = val;
+  applyConfig(val);
+  clearErr('activity');
+}
+
+function onSelectChange() {
+  const val = document.getElementById('activity-type').value;
+  document.querySelectorAll('.activity-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.activity === val);
+  });
+  applyConfig(val);
+}
+
+function applyConfig(val) {
+  const cfg = ACTIVITY_CONFIG[val];
+  const amountInput   = document.getElementById('amount');
+  const amountDisplay = document.getElementById('amount-display');
+  const rowId         = document.getElementById('row-id-number');
+  if (!cfg) {
+    amountInput.style.display = 'block';
+    amountDisplay.style.display = 'none';
+    rowId.style.display = 'none';
+    return;
+  }
+  rowId.style.display = cfg.needId ? 'block' : 'none';
+  if (!cfg.needId) document.getElementById('id-number').value = '';
+  if (cfg.fixed) {
+    amountInput.style.display = 'none';
+    amountInput.value = cfg.amount;
+    amountDisplay.style.display = 'block';
+    amountDisplay.textContent = cfg.amount.toLocaleString() + ' 元';
+  } else {
+    amountInput.style.display = 'block';
+    amountInput.value = '';
+    amountDisplay.style.display = 'none';
+  }
+}
+
+function showErr(id) { document.getElementById('err-' + id).style.display = 'block'; }
+function clearErr(id) { document.getElementById('err-' + id).style.display = 'none'; }
+
+// ★ 請將下方網址替換成活動報名試算表（ID: 1YTELG_BFbOGI6t0hfnDHruyH9OMYvY-gRpNB2gAqIQo）對應的 Apps Script 部署網址
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzF-BN_d9_laMgDwL96cSwe8Bg5FtBm5IR255UzrppUFrVc4dGUQSGE0zcsQWdYzrCarg/exec';
+
+document.getElementById('signup-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  let valid = true;
+
+  const activityType = document.getElementById('activity-type').value;
+  const name         = document.getElementById('name').value.trim();
+  const birthday     = document.getElementById('birthday').value;
+  const address      = document.getElementById('address').value.trim();
+  const phone        = document.getElementById('phone').value.trim();
+  const idNumber     = document.getElementById('id-number').value.trim();
+  const email        = document.getElementById('email').value.trim();
+  const amount       = document.getElementById('amount').value.trim();
+  const code         = document.getElementById('transfer-code').value.trim();
+  const cfg          = ACTIVITY_CONFIG[activityType] || null;
+
+  if (!activityType)            { showErr('activity'); valid = false; } else clearErr('activity');
+  if (!name)                    { showErr('name');     valid = false; } else clearErr('name');
+  if (!birthday)                { showErr('birthday'); valid = false; } else clearErr('birthday');
+  if (!address)                 { showErr('address');  valid = false; } else clearErr('address');
+  if (!/^09\d{8}$/.test(phone)) { showErr('phone');    valid = false; } else clearErr('phone');
+  if (cfg && cfg.needId && !idNumber) { showErr('id'); valid = false; } else clearErr('id');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email'); valid = false; } else clearErr('email');
+  if (!amount || Number(amount) <= 0) { showErr('amount'); valid = false; } else clearErr('amount');
+  if (!/^\d{5}$/.test(code))    { showErr('transfer'); valid = false; } else clearErr('transfer');
+
+  if (!valid) return;
+
+  const btn    = document.getElementById('submit-btn');
+  const errBox = document.getElementById('submit-error');
+  btn.disabled = true;
+  btn.textContent = '送出中...';
+  errBox.style.display = 'none';
+
+  // 產生申請時間與編號，對應試算表欄位：申請時間 / 申請編號
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const applyTime = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const applyId   = 'SJ' + now.getFullYear().toString().slice(-2) + pad(now.getMonth()+1) + pad(now.getDate()) + pad(now.getHours()) + pad(now.getMinutes());
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        applyTime,                                    // → 申請時間
+        applyId,                                      // → 申請編號
+        activityType,                                 // → 活動類型
+        name,                                         // → 申請人姓名
+        birthday,                                     // → 出生年月日
+        address,                                      // → 住址
+        phone,                                        // → 手機號碼
+        idNumber: cfg && cfg.needId ? idNumber : '',  // → 身分證字號
+        email,                                        // → Email
+        transferCode: code,                           // → 匯款後五碼
+        amount                                        // → 金額
+      })
+    });
+
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('success-box').style.display = 'block';
+    document.querySelector('.activity-cards').style.display = 'none';
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '送出申請';
+    errBox.textContent = '送出失敗，請稍後再試或改撥打廟方電話：(02)8976-1766';
+    errBox.style.display = 'block';
+  }
+});
+</script>
 
 <footer>
   <div class="footer-main">
@@ -100,6 +427,5 @@
 </footer>
 
 <script src="../../js/main.js"></script>
-
 </body>
 </html>
