@@ -159,25 +159,25 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .modal-content {
       background: #FFFDF7; border: 2px solid rgba(218,165,32,0.5); border-radius: 16px;
-      max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto;
+      max-width: 480px; width: 90%; max-height: 85vh; overflow-y: auto;
       box-shadow: 0 8px 40px rgba(139,0,0,0.14), 0 0 0 1px rgba(218,165,32,0.15);
       animation: slideUp 0.3s ease;
     }
     @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-header {
-      background: #FFFDF7; padding: 20px 20px 14px;
+      background: #FFFDF7; padding: 16px 20px 12px;
       border-radius: 14px 14px 0 0;
       border-bottom: 1px solid rgba(218,165,32,0.25);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-title { color: #8B0000; font-size: 1.4rem; font-weight: 900; letter-spacing: 0.2em; }
+    .modal-title { color: #8B0000; font-size: 1.3rem; font-weight: 900; letter-spacing: 0.2em; }
     .modal-close { background: none; border: none; color: #bbb; font-size: 1.4rem; cursor: pointer; padding: 4px 8px; transition: color 0.2s; }
     .modal-close:hover { color: #8B0000; }
-    .modal-photo { width: 100%; max-height: 350px; object-fit: contain; background: #F5EDE0; }
-    .modal-body { padding: 20px; }
-    .modal-subtitle { color: #C0392B; font-size: 0.9rem; letter-spacing: 0.2em; margin-bottom: 8px; }
-    .modal-desc { color: #5C3D2E; font-size: 0.95rem; line-height: 1.9; }
-    .modal-actions { display: flex; gap: 10px; padding: 0 20px 20px; flex-wrap: wrap; }
+    .modal-photo { width: 100%; max-height: 280px; object-fit: contain; background: #F5EDE0; }
+    .modal-body { padding: 16px 20px 12px; }
+    .modal-subtitle { color: #C0392B; font-size: 0.88rem; letter-spacing: 0.2em; margin-bottom: 6px; }
+    .modal-desc { color: #5C3D2E; font-size: 0.92rem; line-height: 1.7; }
+    .modal-actions { display: flex; gap: 10px; padding: 0 20px 16px; flex-wrap: wrap; }
     .modal-action-btn {
       flex: 1; min-width: 120px; padding: 10px 16px;
       font-family: 'Noto Serif TC', serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em;
@@ -411,6 +411,7 @@
         <li><a href="../../services/worship/">線上參拜</a></li>
         <li><a href="../../services/signup/">活動報名</a></li>
         <li><a href="../../services/light/">線上點燈</a></li>
+        <li><a href="../../services/fortune/">線上抽籤</a></li>
       </ul>
     </li>
   </ul>
@@ -460,7 +461,7 @@
         <button class="map-hotspot" style="left:46%;top:57%;" onclick="showDeity('huye')"></button>      <!-- 虎爺 -->
         <button class="map-hotspot" style="left:76%;top:43%;" onclick="showDeity('songzi')"></button>    <!-- 送子觀音 -->
         <button class="map-hotspot" style="left:18%;top:74%;" onclick="showDeity('santaizi')"></button>  <!-- 三太子 -->
-        <button class="map-hotspot" style="left:49%;top:74%;" onclick="showDeity('yuhuang')"></button>   <!-- 天公 -->
+        <button class="map-hotspot" style="left:49%;top:74%;" onclick="showDeity('tiangong')"></button>   <!-- 天公 -->
         <button class="map-hotspot" style="left:81%;top:72%;" onclick="showDeity('dizang')"></button>    <!-- 地藏王菩薩 -->
       </div>
     </div>
@@ -581,6 +582,7 @@
       <a href="../../services/worship/">線上參拜</a>
       <a href="../../services/signup/">活動報名</a>
       <a href="../../services/light/">線上點燈</a>
+      <a href="../../services/fortune/">線上抽籤</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -596,7 +598,8 @@ const DEITIES = {
   songzi:    { name: '送子觀音', subtitle: '大慈大悲觀世音菩薩化身', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
   caishen:   { name: '財神爺', subtitle: '武財神', photo: '../../photos/包公.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
   huye:      { name: '虎爺', subtitle: '下壇將軍', photo: '../../photos/虎爺.jpg', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
-  yuhuang:   { name: '玉皇大帝', subtitle: '天公・昊天金闕玉皇上帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
+  tiangong:  { name: '天公', subtitle: '天公爐', photo: '../../photos/天公.jpg', desc: '天公即玉皇大帝，為道教最高神祇。一樓正殿前方設有天公爐，信眾入廟先敬天公，祈求國泰民安、風調雨順、闔家平安。' },
+  yuhuang:   { name: '玉皇大帝', subtitle: '昊天金闕玉皇上帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。二樓主祀玉皇大帝金身，信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
   tianguan:  { name: '天官財神', subtitle: '天官賜福', photo: '../../photos/天官財神.jpg', desc: '天官財神衣著皆為手工刺繡，做工精美。天官掌管賜福，信眾祈求財運亨通、福星高照。' },
   xuantian:  { name: '玄天上帝', subtitle: '北極玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
   jinmu:     { name: '金母娘娘', subtitle: '瑤池金母・王母娘娘', photo: '../../photos/玄天上帝.jpg', desc: '金母娘娘即瑤池金母（王母娘娘），為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
