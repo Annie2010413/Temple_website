@@ -9,7 +9,7 @@
 </head>
 <body class="bg-[#fef9f1] text-[#1d1c17]">
   <header class="sticky top-0 z-50 bg-[#fef9f1] border-b border-[#dcc0be]/40">
-    <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
       <div class="text-xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">海清宮</div>
       <div class="hidden md:flex gap-8 items-center text-sm font-bold tracking-widest" style="font-family:'Noto Serif TC',serif;">
         <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
@@ -18,11 +18,23 @@
         <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map">遊戲故事</a>
         <div id="user-nav-slot"></div>
       </div>
+      <button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+        ☰
+      </button>
     </nav>
+    <div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+      <div class="flex flex-col gap-3 pt-3 text-sm tracking-wider" style="font-family:'Noto Serif TC',serif;">
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
+        <a class="text-[#6c171a] font-bold" href="../profile/index.html">我的進度</a>
+      </div>
+    </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">我的進度</h1>
+  <main class="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">我的進度</h1>
     <p id="profile-user" class="mt-2 text-[#755750]">讀取中...</p>
 
     <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -38,9 +50,9 @@
 
     <section class="mt-6 bg-white border border-[#dcc0be] rounded p-5">
       <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">快速操作</h2>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <a id="continue-story" class="px-4 py-2 bg-[#6c171a] text-white rounded" href="../story/index.html?chapter=1">繼續故事</a>
-        <a id="continue-challenge" class="px-4 py-2 border border-[#6c171a] text-[#6c171a] rounded" href="../challenge/index.html?stage=1">繼續關卡</a>
+      <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3">
+        <a id="continue-story" class="px-4 py-2 text-center bg-[#6c171a] text-white rounded" href="../story/index.html?chapter=1">繼續故事</a>
+        <a id="continue-challenge" class="px-4 py-2 text-center border border-[#6c171a] text-[#6c171a] rounded" href="../challenge/index.html?stage=1">繼續關卡</a>
       </div>
     </section>
   </main>
@@ -48,6 +60,12 @@
   <script src="../../js/state.js"></script>
   <script src="../../js/nav-user.js"></script>
   <script>
+    const mobileToggle = document.getElementById("mobile-nav-toggle");
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
+    }
+
     (async function initProfile() {
       const auth = window.PuzzleState.getAuth();
       const progress = await window.PuzzleState.getProgress();

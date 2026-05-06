@@ -92,7 +92,7 @@
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
 <header class="sticky top-0 z-50 bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20">
-<nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
 <div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">
                 海清宮
             </div>
@@ -103,28 +103,39 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
 <div id="user-nav-slot"></div>
 </div>
-
+<button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+<span class="material-symbols-outlined">menu</span>
+</button>
 </nav>
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#6c171a] font-bold" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+</div>
+</div>
 </header>
 <main>
 <!-- Hero Section -->
-<section class="relative min-height-[819px] flex items-center overflow-hidden bg-surface-container-low py-20 px-6">
+<section class="relative min-height-[819px] flex items-center overflow-hidden bg-surface-container-low py-10 md:py-20 px-4 md:px-6">
 <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 <div class="lg:col-span-7 z-10">
 <div class="inline-block bg-primary text-on-primary px-3 py-1 mb-6 text-xs font-headline tracking-[0.2em] rounded-sm">
                         森羅萬象 • 壹
                     </div>
-<h1 class="text-6xl md:text-8xl font-headline font-black text-primary leading-tight mb-8">
+<h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-headline font-black text-primary leading-tight mb-6 md:mb-8">
                         海清宮<br/><span class="text-on-surface">實境解謎</span>
 </h1>
-<p class="text-xl md:text-2xl text-secondary max-w-xl leading-relaxed mb-10 italic">
+<p class="text-lg md:text-2xl text-secondary max-w-xl leading-relaxed mb-8 md:mb-10 italic">
                         穿梭於古老廟宇的紅牆綠瓦間，解開塵封百年的神祕圖騰，一場結合歷史文化與實境解謎的奇幻旅程。
                     </p>
-<div class="flex flex-wrap gap-4">
-<a href="../story/index.html?chapter=1" class="inline-block bg-primary text-on-primary px-10 py-4 rounded-sm font-headline text-lg tracking-widest transition-all hover:brightness-110 editorial-shadow">
+<div class="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
+<a href="../story/index.html?chapter=1" class="inline-block text-center bg-primary text-on-primary px-6 sm:px-10 py-3 md:py-4 rounded-sm font-headline text-base md:text-lg tracking-widest transition-all hover:brightness-110 editorial-shadow">
                             即刻啟程
                         </a>
-<a href="../story/index.html" class="border border-primary/40 text-primary px-10 py-4 rounded-sm font-headline text-lg tracking-widest hover:bg-primary/5 transition-all">
+<a href="../story/index.html" class="border border-primary/40 text-primary text-center px-6 sm:px-10 py-3 md:py-4 rounded-sm font-headline text-base md:text-lg tracking-widest hover:bg-primary/5 transition-all">
                             探索故事
                         </a>
 </div>
@@ -151,9 +162,9 @@
 </div>
 </section>
 <!-- Game Background (遊戲背景) -->
-<section class="py-24 px-6 bg-surface">
+<section class="py-14 md:py-24 px-4 md:px-6 bg-surface">
 <div class="max-w-7xl mx-auto">
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
 <div class="order-2 lg:order-1 flex gap-4">
 <div class="flex-1 mt-12">
 <img alt="Temple Door" class="w-full aspect-[3/4] object-cover rounded-sm editorial-shadow" data-alt="close up of weathered red wooden temple door with ancient bronze knockers and peeling paint texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAim2P1Z8JsNCFFAXIGzh0AiGO88zjHA0wyeSn90Fhff0guxJQiZ-obSthFmQc03CdqokqfyEsC7S6bF77IRvk1O-eLvKUWHnSLM2lcVeexv_j8rd3qWygRirRUl7BSAppT1Xl_yedJ497FIwLxhkvYiv-mJSjUB4pN2MyAOl5QGb2GqGH_eGOm3puBtaUXef-p4_S3ry7GtpDpPqhcjxzOQanVo_XtHdB07PLREeHHXU1gIVOpQ4tEsieXz6nJF4keAIvhF_VFOhLj"/>
@@ -164,8 +175,8 @@
 </div>
 <div class="order-1 lg:order-2">
 <span class="text-on-primary-fixed-variant font-headline text-sm tracking-widest uppercase mb-4 block">Archive 01</span>
-<h2 class="text-4xl md:text-5xl font-headline font-bold text-on-surface mb-8">遊戲背景</h2>
-<div class="space-y-6 text-lg text-secondary leading-loose font-body">
+<h2 class="text-3xl md:text-5xl font-headline font-bold text-on-surface mb-6 md:mb-8">遊戲背景</h2>
+<div class="space-y-5 text-base md:text-lg text-secondary leading-loose font-body">
 <p>海清宮不僅是信仰的中心，更是歲月的守望者。相傳在廟宇重建之時，工匠大師在樑柱結構中隱藏了一套特殊的符號系統。</p>
 <p>這套被稱為「封神密語」的機關，唯有心思縝密、對文化懷有敬畏之心的探索者，方能透過環境中的蛛絲馬跡，拼湊出被遺忘的歷史真相。</p>
 <p>今日，封印似乎有所鬆動，神祕的信函傳到了你的手中...</p>
@@ -175,27 +186,27 @@
 </div>
 </section>
 <!-- Game Rules (遊戲規則) - Bento Grid Style -->
-<section class="py-24 px-6 bg-surface-container">
+<section class="py-14 md:py-24 px-4 md:px-6 bg-surface-container">
 <div class="max-w-7xl mx-auto">
-<div class="text-center mb-16">
-<h2 class="text-4xl font-headline font-bold text-on-surface">遊戲規則</h2>
+<div class="text-center mb-10 md:mb-16">
+<h2 class="text-3xl md:text-4xl font-headline font-bold text-on-surface">遊戲規則</h2>
 <div class="w-16 h-1 bg-primary mx-auto mt-4"></div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
 <!-- Rule 1 -->
-<div class="bg-surface-container-high p-10 flex flex-col items-center text-center transition-all hover:bg-surface-container-highest">
+<div class="bg-surface-container-high p-6 md:p-10 flex flex-col items-center text-center transition-all hover:bg-surface-container-highest">
 <span class="material-symbols-outlined text-primary text-5xl mb-6">explore</span>
 <h3 class="text-xl font-headline font-bold mb-4">實地探索</h3>
 <p class="text-secondary leading-relaxed">玩家需親自造訪海清宮，根據數位提示尋找廟宇中的特定建築細節、石雕或對聯。</p>
 </div>
 <!-- Rule 2 -->
-<div class="bg-surface-container-highest p-10 flex flex-col items-center text-center">
+<div class="bg-surface-container-highest p-6 md:p-10 flex flex-col items-center text-center">
 <span class="material-symbols-outlined text-primary text-5xl mb-6">lightbulb</span>
 <h3 class="text-xl font-headline font-bold mb-4">智慧解碼</h3>
 <p class="text-secondary leading-relaxed">結合手邊的實體道具與手機端的互動介面，觀察環境進行邏輯推理與謎題破解。</p>
 </div>
 <!-- Rule 3 -->
-<div class="bg-surface-container-high p-10 flex flex-col items-center text-center transition-all hover:bg-surface-container-highest">
+<div class="bg-surface-container-high p-6 md:p-10 flex flex-col items-center text-center transition-all hover:bg-surface-container-highest">
 <span class="material-symbols-outlined text-primary text-5xl mb-6">schedule</span>
 <h3 class="text-xl font-headline font-bold mb-4">不限時間</h3>
 <p class="text-secondary leading-relaxed">本遊戲為自主參與性質，建議於廟宇開放時間內（08:00 - 17:00）進行，不設完成時限。</p>
@@ -221,6 +232,14 @@
 <script src="../../js/nav-user.js"></script>
 <script>
   (function setupAuthEntry() {
+    const mobileToggle = document.getElementById("mobile-nav-toggle");
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.onclick = () => {
+        mobileMenu.classList.toggle("hidden");
+      };
+    }
+
     const authStatus = document.getElementById("auth-status");
     const guestBtn = document.getElementById("guest-start-btn");
     const googleContainer = document.getElementById("google-signin-container");

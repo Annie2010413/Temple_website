@@ -91,7 +91,7 @@
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 <header class="bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15 sticky top-0 z-50">
-<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
 <div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
 <nav class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
@@ -100,24 +100,35 @@
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
 <div id="user-nav-slot"></div>
 </nav>
-
+<button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
+<a class="text-[#6c171a] font-bold" href="../story_map/index.html">遊戲故事</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+</div>
 </div>
 </header>
 <main class="relative overflow-hidden flex flex-col items-center">
 <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
 <img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric architectural close-up of traditional Chinese temple roof tiles and wooden beams with soft morning mist and ancient stone textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvKuguvf55VVA3QaxOuNJub5veFjGsKosxSgDm456z7NInZHA-zAYx5UsNPCHPayHLSwi3oByklFyEVHDZCt3zWM0D3gdwgKn_DMS2nTG0RyrM_XZlr89DGqvWIfnXZ6JNN6am5OkLRd8vGDNVzgxAP-qAAOZNEr4SrfaCBWYiB9cRb2hGlzMmHOiCcX5aXdktbPENj2NPnrSyAxuMZceA6sGiURC8oDx5TeV3_gK1zHkZwPc2aeWmnYDsVjXhInvN1clg9T4K84_r"/>
 </div>
-<section class="relative z-10 w-full max-w-5xl mx-auto px-6 py-10 md:py-14 flex flex-col items-center">
+<section class="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
 <div class="mb-8 flex items-center gap-3">
 <div class="w-12 h-px bg-primary/30"></div>
-<span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.3em] text-lg uppercase">序章：冥府之鑰</span>
+<span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.18em] md:tracking-[0.3em] text-base md:text-lg uppercase text-center">序章：冥府之鑰</span>
 <div class="w-12 h-px bg-primary/30"></div>
 </div>
-<div class="relative parchment-texture p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full bg-background-light" style="border: 1px solid rgba(139, 46, 46, 0.1);">
-<div class="absolute -top-6 -right-6 w-16 h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-2xl font-black rounded-sm shadow-lg">
+<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full bg-background-light" style="border: 1px solid rgba(139, 46, 46, 0.1);">
+<div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-12 h-12 md:w-16 md:h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-xl md:text-2xl font-black rounded-sm shadow-lg">
 <span id="chapter-badge">壹</span>
                 </div>
-<article class="space-y-8 text-on-surface leading-loose text-lg md:text-xl font-headline tracking-wide">
+<article class="space-y-6 md:space-y-8 text-on-surface leading-loose text-base sm:text-lg md:text-xl font-headline tracking-wide">
 <p id="story-paragraph-1" class="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
 
                     </p>
@@ -137,18 +148,18 @@
 
                     </p>
 </article>
-<div class="mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
-<a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex items-center gap-3 border border-primary text-primary px-7 py-3 rounded-sm font-headline font-bold text-base tracking-[0.15em] hover:bg-primary/10 transition-all">
+<div class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4">
+<a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex justify-center items-center gap-3 border border-primary text-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] hover:bg-primary/10 transition-all">
 <span class="material-symbols-outlined transition-transform group-hover:-translate-x-2" data-icon="arrow_left_alt">arrow_left_alt</span>
 <span id="story-prev-text">上一章</span>
 </a>
-<a id="story-next-link" href="../challenge/index.html" class="group relative inline-flex items-center gap-3 bg-primary text-on-primary px-7 py-3 rounded-sm font-headline font-bold text-base tracking-[0.15em] shadow-xl hover:bg-primary-container hover:text-on-primary-container transition-all">
+<a id="story-next-link" href="../challenge/index.html" class="group relative inline-flex justify-center items-center gap-3 bg-primary text-on-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] shadow-xl hover:bg-primary-container hover:text-on-primary-container transition-all">
 <span id="story-next-text">進入挑戰：開啟第一關</span>
                         <span class="material-symbols-outlined transition-transform group-hover:translate-x-2" data-icon="arrow_right_alt">arrow_right_alt</span>
 </a>
 </div>
 </div>
-<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-3xl">
 <div class="p-4 rounded-sm border-l-2 border-primary/40 bg-[#f5f0e8]">
 <h3 class="font-headline font-bold text-primary text-sm mb-2 tracking-widest">任務目標</h3>
 <p id="mission-text" class="text-sm text-secondary font-body">尋找隱藏在神像裝飾中的三枚冥幣符號。</p>
@@ -182,6 +193,12 @@
 <script src="../../js/state.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
+  const mobileToggle = document.getElementById("mobile-nav-toggle");
+  const mobileMenu = document.getElementById("mobile-nav-menu");
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
+  }
+
   function typeText(element, text, speed = 35) {
     return new Promise((resolve) => {
       element.textContent = "";
