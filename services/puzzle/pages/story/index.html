@@ -81,13 +81,43 @@
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
     }
 .parchment-texture {
-    background-color: #f8f6f6;
+    background-color: rgba(248, 246, 246, 0.78);
     background-image: none;
+    backdrop-filter: blur(1.5px);
     }
 .writing-vertical {
     writing-mode: vertical-rl;
     text-orientation: mixed
-    }</style>
+    }
+.cinematic-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background:
+      radial-gradient(circle at 50% 80%, rgba(255, 213, 133, 0.24) 0%, rgba(255, 213, 133, 0.1) 24%, rgba(0, 0, 0, 0.65) 70%),
+      linear-gradient(to top, rgba(12, 8, 4, 0.62) 0%, rgba(12, 8, 4, 0.2) 45%, rgba(12, 8, 4, 0.05) 100%);
+    opacity: 0;
+}
+.story-cinematic-on .cinematic-layer {
+    animation: lanternFadeIn 2400ms ease-out forwards;
+}
+.story-motion-track {
+    will-change: transform;
+}
+.story-cinematic-on .story-motion-track {
+    animation: stairClimb 9000ms ease-out forwards;
+}
+@keyframes lanternFadeIn {
+    0% { opacity: 0; }
+    35% { opacity: 0.35; }
+    100% { opacity: 0.75; }
+}
+@keyframes stairClimb {
+    0% { transform: translateY(24px) scale(1.01); }
+    100% { transform: translateY(-14px) scale(1); }
+}
+</style>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 <header class="bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15 sticky top-0 z-50">
@@ -114,17 +144,18 @@
 </div>
 </div>
 </header>
-<main class="relative overflow-hidden flex flex-col items-center">
+<main id="story-stage" class="relative overflow-hidden flex flex-col items-center">
 <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
-<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric architectural close-up of traditional Chinese temple roof tiles and wooden beams with soft morning mist and ancient stone textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvKuguvf55VVA3QaxOuNJub5veFjGsKosxSgDm456z7NInZHA-zAYx5UsNPCHPayHLSwi3oByklFyEVHDZCt3zWM0D3gdwgKn_DMS2nTG0RyrM_XZlr89DGqvWIfnXZ6JNN6am5OkLRd8vGDNVzgxAP-qAAOZNEr4SrfaCBWYiB9cRb2hGlzMmHOiCcX5aXdktbPENj2NPnrSyAxuMZceA6sGiURC8oDx5TeV3_gK1zHkZwPc2aeWmnYDsVjXhInvN1clg9T4K84_r"/>
+<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80"/>
 </div>
-<section class="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
+<div class="cinematic-layer"></div>
+<section class="story-motion-track relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
 <div class="mb-8 flex items-center gap-3">
 <div class="w-12 h-px bg-primary/30"></div>
 <span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.18em] md:tracking-[0.3em] text-base md:text-lg uppercase text-center">序章：冥府之鑰</span>
 <div class="w-12 h-px bg-primary/30"></div>
 </div>
-<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full bg-background-light" style="border: 1px solid rgba(139, 46, 46, 0.1);">
+<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
 <div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-12 h-12 md:w-16 md:h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-xl md:text-2xl font-black rounded-sm shadow-lg">
 <span id="chapter-badge">壹</span>
                 </div>
@@ -199,7 +230,17 @@
     mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
   }
 
-  function typeText(element, text, speed = 35) {
+  function keepTypingInView(element) {
+    const rect = element.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const targetBottom = viewportHeight * 0.78;
+    if (rect.bottom > targetBottom) {
+      const delta = rect.bottom - targetBottom;
+      window.scrollBy({ top: delta, behavior: "auto" });
+    }
+  }
+
+  function typeText(element, text, speed = 35, onTick = null) {
     return new Promise((resolve) => {
       element.textContent = "";
       let index = 0;
@@ -207,6 +248,7 @@
       const timer = setInterval(() => {
         element.textContent += text[index];
         index += 1;
+        if (typeof onTick === "function") onTick();
 
         if (index >= text.length) {
           clearInterval(timer);
@@ -217,6 +259,13 @@
   }
 
   async function typeStoryContent(chapter) {
+    const stageEl = document.getElementById("story-stage");
+    if (stageEl) {
+      stageEl.classList.remove("story-cinematic-on");
+      void stageEl.offsetWidth;
+      stageEl.classList.add("story-cinematic-on");
+    }
+
     const storyElements = [
       { id: "story-paragraph-1", text: chapter.p1, speed: 60 },
       { id: "story-paragraph-2", text: chapter.p2, speed: 55 },
@@ -228,7 +277,8 @@
     for (const item of storyElements) {
       const el = document.getElementById(item.id);
       if (!el) continue;
-      await typeText(el, item.text || "", item.speed);
+      await typeText(el, item.text || "", item.speed, () => keepTypingInView(el));
+      keepTypingInView(el);
     }
   }
 
