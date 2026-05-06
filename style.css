@@ -108,7 +108,8 @@ ul.dropdown-menu {
   margin: 0;
   flex-direction: column;
 }
-li.dropdown:hover > ul.dropdown-menu {
+li.dropdown:hover > ul.dropdown-menu,
+li.dropdown.open > ul.dropdown-menu {
   display: flex !important;
 }
 ul.dropdown-menu > li > a {
@@ -342,6 +343,7 @@ ul.dropdown-menu > li > a:hover {
   padding: 9px 0; border-bottom: 1px dashed var(--border);
   font-size: 1rem; color: var(--text-mid); cursor: pointer;
   transition: color 0.2s;
+  text-decoration: none;
 }
 .sidebar-link:last-child { border-bottom: none; }
 .sidebar-link:hover { color: var(--red); }
