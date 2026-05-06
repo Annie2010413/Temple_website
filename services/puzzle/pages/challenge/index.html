@@ -153,6 +153,23 @@
                         你面前的石台上有一個空的凹槽，形狀如同一枚失落的官印。根據老廟祝留下的殘卷，這個凹槽指向了一個特定的年份——那一年，海清宮迎來了第一次的大規模修繕，也是正義之光重新綻放的時刻。
                     </p>
 </div>
+<div class="space-y-2">
+<button id="challenge-qr-btn" class="w-full border border-primary text-primary py-2 font-headline font-bold tracking-[0.14em] hover:bg-primary/10 transition-all">
+                        掃描 QR Code
+                    </button>
+<div class="grid grid-cols-2 gap-2">
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
+<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
+</div>
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
+<span id="challenge-inventory" class="font-headline font-bold text-xs">3 道具</span>
+</div>
+</div>
+</div>
 <div class="p-3 rounded-sm relative overflow-hidden group bg-[#fef9f1]" style="background-color: #fef9f1; border: 1px solid #dcc0be;">
 <div class="absolute top-4 right-4 text-primary/10 select-none"><span class="material-symbols-outlined text-8xl opacity-10" style="color: #8B2E2E">balance</span></div>
 <h3 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
@@ -219,18 +236,6 @@
 <div class="grid grid-cols-2 gap-2 mt-2">
 <a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-2 font-headline font-bold tracking-[0.1em] hover:bg-primary/10 transition-all">上一關</a>
 <a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.1em] hover:opacity-90 transition-all">下一關</a>
-</div>
-<div class="grid grid-cols-2 gap-2">
-<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
-<span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
-<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
-</div>
-<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
-<span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
-<span id="challenge-inventory" class="font-headline font-bold text-xs">3 道具</span>
-</div>
 </div>
 </aside>
 </div>
@@ -321,6 +326,7 @@
     const input = document.getElementById("challenge-answer-input");
     const submitButton = document.getElementById("challenge-submit-btn");
     const feedback = document.getElementById("challenge-feedback");
+    const qrButton = document.getElementById("challenge-qr-btn");
 
     submitButton.onclick = async () => {
       const userAnswer = normalizeAnswer(input.value || "");
@@ -349,6 +355,10 @@
       setTimeout(() => {
         window.location.href = `../story/index.html?chapter=${Math.min(stageNumber + 1, 7)}`;
       }, 700);
+    };
+
+    qrButton.onclick = () => {
+      window.location.href = `./qr-scanner.html?stage=${stageNumber}`;
     };
   }
 
