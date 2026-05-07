@@ -47,7 +47,7 @@
     <li><a href="#contact">聯絡我們</a></li>
     <li><a href="committee.html">管理委員會名單</a></li>
     <li class="dropdown">
-      <a href="javascript:void(0)" class="dropdown-toggle">線上服務 ▾</a>
+      <a href="javascript:void(0)" class="dropdown-toggle" onclick="this.parentElement.classList.toggle('open')">線上服務 ▾</a>
       <ul class="dropdown-menu">
         <li><a href="services/puzzle/">解謎遊戲</a></li>
         <li><a href="services/worship/">線上參拜</a></li>
@@ -69,6 +69,11 @@
   <a href="#info">交通資訊</a>
   <a href="#contact">聯絡我們</a>
   <a href="committee.html">管理委員會名單</a>
+  <a href="services/puzzle/">　解謎遊戲</a>
+  <a href="services/worship/">　線上參拜</a>
+  <a href="services/signup/">　活動報名</a>
+  <a href="services/light/">　線上點燈</a>
+  <a href="services/fortune/">　線上抽籤</a>
 </div>
 
 <section id="hero">
@@ -156,11 +161,13 @@
         </div>
       </div>
       <div class="sidebar-box">
-        <div class="sidebar-title">📋 祭祀服務</div>
+        <div class="sidebar-title">🌐 線上服務</div>
         <div class="sidebar-content">
-          <div class="sidebar-link">冤親債主化解</div>
-          <div class="sidebar-link">點光明燈/補財庫</div>
-          <div class="sidebar-link">收驚祈福服務</div>
+          <a class="sidebar-link" href="services/puzzle/">解謎遊戲</a>
+          <a class="sidebar-link" href="services/worship/">線上參拜</a>
+          <a class="sidebar-link" href="services/signup/">活動報名</a>
+          <a class="sidebar-link" href="services/light/">線上點燈</a>
+          <a class="sidebar-link" href="services/fortune/">線上抽籤</a>
         </div>
       </div>
     </aside>
