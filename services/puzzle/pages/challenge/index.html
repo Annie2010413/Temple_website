@@ -166,9 +166,14 @@
                     </p>
 </div>
 <div class="space-y-2 md:space-y-3">
+<div class="grid grid-cols-2 gap-2">
 <button id="challenge-qr-btn" class="w-full border border-primary text-primary py-2 font-headline font-bold tracking-[0.14em] hover:bg-primary/10 transition-all">
                         掃描 QR Code
                     </button>
+<button id="challenge-ar-btn" class="w-full bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.14em] hover:opacity-90 transition-all">
+                        開啟 AR 探索
+                    </button>
+</div>
 <div class="grid grid-cols-2 gap-2">
 <div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
 <span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
@@ -276,6 +281,17 @@
     return value.replace(/\s+/g, "").toLowerCase();
   }
 
+  function refreshInventoryBadge() {
+    const el = document.getElementById("challenge-inventory");
+    if (!el) return;
+    const items = (window.PuzzleState && typeof window.PuzzleState.getInventory === "function")
+      ? window.PuzzleState.getInventory()
+      : [];
+    el.textContent = `${items.length} 道具`;
+  }
+
+  document.addEventListener("puzzle-inventory-changed", refreshInventoryBadge);
+
   async function loadChallengeStage() {
     const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
     const response = await fetch("./challenges.json");
@@ -310,7 +326,7 @@
     document.getElementById("challenge-difficulty").textContent = stage.difficulty;
     document.getElementById("challenge-progress").textContent = stage.progress;
     document.getElementById("challenge-lore").textContent = stage.lore;
-    document.getElementById("challenge-inventory").textContent = stage.inventory;
+    refreshInventoryBadge();
 
     const prevLink = document.getElementById("challenge-prev-link");
     const nextLink = document.getElementById("challenge-next-link");
@@ -398,6 +414,13 @@
     qrButton.onclick = () => {
       window.location.href = `./qr-scanner.html?stage=${stageNumber}`;
     };
+
+    const arButton = document.getElementById("challenge-ar-btn");
+    if (arButton) {
+      arButton.onclick = () => {
+        window.location.href = `./ar-scanner.html?stage=${stageNumber}`;
+      };
+    }
   }
 
   loadChallengeStage().catch(() => {

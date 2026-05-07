@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR 探索</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;family=Newsreader:ital,wght@0,400;0,600;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#6c171a",
+            background: "#fef9f1",
+            surface: "#fef9f1",
+            secondary: "#755750",
+            outline: "#897270",
+            "outline-variant": "#dcc0be",
+            "on-surface": "#1d1c17",
+            "on-surface-variant": "#564241",
+            "surface-container-low": "#f8f3eb",
+            "surface-container-highest": "#e7e2da",
+            "primary-fixed-dim": "#ffb3af",
+            "on-primary": "#ffffff"
+          },
+          fontFamily: {
+            headline: ["Noto Serif TC", "serif"],
+            body: ["Newsreader", "serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .ar-frame {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: #000;
+    }
+    #ar-stage {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden;
+    }
+    #ar-stage video {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      z-index: 1 !important;
+      display: block !important;
+    }
+    #ar-stage canvas {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      z-index: 2 !important;
+      display: block !important;
+    }
+    .ar-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .ar-detect-frame {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 4;
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .ar-detect-frame.is-found {
+      border: 3px solid #22c55e;
+      box-shadow: inset 0 0 24px rgba(34, 197, 94, 0.45);
+    }
+    .ar-detect-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 5;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-family: "Noto Serif TC", serif;
+      letter-spacing: 0.12em;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      pointer-events: none;
+    }
+    .ar-detect-badge.is-found {
+      background: rgba(34, 197, 94, 0.85);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    .ar-viewport {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      background: #000;
+      overflow: hidden;
+    }
+    @media (min-width: 768px) {
+      .ar-viewport {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+      }
+    }
+    @keyframes arModalIn {
+      0%   { opacity: 0; transform: scale(0.85); }
+      60%  { opacity: 1; transform: scale(1.03); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes arBackdropIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .ar-modal-card {
+      animation: arModalIn 0.32s cubic-bezier(0.2, 0.8, 0.3, 1.2);
+    }
+    .ar-modal-backdrop {
+      animation: arBackdropIn 0.18s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-black md:bg-background text-on-surface font-body min-h-screen overflow-hidden md:overflow-auto">
+  <main class="min-h-screen md:max-w-7xl md:mx-auto p-0 md:px-4 md:py-6 flex items-stretch md:items-center justify-center">
+    <section class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl bg-black md:bg-surface md:border md:border-outline-variant/30 md:shadow-2xl md:rounded-sm md:overflow-hidden">
+      <header class="fixed md:static top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] md:px-5 md:py-4 border-b border-[#dcc0be]/15 bg-[#fef9f1]">
+        <div>
+          <p class="text-[11px] tracking-[0.2em] font-headline text-secondary">PUZZLE AR</p>
+          <h1 class="text-lg md:text-xl font-headline font-black text-primary">AR 探索器</h1>
+        </div>
+        <button id="ar-close-btn" class="w-9 h-9 rounded-full border border-primary/30 text-primary hover:bg-primary/10 transition-colors font-headline" aria-label="關閉並返回">✕</button>
+      </header>
+
+      <div class="min-h-screen md:min-h-0 p-0 md:p-4 md:space-y-3">
+        <p id="ar-stage-text" class="fixed md:static top-[calc(5rem+env(safe-area-inset-top))] md:top-auto left-3 z-20 px-3 py-1.5 bg-[#fef9f1]/70 md:bg-transparent border border-[#dcc0be]/40 md:border-0 rounded-full md:rounded-none text-xs text-secondary font-headline tracking-wide backdrop-blur md:backdrop-blur-0">關卡：-</p>
+        <div class="hidden md:block bg-surface-container-low border border-outline-variant/30 p-3 text-sm text-on-surface-variant leading-relaxed">
+          <p>請將鏡頭對準現場指定圖案（例如石碑紋飾或符文卡），並讓圖案完整出現在畫面內。</p>
+          <p class="mt-1 text-xs text-secondary">偵測成功後道具會浮現在圖案上，點擊道具可查看介紹並收進道具箱。</p>
+        </div>
+        <div class="ar-viewport md:mt-3 md:mx-auto md:max-w-md md:border md:border-outline-variant/30">
+          <div id="ar-stage"></div>
+          <div id="ar-detect-badge" class="ar-detect-badge">偵測中…</div>
+          <div id="ar-detect-frame" class="ar-detect-frame"></div>
+        </div>
+        <p id="ar-status" class="fixed md:static left-3 right-3 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] md:bottom-auto z-20 px-3 py-2 md:px-0 md:py-0 bg-black/45 md:bg-transparent border border-white/15 md:border-0 rounded-sm md:rounded-none text-sm text-white md:text-on-surface-variant font-headline text-center md:text-left backdrop-blur md:backdrop-blur-0">正在啟動 AR...</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="ar-item-modal" class="hidden fixed inset-0 z-30 flex items-center justify-center p-4">
+    <div id="ar-item-backdrop" class="ar-modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+    <div id="ar-item-card" class="ar-modal-card relative w-full max-w-sm bg-surface border border-outline-variant/40 shadow-2xl">
+      <button id="ar-item-close-btn" class="absolute top-2 right-2 w-8 h-8 rounded-full text-secondary hover:bg-surface-container-low transition-colors font-headline" aria-label="關閉">✕</button>
+      <div class="px-5 pt-6 pb-5 text-center">
+        <p class="text-[11px] tracking-[0.3em] font-headline text-secondary mb-3">獲 得 道 具</p>
+        <div class="flex justify-center mb-4">
+          <img id="ar-item-image" class="w-28 h-28 object-contain bg-surface-container-highest border border-outline-variant/30" alt="道具圖片"/>
+        </div>
+        <p id="ar-item-name" class="font-headline font-black text-primary text-2xl mb-2">道具名稱</p>
+        <p id="ar-item-desc" class="text-sm text-on-surface-variant leading-relaxed">道具描述</p>
+      </div>
+      <div class="grid grid-cols-2 border-t border-outline-variant/30">
+        <button id="ar-item-cancel-btn" class="py-3 font-headline tracking-[0.12em] text-secondary hover:bg-surface-container-low transition-colors">稍 後 再 說</button>
+        <button id="ar-collect-btn" class="py-3 bg-primary text-on-primary font-headline tracking-[0.18em] hover:opacity-90 transition-opacity">收 下 道 具</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/state.js"></script>
+  <script type="module">
+    import { MindARThree } from "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js";
+    import * as THREE from "three";
+
+    const params = new URLSearchParams(window.location.search);
+    const stageNumber = Number(params.get("stage")) || 1;
+
+    const stageText = document.getElementById("ar-stage-text");
+    const statusEl = document.getElementById("ar-status");
+    const closeBtn = document.getElementById("ar-close-btn");
+    const itemModal = document.getElementById("ar-item-modal");
+    const itemBackdrop = document.getElementById("ar-item-backdrop");
+    const itemCard = document.getElementById("ar-item-card");
+    const itemImage = document.getElementById("ar-item-image");
+    const itemName = document.getElementById("ar-item-name");
+    const itemDesc = document.getElementById("ar-item-desc");
+    const itemCloseBtn = document.getElementById("ar-item-close-btn");
+    const itemCancelBtn = document.getElementById("ar-item-cancel-btn");
+    const collectBtn = document.getElementById("ar-collect-btn");
+    const detectFrame = document.getElementById("ar-detect-frame");
+    const detectBadge = document.getElementById("ar-detect-badge");
+    stageText.textContent = `關卡：${stageNumber}`;
+
+    let mindarThree = null;
+    let started = false;
+    let activeItem = null;
+    const itemMeshes = [];
+    const collectedIds = new Set(
+      (window.PuzzleState?.getInventory?.() || [])
+        .map((entry) => (entry && entry.id) ? String(entry.id) : "")
+        .filter(Boolean)
+    );
+
+    function setDetectionUI(found) {
+      if (found) {
+        detectFrame.classList.add("is-found");
+        detectBadge.classList.add("is-found");
+        detectBadge.textContent = "偵測到目標 ✓";
+      } else {
+        detectFrame.classList.remove("is-found");
+        detectBadge.classList.remove("is-found");
+        detectBadge.textContent = "偵測中…";
+      }
+    }
+
+    function sanitizeImagePath(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      if (!raw.startsWith("./") && !raw.startsWith("../")) return "";
+      const lowered = raw.toLowerCase();
+      if (lowered.startsWith("javascript:") || lowered.startsWith("data:") || lowered.startsWith("vbscript:")) return "";
+      return raw;
+    }
+
+    async function loadArTargets() {
+      const response = await fetch("./ar-targets.json");
+      if (!response.ok) throw new Error("Failed to load ar-targets.json");
+      const data = await response.json();
+      return {
+        mindFile: typeof data.mindFile === "string" ? data.mindFile : "",
+        items: Array.isArray(data.items) ? data.items : []
+      };
+    }
+
+    function showItemCard(item) {
+      activeItem = item;
+      itemImage.src = sanitizeImagePath(item.image) || "";
+      itemName.textContent = String(item.name || "未命名道具");
+      itemDesc.textContent = String(item.description || "");
+      itemModal.classList.remove("hidden");
+      itemCard.classList.remove("ar-modal-card");
+      itemBackdrop.classList.remove("ar-modal-backdrop");
+      void itemCard.offsetWidth;
+      itemCard.classList.add("ar-modal-card");
+      itemBackdrop.classList.add("ar-modal-backdrop");
+    }
+
+    function hideItemCard() {
+      activeItem = null;
+      itemModal.classList.add("hidden");
+    }
+
+    itemCloseBtn.onclick = () => hideItemCard();
+    itemCancelBtn.onclick = () => hideItemCard();
+    itemBackdrop.onclick = () => hideItemCard();
+
+    function createItemTexture(item) {
+      const c = document.createElement("canvas");
+      c.width = 512;
+      c.height = 512;
+      const ctx = c.getContext("2d");
+
+      const grad = ctx.createLinearGradient(0, 0, 0, 512);
+      grad.addColorStop(0, "#8a1f23");
+      grad.addColorStop(1, "#4a0e10");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+
+      ctx.strokeStyle = "#f0c674";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(24, 24, 464, 464);
+      ctx.strokeStyle = "rgba(240, 198, 116, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(40, 40, 432, 432);
+
+      ctx.fillStyle = "#fef9f1";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.font = "bold 110px 'Noto Serif TC', serif";
+      ctx.fillText(String(item.name || "道具"), 256, 240);
+
+      ctx.font = "30px 'Noto Serif TC', serif";
+      ctx.fillStyle = "#f0c674";
+      ctx.fillText("·  點 我 查 看  ·", 256, 360);
+
+      const texture = new THREE.CanvasTexture(c);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    function attachItemMeshToAnchor(anchor, item) {
+      const fallback = createItemTexture(item);
+      const material = new THREE.MeshBasicMaterial({
+        map: fallback,
+        transparent: true,
+        side: THREE.DoubleSide
+      });
+      const geometry = new THREE.PlaneGeometry(0.6, 0.6);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(0, 0, 0.05);
+      mesh.userData.item = item;
+      mesh.userData.baseY = 0;
+      mesh.userData.baseScale = { x: 1, y: 1 };
+      mesh.scale.set(1, 1, 1);
+      if (collectedIds.has(item.id)) mesh.visible = false;
+      anchor.group.add(mesh);
+      itemMeshes.push(mesh);
+
+      const imagePath = sanitizeImagePath(item.image);
+      if (imagePath) {
+        new THREE.TextureLoader().load(
+          imagePath,
+          (texture) => {
+            texture.colorSpace = THREE.SRGBColorSpace;
+            material.map = texture;
+            material.needsUpdate = true;
+
+            const w = texture.image && texture.image.width ? texture.image.width : 1;
+            const h = texture.image && texture.image.height ? texture.image.height : 1;
+            if (w > 0 && h > 0) {
+              if (w >= h) {
+                mesh.userData.baseScale = { x: 1, y: h / w };
+              } else {
+                mesh.userData.baseScale = { x: w / h, y: 1 };
+              }
+              mesh.scale.set(mesh.userData.baseScale.x, mesh.userData.baseScale.y, 1);
+            }
+          },
+          undefined,
+          () => {
+            console.warn(`[AR] failed to load item image: ${imagePath}, fallback to canvas texture.`);
+          }
+        );
+      }
+      return mesh;
+    }
+
+    async function closeAndBack() {
+      try {
+        if (mindarThree && started) {
+          await mindarThree.stop();
+        }
+      } catch (_error) {
+        // Ignore stop errors.
+      }
+      window.location.href = `./index.html?stage=${stageNumber}`;
+    }
+
+    closeBtn.onclick = () => closeAndBack();
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (!itemModal.classList.contains("hidden")) {
+          hideItemCard();
+        } else {
+          closeAndBack();
+        }
+      }
+    });
+    window.addEventListener("beforeunload", () => {
+      try { if (mindarThree && started) mindarThree.stop(); } catch (_error) { /* noop */ }
+    });
+
+    collectBtn.onclick = () => {
+      if (!activeItem) return;
+      const collected = activeItem;
+      window.PuzzleState.addInventoryItem({
+        id: collected.id,
+        name: collected.name,
+        image: collected.image,
+        description: collected.description
+      });
+      collectedIds.add(collected.id);
+      itemMeshes.forEach((mesh) => {
+        if (mesh.userData.item && mesh.userData.item.id === collected.id) {
+          mesh.visible = false;
+        }
+      });
+      statusEl.textContent = `已收下：${collected.name}（已加入道具箱）`;
+      hideItemCard();
+    };
+
+    (async function startArFlow() {
+      let config;
+      try {
+        config = await loadArTargets();
+      } catch (error) {
+        console.error("[AR] load ar-targets.json failed", error);
+        statusEl.textContent = "載入 AR 設定失敗（ar-targets.json）。";
+        return;
+      }
+
+      const itemsForStage = config.items.filter((item) => Number(item.stage) === stageNumber);
+      if (!config.mindFile) {
+        statusEl.textContent = "尚未設定 AR 目標檔（mindFile）。請先到 MindAR Compile 工具產生 .mind 檔。";
+        return;
+      }
+
+      try {
+        mindarThree = new MindARThree({
+          container: document.getElementById("ar-stage"),
+          imageTargetSrc: config.mindFile,
+          uiLoading: "no",
+          uiScanning: "no",
+          uiError: "no"
+        });
+
+        const { renderer, scene, camera } = mindarThree;
+        const anchors = itemsForStage.map((item) => mindarThree.addAnchor(Number(item.targetIndex) || 0));
+
+        anchors.forEach((anchor, idx) => {
+          const item = itemsForStage[idx];
+          attachItemMeshToAnchor(anchor, item);
+
+          anchor.onTargetFound = () => {
+            if (collectedIds.has(item.id)) {
+              statusEl.textContent = "已領取道具，請前往道具庫查看。";
+            } else {
+              statusEl.textContent = "偵測成功！點擊圖案上的道具查看介紹。";
+            }
+            setDetectionUI(true);
+          };
+          anchor.onTargetLost = () => {
+            statusEl.textContent = "偵測中斷，請重新對準圖案。";
+            setDetectionUI(false);
+            if (activeItem && activeItem.targetIndex === Number(item.targetIndex)) {
+              hideItemCard();
+            }
+          };
+        });
+
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        const handlePointer = (event) => {
+          const touch = event.changedTouches && event.changedTouches[0];
+          const clientX = touch ? touch.clientX : event.clientX;
+          const clientY = touch ? touch.clientY : event.clientY;
+          if (typeof clientX !== "number" || typeof clientY !== "number") return;
+
+          const canvasEl = renderer.domElement;
+          const rect = canvasEl.getBoundingClientRect();
+          pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+          pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+          raycaster.setFromCamera(pointer, camera);
+          const visibleMeshes = itemMeshes.filter((mesh) => mesh.visible && mesh.parent && mesh.parent.visible);
+          const hits = raycaster.intersectObjects(visibleMeshes, false);
+          if (hits.length > 0) {
+            const hitItem = hits[0].object.userData.item;
+            if (hitItem && !collectedIds.has(hitItem.id)) {
+              showItemCard(hitItem);
+            }
+          }
+        };
+        renderer.domElement.style.pointerEvents = "auto";
+        renderer.domElement.addEventListener("click", handlePointer);
+        renderer.domElement.addEventListener("touchend", handlePointer, { passive: true });
+
+        await mindarThree.start();
+        started = true;
+
+        const stageEl = document.getElementById("ar-stage");
+        const videoEl = stageEl.querySelector("video");
+        const canvasEl = stageEl.querySelector("canvas");
+        if (videoEl) {
+          videoEl.style.zIndex = "1";
+          videoEl.style.position = "absolute";
+          videoEl.style.top = "0";
+          videoEl.style.left = "0";
+          videoEl.style.width = "100%";
+          videoEl.style.height = "100%";
+          videoEl.style.objectFit = "cover";
+        }
+        if (canvasEl) {
+          canvasEl.style.zIndex = "2";
+          canvasEl.style.position = "absolute";
+          canvasEl.style.top = "0";
+          canvasEl.style.left = "0";
+          canvasEl.style.width = "100%";
+          canvasEl.style.height = "100%";
+        }
+
+        statusEl.textContent = "AR 啟動成功，請對準目標圖案。";
+
+        const clock = new THREE.Clock();
+        renderer.setAnimationLoop(() => {
+          const t = clock.getElapsedTime();
+          itemMeshes.forEach((mesh) => {
+            if (!mesh.visible) return;
+            mesh.position.y = mesh.userData.baseY + Math.sin(t * 2.4) * 0.04;
+            const pulse = 1 + Math.sin(t * 2.4) * 0.03;
+            const bx = mesh.userData.baseScale ? mesh.userData.baseScale.x : 1;
+            const by = mesh.userData.baseScale ? mesh.userData.baseScale.y : 1;
+            mesh.scale.set(bx * pulse, by * pulse, 1);
+          });
+          renderer.render(scene, camera);
+        });
+      } catch (error) {
+        console.error("[AR] start failed", error);
+        statusEl.textContent = "無法啟動 AR。請確認相機權限，並使用 HTTPS 或 localhost 開啟。";
+      }
+    })();
+  </script>
+</body>
+</html>

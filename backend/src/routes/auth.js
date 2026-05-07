@@ -3,11 +3,12 @@ const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const config = require("../config");
 const User = require("../models/User");
+const { authLimiter } = require("../middleware/limiters");
 
 const router = express.Router();
 const googleClient = new OAuth2Client(config.googleClientId);
 
-router.post("/google", async (req, res) => {
+router.post("/google", authLimiter, async (req, res) => {
   try {
     const { idToken } = req.body || {};
     if (!idToken) {

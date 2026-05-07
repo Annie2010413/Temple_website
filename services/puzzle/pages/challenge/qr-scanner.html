@@ -40,9 +40,9 @@
   </style>
 </head>
 <body class="bg-background text-on-surface font-body min-h-screen">
-  <main class="min-h-screen max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 md:py-12 flex items-start md:items-center justify-center">
-    <section class="w-full max-w-3xl bg-surface border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden">
-      <header class="flex items-center justify-between px-5 py-4 border-b border-outline-variant/30 bg-surface-container-low">
+  <main class="min-h-screen max-w-7xl mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 flex items-start md:items-center justify-center">
+    <section class="w-full max-w-3xl md:max-w-5xl bg-surface border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden">
+      <header class="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 border-b border-outline-variant/30 bg-surface-container-low">
         <div>
           <p class="text-[11px] tracking-[0.2em] font-headline text-secondary">PUZZLE SCAN</p>
           <h1 class="text-lg md:text-xl font-headline font-black text-primary">QR 掃描器</h1>
@@ -50,13 +50,13 @@
         <button id="scanner-close-btn" class="w-9 h-9 rounded-full border border-primary/30 text-primary hover:bg-primary/10 transition-colors font-headline" aria-label="關閉並返回">✕</button>
       </header>
 
-      <div class="p-3 sm:p-4 md:p-5 space-y-3">
+      <div class="p-2 sm:p-3 md:p-4 space-y-2 md:space-y-3">
         <p id="scanner-stage-text" class="text-xs text-secondary font-headline tracking-wide">關卡：-</p>
         <div class="bg-surface-container-low border border-outline-variant/30 p-3 text-sm text-on-surface-variant leading-relaxed">
           <p>請將 QR Code 置中於掃描框內，保持手機穩定 1-2 秒即可辨識。</p>
           <p class="mt-1 text-xs text-secondary">掃描成功後會在此區顯示結果圖片，按右上角 ✕ 可返回關卡頁。</p>
         </div>
-        <div id="scanner-reader" class="mt-5 sm:mt-6 w-full min-h-[240px] sm:min-h-[280px] bg-surface-container-highest border border-outline-variant/30"></div>
+        <div id="scanner-reader" class="mt-3 sm:mt-4 w-full max-w-md mx-auto min-h-[240px] sm:min-h-[280px] bg-surface-container-highest border border-outline-variant/30"></div>
         <p id="scanner-status" class="text-sm text-on-surface-variant font-headline">正在啟動相機...</p>
       </div>
     </section>
@@ -133,7 +133,7 @@
     }
 
     function replaceReaderWithResult(title, imageUrl) {
-      readerEl.className = "w-full min-h-[240px] sm:min-h-[280px] border border-outline-variant/30 bg-surface-container-low p-2 space-y-2";
+      readerEl.className = "mt-3 sm:mt-4 w-full max-w-md mx-auto min-h-[240px] sm:min-h-[280px] border border-outline-variant/30 bg-surface-container-low p-2 space-y-2";
       readerEl.replaceChildren();
 
       const titleEl = document.createElement("p");
