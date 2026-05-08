@@ -398,8 +398,9 @@
       feedback.textContent = "答對了！正在前往下一段故事...";
       feedback.className = "text-sm font-headline tracking-wide text-green-700";
       submitButton.textContent = "驗證成功";
+      const nextChapter = Math.min(Number(result.unlockedStory) || (stageNumber + 1), 7);
       setTimeout(() => {
-        window.location.href = `../story/index.html?chapter=${Math.min(stageNumber + 1, 7)}`;
+        window.location.href = `../story/index.html?chapter=${nextChapter}`;
       }, 700);
     }
 

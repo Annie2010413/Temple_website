@@ -317,35 +317,46 @@
 
     document.getElementById("chapter-title").textContent = chapter.title;
     document.getElementById("chapter-badge").textContent = chapter.badge;
-    await typeStoryContent(chapter);
-    document.getElementById("story-image").src = chapter.image;
-    document.getElementById("mission-text").textContent = chapter.mission;
-    document.getElementById("tools-text").textContent = chapter.tools;
-    document.getElementById("location-text").textContent = chapter.location;
-
     const nextLink = document.getElementById("story-next-link");
     const nextText = document.getElementById("story-next-text");
     const prevLink = document.getElementById("story-prev-link");
     const prevText = document.getElementById("story-prev-text");
 
     if (allowedChapter <= 1) {
+      prevLink.style.display = "none";
       prevLink.style.visibility = "hidden";
       prevLink.setAttribute("aria-hidden", "true");
       prevLink.setAttribute("tabindex", "-1");
+      prevLink.onclick = null;
     } else {
+      prevLink.style.display = "inline-flex";
       prevLink.style.visibility = "visible";
       prevLink.removeAttribute("aria-hidden");
       prevLink.removeAttribute("tabindex");
       prevLink.href = `./index.html?chapter=${allowedChapter - 1}`;
       prevText.textContent = `返回上一章（第 ${allowedChapter - 1} 章）`;
+      prevLink.onclick = null;
     }
 
     if (allowedChapter <= 5) {
       nextLink.href = `../challenge/index.html?stage=${allowedChapter}`;
       nextText.textContent = `進入挑戰：第 ${allowedChapter} 關`;
+      nextLink.onclick = async (event) => {
+        event.preventDefault();
+        try {
+          await window.PuzzleState.updateProgress({
+            unlockedStory: allowedChapter,
+            unlockedChallenge: allowedChapter
+          });
+        } catch (_error) {
+          // Ignore and continue navigation to avoid blocking user flow.
+        }
+        window.location.href = `../challenge/index.html?stage=${allowedChapter}`;
+      };
     } else if (allowedChapter >= maxChapter) {
       nextLink.href = "../challenge_map/index.html";
       nextText.textContent = "前往關卡地圖";
+      nextLink.onclick = null;
     } else {
       nextLink.href = `./index.html?chapter=${allowedChapter + 1}`;
       nextText.textContent = `前往下一章（第 ${allowedChapter + 1} 章）`;
@@ -359,6 +370,13 @@
         nextLink.onclick = null;
       }
     }
+
+    // Apply visual/navigation state before typing animation starts.
+    document.getElementById("story-image").src = chapter.image;
+    document.getElementById("mission-text").textContent = chapter.mission;
+    document.getElementById("tools-text").textContent = chapter.tools;
+    document.getElementById("location-text").textContent = chapter.location;
+    await typeStoryContent(chapter);
   }
 
   loadStoryChapter().catch(() => {

@@ -100,7 +100,14 @@
     const auth = getAuth();
     if (!auth?.token) return getGuestProgress();
     try {
-      return sanitizeProgress(await getCloudProgress());
+      const cloud = sanitizeProgress(await getCloudProgress());
+      const local = getGuestProgress();
+      const merged = {
+        unlockedStory: Math.max(cloud.unlockedStory, local.unlockedStory),
+        unlockedChallenge: Math.max(cloud.unlockedChallenge, local.unlockedChallenge)
+      };
+      setGuestProgress(merged);
+      return merged;
     } catch (error) {
       if (String(error?.message || "").includes("401")) {
         clearAuth();
@@ -114,8 +121,14 @@
     const auth = getAuth();
     if (auth?.token) {
       try {
-        const saved = await putCloudProgress(sanitizeProgress(next));
-        return sanitizeProgress(saved);
+        const saved = sanitizeProgress(await putCloudProgress(sanitizeProgress(next)));
+        const local = getGuestProgress();
+        const merged = {
+          unlockedStory: Math.max(saved.unlockedStory, local.unlockedStory),
+          unlockedChallenge: Math.max(saved.unlockedChallenge, local.unlockedChallenge)
+        };
+        setGuestProgress(merged);
+        return merged;
       } catch (error) {
         if (String(error?.message || "").includes("401")) {
           clearAuth();
@@ -156,18 +169,28 @@
       unlockedStory: data.unlockedStory,
       unlockedChallenge: data.unlockedChallenge
     });
+    const expectedProgress = sanitizeProgress({
+      unlockedStory: normalizedStage + 1,
+      unlockedChallenge: normalizedStage + 1
+    });
 
     if (!isLoggedIn()) {
       const current = getGuestProgress();
       const localMerged = {
-        unlockedStory: Math.max(current.unlockedStory, merged.unlockedStory),
-        unlockedChallenge: Math.max(current.unlockedChallenge, merged.unlockedChallenge)
+        unlockedStory: Math.max(current.unlockedStory, merged.unlockedStory, expectedProgress.unlockedStory),
+        unlockedChallenge: Math.max(current.unlockedChallenge, merged.unlockedChallenge, expectedProgress.unlockedChallenge)
       };
       setGuestProgress(localMerged);
       return { correct: true, ...localMerged };
     }
 
-    return { correct: true, ...merged };
+    const cloudMerged = {
+      unlockedStory: Math.max(merged.unlockedStory, expectedProgress.unlockedStory),
+      unlockedChallenge: Math.max(merged.unlockedChallenge, expectedProgress.unlockedChallenge)
+    };
+    setGuestProgress(cloudMerged);
+    await updateProgress(cloudMerged);
+    return { correct: true, ...cloudMerged };
   }
 
   function isLoggedIn() {
