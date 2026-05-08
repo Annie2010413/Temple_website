@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "stage": 1,
+      "hash": "replace_with_stage1_hash",
+      "title": "第一關掃描獎勵圖片",
+      "image": "./assets/qr/stage-1-reward.jpg"
+    },
+    {
+      "stage": 2,
+      "hash": "replace_with_stage2_hash",
+      "title": "第二關掃描獎勵圖片",
+      "image": "./assets/qr/stage-2-reward.jpg"
+    }
+  ]
+}

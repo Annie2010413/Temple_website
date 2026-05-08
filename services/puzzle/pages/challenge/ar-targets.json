@@ -1,0 +1,21 @@
+{
+  "mindFile": "https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind",
+  "items": [
+    {
+      "stage": 1,
+      "targetIndex": 0,
+      "id": "stage-1-talisman",
+      "name": "寶貝球",
+      "image": "./assets/ar/stage-1-item.png",
+      "description": "海清宮第一關偵測到的虛擬道具：寶貝球。"
+    },
+    {
+      "stage": 2,
+      "targetIndex": 1,
+      "id": "stage-2-coin",
+      "name": "冥幣",
+      "image": "./assets/ar/stage-2-item.png",
+      "description": "海清宮第二關偵測到的虛擬道具：冥幣。"
+    }
+  ]
+}

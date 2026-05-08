@@ -81,17 +81,47 @@
     font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
     }
 .parchment-texture {
-    background-color: #f8f6f6;
+    background-color: rgba(248, 246, 246, 0.78);
     background-image: none;
+    backdrop-filter: blur(1.5px);
     }
 .writing-vertical {
     writing-mode: vertical-rl;
     text-orientation: mixed
-    }</style>
+    }
+.cinematic-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background:
+      radial-gradient(circle at 50% 80%, rgba(255, 213, 133, 0.24) 0%, rgba(255, 213, 133, 0.1) 24%, rgba(0, 0, 0, 0.65) 70%),
+      linear-gradient(to top, rgba(12, 8, 4, 0.62) 0%, rgba(12, 8, 4, 0.2) 45%, rgba(12, 8, 4, 0.05) 100%);
+    opacity: 0;
+}
+.story-cinematic-on .cinematic-layer {
+    animation: lanternFadeIn 2400ms ease-out forwards;
+}
+.story-motion-track {
+    will-change: transform;
+}
+.story-cinematic-on .story-motion-track {
+    animation: stairClimb 9000ms ease-out forwards;
+}
+@keyframes lanternFadeIn {
+    0% { opacity: 0; }
+    35% { opacity: 0.35; }
+    100% { opacity: 0.75; }
+}
+@keyframes stairClimb {
+    0% { transform: translateY(24px) scale(1.01); }
+    100% { transform: translateY(-14px) scale(1); }
+}
+</style>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 <header class="bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15 sticky top-0 z-50">
-<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
 <div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
 <nav class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
@@ -100,55 +130,67 @@
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
 <div id="user-nav-slot"></div>
 </nav>
-
+<button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
+<a class="text-[#6c171a] font-bold" href="../story_map/index.html">遊戲故事</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+</div>
 </div>
 </header>
-<main class="relative overflow-hidden flex flex-col items-center">
+<main id="story-stage" class="relative overflow-hidden flex flex-col items-center">
 <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
-<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric architectural close-up of traditional Chinese temple roof tiles and wooden beams with soft morning mist and ancient stone textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvKuguvf55VVA3QaxOuNJub5veFjGsKosxSgDm456z7NInZHA-zAYx5UsNPCHPayHLSwi3oByklFyEVHDZCt3zWM0D3gdwgKn_DMS2nTG0RyrM_XZlr89DGqvWIfnXZ6JNN6am5OkLRd8vGDNVzgxAP-qAAOZNEr4SrfaCBWYiB9cRb2hGlzMmHOiCcX5aXdktbPENj2NPnrSyAxuMZceA6sGiURC8oDx5TeV3_gK1zHkZwPc2aeWmnYDsVjXhInvN1clg9T4K84_r"/>
+<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80"/>
 </div>
-<section class="relative z-10 w-full max-w-5xl mx-auto px-6 py-10 md:py-14 flex flex-col items-center">
+<div class="cinematic-layer"></div>
+<section class="story-motion-track relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
 <div class="mb-8 flex items-center gap-3">
 <div class="w-12 h-px bg-primary/30"></div>
-<span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.3em] text-lg uppercase">序章：冥府之鑰</span>
+<span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.18em] md:tracking-[0.3em] text-base md:text-lg uppercase text-center">序章：冥府之鑰</span>
 <div class="w-12 h-px bg-primary/30"></div>
 </div>
-<div class="relative parchment-texture p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full bg-background-light" style="border: 1px solid rgba(139, 46, 46, 0.1);">
-<div class="absolute -top-6 -right-6 w-16 h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-2xl font-black rounded-sm shadow-lg">
+<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
+<div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-12 h-12 md:w-16 md:h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-xl md:text-2xl font-black rounded-sm shadow-lg">
 <span id="chapter-badge">壹</span>
                 </div>
-<article class="space-y-8 text-on-surface leading-loose text-lg md:text-xl font-headline tracking-wide">
+<article class="space-y-6 md:space-y-8 text-on-surface leading-loose text-base sm:text-lg md:text-xl font-headline tracking-wide">
 <p id="story-paragraph-1" class="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
-                        雲林四湖海清宮，森羅殿前，威嚴肅穆。香煙裊裊中，包公神像目光如炬，彷彿能洞悉世間一切善惡真相。
+
                     </p>
 <p id="story-paragraph-2">
-                        在一個悶熱的午後，你作為一名熱愛解謎的旅人，踏入了這座擁有三百年歷史的古廟。然而，當你觸摸到神案前的一塊斑駁青石時，一股寒意瞬間席捲全身。
+
                     </p>
 <div class="py-6 flex justify-center">
 <img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
 </div>
 <p id="story-paragraph-3">
-                        「時機已至。」一個低沈且威嚴的聲音在你腦海中響起。
+
                     </p>
 <p id="story-paragraph-4">
-                        你發現，原本熟悉的廟宇環境開始發生奇異的變化。牆上的碑文閃爍著微弱的金光，原本靜止的木雕龍像似乎正在緩緩遊動。一張陳舊的捲軸在石桌上緩緩展開，上面顯現出一行行你從未見過的古字。
+
                     </p>
 <p id="story-highlight" class="text-on-primary-fixed-variant font-bold italic border-l-4 border-primary/20 pl-6">
-                        這不是一場普通的遊戲。這是來自地府的請託，唯有心思縝密、無懼真相之人，方能解開被埋藏在海清宮深處的千年之謎。
+
                     </p>
 </article>
-<div class="mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
-<a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex items-center gap-3 border border-primary text-primary px-7 py-3 rounded-sm font-headline font-bold text-base tracking-[0.15em] hover:bg-primary/10 transition-all">
+<div class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4">
+<a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex justify-center items-center gap-3 border border-primary text-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] hover:bg-primary/10 transition-all">
 <span class="material-symbols-outlined transition-transform group-hover:-translate-x-2" data-icon="arrow_left_alt">arrow_left_alt</span>
 <span id="story-prev-text">上一章</span>
 </a>
-<a id="story-next-link" href="../challenge/index.html" class="group relative inline-flex items-center gap-3 bg-primary text-on-primary px-7 py-3 rounded-sm font-headline font-bold text-base tracking-[0.15em] shadow-xl hover:bg-primary-container hover:text-on-primary-container transition-all">
+<a id="story-next-link" href="../challenge/index.html" class="group relative inline-flex justify-center items-center gap-3 bg-primary text-on-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] shadow-xl hover:bg-primary-container hover:text-on-primary-container transition-all">
 <span id="story-next-text">進入挑戰：開啟第一關</span>
                         <span class="material-symbols-outlined transition-transform group-hover:translate-x-2" data-icon="arrow_right_alt">arrow_right_alt</span>
 </a>
 </div>
 </div>
-<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 w-full max-w-3xl">
 <div class="p-4 rounded-sm border-l-2 border-primary/40 bg-[#f5f0e8]">
 <h3 class="font-headline font-bold text-primary text-sm mb-2 tracking-widest">任務目標</h3>
 <p id="mission-text" class="text-sm text-secondary font-body">尋找隱藏在神像裝飾中的三枚冥幣符號。</p>
@@ -182,8 +224,81 @@
 <script src="../../js/state.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
+  const mobileToggle = document.getElementById("mobile-nav-toggle");
+  const mobileMenu = document.getElementById("mobile-nav-menu");
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
+  }
+
+  function keepTypingInView(element) {
+    const rect = element.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const targetBottom = viewportHeight * 0.78;
+    if (rect.bottom > targetBottom) {
+      const delta = rect.bottom - targetBottom;
+      window.scrollBy({ top: delta, behavior: "auto" });
+    }
+  }
+
+  function typeText(element, text, speed = 35, onTick = null) {
+    return new Promise((resolve) => {
+      element.textContent = "";
+      let index = 0;
+
+      const timer = setInterval(() => {
+        element.textContent += text[index];
+        index += 1;
+        if (typeof onTick === "function") onTick();
+
+        if (index >= text.length) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, speed);
+    });
+  }
+
+  async function typeStoryContent(chapter) {
+    const stageEl = document.getElementById("story-stage");
+    if (stageEl) {
+      stageEl.classList.remove("story-cinematic-on");
+      void stageEl.offsetWidth;
+      stageEl.classList.add("story-cinematic-on");
+    }
+
+    const storyElements = [
+      { id: "story-paragraph-1", text: chapter.p1, speed: 60 },
+      { id: "story-paragraph-2", text: chapter.p2, speed: 55 },
+      { id: "story-paragraph-3", text: chapter.p3, speed: 75 },
+      { id: "story-paragraph-4", text: chapter.p4, speed: 55 },
+      { id: "story-highlight", text: chapter.highlight, speed: 62 }
+    ];
+
+    for (const item of storyElements) {
+      const el = document.getElementById(item.id);
+      if (!el) continue;
+      await typeText(el, item.text || "", item.speed, () => keepTypingInView(el));
+      keepTypingInView(el);
+    }
+  }
+
+  function clearStoryContent() {
+    const storyIds = [
+      "story-paragraph-1",
+      "story-paragraph-2",
+      "story-paragraph-3",
+      "story-paragraph-4",
+      "story-highlight"
+    ];
+
+    for (const id of storyIds) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = "";
+    }
+  }
 
   async function loadStoryChapter() {
+    clearStoryContent();
     const chapterNumber = Number(new URLSearchParams(window.location.search).get("chapter")) || 1;
     const response = await fetch("./chapters.json");
     if (!response.ok) {
@@ -202,11 +317,7 @@
 
     document.getElementById("chapter-title").textContent = chapter.title;
     document.getElementById("chapter-badge").textContent = chapter.badge;
-    document.getElementById("story-paragraph-1").textContent = chapter.p1;
-    document.getElementById("story-paragraph-2").textContent = chapter.p2;
-    document.getElementById("story-paragraph-3").textContent = chapter.p3;
-    document.getElementById("story-paragraph-4").textContent = chapter.p4;
-    document.getElementById("story-highlight").textContent = chapter.highlight;
+    await typeStoryContent(chapter);
     document.getElementById("story-image").src = chapter.image;
     document.getElementById("mission-text").textContent = chapter.mission;
     document.getElementById("tools-text").textContent = chapter.tools;

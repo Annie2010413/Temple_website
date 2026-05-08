@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR 掃描</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;family=Newsreader:ital,wght@0,400;0,600;1,400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#6c171a",
+            background: "#fef9f1",
+            surface: "#fef9f1",
+            secondary: "#755750",
+            outline: "#897270",
+            "outline-variant": "#dcc0be",
+            "on-surface": "#1d1c17",
+            "on-surface-variant": "#564241",
+            "surface-container-low": "#f8f3eb",
+            "surface-container-highest": "#e7e2da",
+            "primary-fixed-dim": "#ffb3af"
+          },
+          fontFamily: {
+            headline: ["Noto Serif TC", "serif"],
+            body: ["Newsreader", "serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    #scanner-reader video {
+      border-radius: 0.125rem;
+      border: 1px solid rgba(220, 192, 190, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen">
+  <main class="min-h-screen max-w-7xl mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 flex items-start md:items-center justify-center">
+    <section class="w-full max-w-3xl md:max-w-5xl bg-surface border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden">
+      <header class="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 border-b border-outline-variant/30 bg-surface-container-low">
+        <div>
+          <p class="text-[11px] tracking-[0.2em] font-headline text-secondary">PUZZLE SCAN</p>
+          <h1 class="text-lg md:text-xl font-headline font-black text-primary">QR 掃描器</h1>
+        </div>
+        <button id="scanner-close-btn" class="w-9 h-9 rounded-full border border-primary/30 text-primary hover:bg-primary/10 transition-colors font-headline" aria-label="關閉並返回">✕</button>
+      </header>
+
+      <div class="p-2 sm:p-3 md:p-4 space-y-2 md:space-y-3">
+        <p id="scanner-stage-text" class="text-xs text-secondary font-headline tracking-wide">關卡：-</p>
+        <div class="bg-surface-container-low border border-outline-variant/30 p-3 text-sm text-on-surface-variant leading-relaxed">
+          <p>請將 QR Code 置中於掃描框內，保持手機穩定 1-2 秒即可辨識。</p>
+          <p class="mt-1 text-xs text-secondary">掃描成功後會在此區顯示結果圖片，按右上角 ✕ 可返回關卡頁。</p>
+        </div>
+        <div id="scanner-reader" class="mt-3 sm:mt-4 w-full max-w-md mx-auto min-h-[240px] sm:min-h-[280px] bg-surface-container-highest border border-outline-variant/30"></div>
+        <p id="scanner-status" class="text-sm text-on-surface-variant font-headline">正在啟動相機...</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const stageNumber = Number(params.get("stage")) || 1;
+
+    const stageText = document.getElementById("scanner-stage-text");
+    const statusEl = document.getElementById("scanner-status");
+    const closeBtn = document.getElementById("scanner-close-btn");
+    const readerEl = document.getElementById("scanner-reader");
+    stageText.textContent = `關卡：${stageNumber}`;
+
+    let scanner = null;
+    let scanning = false;
+
+    function normalizeHash(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function sanitizeImagePath(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      // Allow only local relative asset paths to avoid script/data URL injection.
+      if (!raw.startsWith("./") && !raw.startsWith("../")) return "";
+      if (raw.includes("..\\")) return "";
+      const lowered = raw.toLowerCase();
+      if (lowered.startsWith("javascript:") || lowered.startsWith("data:") || lowered.startsWith("vbscript:")) return "";
+      return raw;
+    }
+
+    function extractPossibleHashes(rawText) {
+      const candidates = new Set();
+      const normalizedRaw = normalizeHash(rawText);
+      if (normalizedRaw) candidates.add(normalizedRaw);
+
+      try {
+        const parsedUrl = new URL(rawText);
+        const hashFromQuery = normalizeHash(parsedUrl.searchParams.get("hash"));
+        const hashFromFragment = normalizeHash((parsedUrl.hash || "").replace(/^#/, ""));
+        const hashFromPath = normalizeHash(parsedUrl.pathname.split("/").pop());
+        if (hashFromQuery) candidates.add(hashFromQuery);
+        if (hashFromFragment) candidates.add(hashFromFragment);
+        if (hashFromPath) candidates.add(hashFromPath);
+      } catch (_error) {
+        // Raw QR content is not a URL.
+      }
+
+      return Array.from(candidates);
+    }
+
+    async function loadQrRewards() {
+      const response = await fetch("./qr-rewards.json");
+      if (!response.ok) throw new Error("Failed to load qr-rewards.json");
+      const data = await response.json();
+      return Array.isArray(data.items) ? data.items : [];
+    }
+
+    async function stopScanner() {
+      if (!scanner || !scanning) return;
+      try {
+        await scanner.stop();
+      } catch (_error) {
+        // Ignore stop errors.
+      }
+      try {
+        await scanner.clear();
+      } catch (_error) {
+        // Ignore clear errors.
+      }
+      scanning = false;
+    }
+
+    function replaceReaderWithResult(title, imageUrl) {
+      readerEl.className = "mt-3 sm:mt-4 w-full max-w-md mx-auto min-h-[240px] sm:min-h-[280px] border border-outline-variant/30 bg-surface-container-low p-2 space-y-2";
+      readerEl.replaceChildren();
+
+      const titleEl = document.createElement("p");
+      titleEl.className = "text-sm text-primary font-headline font-bold";
+      titleEl.textContent = String(title || "掃描結果");
+
+      const imageEl = document.createElement("img");
+      imageEl.className = "w-full max-h-[55vh] sm:max-h-[60vh] object-contain bg-surface-container-highest border border-outline-variant/30";
+      imageEl.alt = "掃描結果圖片";
+      imageEl.src = sanitizeImagePath(imageUrl) || "";
+
+      readerEl.append(titleEl, imageEl);
+    }
+
+    async function closeAndBack() {
+      await stopScanner();
+      window.location.href = `./index.html?stage=${stageNumber}`;
+    }
+
+    closeBtn.onclick = () => {
+      closeAndBack();
+    };
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeAndBack();
+      }
+    });
+
+    window.addEventListener("beforeunload", () => {
+      stopScanner();
+    });
+
+    (async function startScannerFlow() {
+      if (!window.Html5Qrcode) {
+        statusEl.textContent = "找不到 QR 掃描器套件，請稍後再試。";
+        return;
+      }
+
+      let rewards = [];
+      try {
+        rewards = await loadQrRewards();
+      } catch (_error) {
+        statusEl.textContent = "載入掃描設定失敗（qr-rewards.json）。";
+        return;
+      }
+
+      scanner = new Html5Qrcode("scanner-reader");
+
+      const findRewardByHash = (decodedText) => {
+        const hashCandidates = extractPossibleHashes(decodedText);
+        return rewards.find((item) => {
+          if (!item) return false;
+          if (Number(item.stage) !== stageNumber) return false;
+          const mappedHash = normalizeHash(item.hash);
+          return mappedHash && hashCandidates.includes(mappedHash);
+        });
+      };
+
+      try {
+        await scanner.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 240, height: 240 } },
+          async (decodedText) => {
+            const matchedItem = findRewardByHash(decodedText);
+            await stopScanner();
+
+            if (!matchedItem) {
+              statusEl.textContent = "已掃描到 QR Code，但沒有對應圖片。可按右上角叉叉返回。";
+              return;
+            }
+
+            replaceReaderWithResult(matchedItem.title || "掃描結果", matchedItem.image || "");
+            statusEl.textContent = "掃描成功，按右上角叉叉返回原頁。";
+          },
+          () => {
+            // Ignore decode failure per frame.
+          }
+        );
+        scanning = true;
+        statusEl.textContent = "掃描器啟動成功，請對準 QR Code。";
+      } catch (_error) {
+        statusEl.textContent = "無法啟動相機。請確認權限，並使用 HTTPS 或 localhost。";
+      }
+    })();
+  </script>
+</body>
+</html>

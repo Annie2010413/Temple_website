@@ -1,7 +1,42 @@
 (() => {
   const AUTH_KEY = "puzzle_auth";
   const GUEST_PROGRESS_KEY = "puzzle_guest_progress";
+  const INVENTORY_KEY = "puzzle_inventory";
   const API_BASE = window.PUZZLE_API_BASE || "http://localhost:5501";
+
+  function getInventory() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(INVENTORY_KEY) || "[]");
+      return Array.isArray(raw) ? raw : [];
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  function setInventory(items) {
+    localStorage.setItem(INVENTORY_KEY, JSON.stringify(Array.isArray(items) ? items : []));
+  }
+
+  function addInventoryItem(item) {
+    if (!item || !item.id) return getInventory();
+    const items = getInventory();
+    if (items.find((existing) => existing.id === item.id)) return items;
+    const next = items.concat([{
+      id: String(item.id),
+      name: String(item.name || "未命名道具"),
+      image: String(item.image || ""),
+      description: String(item.description || ""),
+      acquiredAt: Date.now()
+    }]);
+    setInventory(next);
+    document.dispatchEvent(new CustomEvent("puzzle-inventory-changed", { detail: { items: next } }));
+    return next;
+  }
+
+  function clearInventory() {
+    setInventory([]);
+    document.dispatchEvent(new CustomEvent("puzzle-inventory-changed", { detail: { items: [] } }));
+  }
 
   function sanitizeProgress(raw) {
     return {
@@ -173,6 +208,9 @@
     signInWithGoogleIdToken,
     signOut,
     syncProgressAfterSignIn,
-    getLocalProgress: getGuestProgress
+    getLocalProgress: getGuestProgress,
+    getInventory,
+    addInventoryItem,
+    clearInventory
   };
 })();

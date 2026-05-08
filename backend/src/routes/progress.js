@@ -1,5 +1,7 @@
 const express = require("express");
 const { authMiddleware } = require("../middleware/auth");
+const { progressReadLimiter, progressWriteLimiter } = require("../middleware/limiters");
+const { progressCache, invalidateProgressCache } = require("../util/progress-cache");
 const Progress = require("../models/Progress");
 
 const router = express.Router();
@@ -12,10 +14,17 @@ function clampProgress(value, min, max) {
 
 router.use(authMiddleware);
 
-router.get("/", async (req, res) => {
-  const userId = req.user.userId;
-  let progress = await Progress.findOne({ userId });
+router.get("/", progressReadLimiter, async (req, res) => {
+  const userId = String(req.user.userId);
 
+  const cached = progressCache.get(userId);
+  if (cached) {
+    res.set("Cache-Control", "private, max-age=10");
+    res.set("X-Cache", "HIT");
+    return res.json(cached);
+  }
+
+  let progress = await Progress.findOne({ userId });
   if (!progress) {
     progress = await Progress.create({
       userId,
@@ -24,15 +33,20 @@ router.get("/", async (req, res) => {
     });
   }
 
-  return res.json({
+  const payload = {
     unlockedStory: progress.unlockedStory,
     unlockedChallenge: progress.unlockedChallenge,
     updatedAt: progress.updatedAt
-  });
+  };
+  progressCache.set(userId, payload);
+
+  res.set("Cache-Control", "private, max-age=10");
+  res.set("X-Cache", "MISS");
+  return res.json(payload);
 });
 
-router.put("/", async (req, res) => {
-  const userId = req.user.userId;
+router.put("/", progressWriteLimiter, async (req, res) => {
+  const userId = String(req.user.userId);
   const nextStory = clampProgress(req.body?.unlockedStory, 1, MAX_STORY);
   const nextChallenge = clampProgress(req.body?.unlockedChallenge, 1, MAX_CHALLENGE);
 
@@ -47,6 +61,8 @@ router.put("/", async (req, res) => {
     { $set: merged },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  invalidateProgressCache(userId);
 
   return res.json({
     unlockedStory: progress.unlockedStory,
