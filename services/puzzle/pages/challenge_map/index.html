@@ -275,11 +275,15 @@
       const stage = index + 1;
       const isUnlocked = stage <= unlocked;
       const target = `../challenge/index.html?stage=${stage}`;
-      const imageWrapper = card.querySelector(".h-48");
+      const imageEl = card.querySelector("img");
+      const imageWrapper = imageEl ? imageEl.parentElement : null;
       const lockIcon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
         .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "lock_open");
       const hintText = card.querySelector("p.text-sm, p.text-xs");
       const lockBadge = card.querySelector("div.text-\\[10px\\].tracking-widest");
+      if (lockBadge) {
+        lockBadge.style.display = "none";
+      }
 
       if (isUnlocked) {
         card.classList.add("cursor-pointer");
@@ -288,6 +292,9 @@
         if (imageWrapper) {
           imageWrapper.classList.remove("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.remove("grayscale", "opacity-40");
+        }
         if (lockIcon) {
           lockIcon.textContent = "lock_open";
           lockIcon.classList.add("text-primary");
@@ -295,24 +302,17 @@
         if (hintText) {
           hintText.textContent = "已解鎖，點擊前往";
         }
-        if (lockBadge) {
-          lockBadge.textContent = "已解鎖";
-          lockBadge.classList.remove("text-secondary");
-          lockBadge.classList.add("text-primary");
-        }
       } else {
         card.onclick = null;
         if (imageWrapper) {
           imageWrapper.classList.add("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.add("grayscale", "opacity-40");
+        }
         if (lockIcon) {
           lockIcon.textContent = "lock";
           lockIcon.classList.remove("text-primary");
-        }
-        if (lockBadge) {
-          lockBadge.textContent = "未解鎖";
-          lockBadge.classList.remove("text-primary");
-          lockBadge.classList.add("text-secondary");
         }
       }
     });

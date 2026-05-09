@@ -292,11 +292,15 @@
       const chapter = extractChapterNumber(card) || (index + 1);
       const isUnlocked = chapter <= unlocked;
       const target = `../story/index.html?chapter=${chapter}`;
-      const imageWrapper = card.querySelector(".h-48");
+      const imageEl = card.querySelector("img");
+      const imageWrapper = imageEl ? imageEl.parentElement : null;
       const icon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
         .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "menu_book");
       const hintText = card.querySelector("p.text-sm, p.text-xs");
       const lockBadge = card.querySelector("div.text-\\[10px\\].tracking-widest");
+      if (lockBadge) {
+        lockBadge.style.display = "none";
+      }
 
       // Normalize visual size so all story cards are same size.
       card.classList.remove("md:col-span-8", "md:row-span-2", "md:col-start-5", "bg-surface-container-lowest", "border-primary/5");
@@ -319,6 +323,9 @@
         if (imageWrapper) {
           imageWrapper.classList.remove("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.remove("grayscale", "opacity-40");
+        }
 
         if (icon) {
           icon.textContent = "menu_book";
@@ -327,16 +334,14 @@
         if (hintText) {
           hintText.textContent = "已解鎖，點擊閱讀";
         }
-        if (lockBadge) {
-          lockBadge.textContent = "已解鎖";
-          lockBadge.classList.remove("text-secondary");
-          lockBadge.classList.add("text-primary");
-        }
       } else {
         card.onclick = null;
 
         if (imageWrapper) {
           imageWrapper.classList.add("grayscale", "opacity-40");
+        }
+        if (imageEl) {
+          imageEl.classList.add("grayscale", "opacity-40");
         }
         if (icon) {
           icon.textContent = "lock";
@@ -344,11 +349,6 @@
         }
         if (hintText) {
           hintText.textContent = "需完成前一關卡解鎖";
-        }
-        if (lockBadge) {
-          lockBadge.textContent = "未解鎖";
-          lockBadge.classList.remove("text-primary");
-          lockBadge.classList.add("text-secondary");
         }
       }
     });
