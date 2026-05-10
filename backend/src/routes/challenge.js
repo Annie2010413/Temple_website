@@ -9,11 +9,11 @@ const router = express.Router();
 const MAX_STORY = 7;
 const MAX_CHALLENGE = 5;
 const ANSWERS = {
-  1: "1738",
-  2: "1321",
-  3: "明斷心",
-  4: "3142756",
-  5: "正義昭明"
+  1: "靈願善心現",
+  2: "13",
+  3: "23322333",
+  4: "2",
+  5: "BE6128"
 };
 
 function normalizeAnswer(value) {
