@@ -136,13 +136,14 @@
 </div>
 <!-- Level Grid / Map -->
 <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-stretch">
-  <div class="md:col-span-8 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative group">    <div class="h-full flex flex-col">
+  <div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative group">
+    <div class="h-full flex flex-col">
       <div class="h-40 md:h-48 overflow-hidden grayscale opacity-40">
         <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArpp_NpuoceXnAFFObSEkgare5bOGxhtbD2LsbYlWAYkLXDOWFl-2Due3PHbBvsLTpFzsH-1WGo0mR6NWrZS91XxD8tZqoyWqXlFtHPQuLdyH1wVtHz0g7-kwku1479FtO_UmfcmKJ00QdnsX-DG3atAihJpp5rbqmKs57yuyIFf9fF6ZzeW9ucxKB6THmcAY6nCjSwIGICy8OUFYITA6cEmyWte3uuRSuUJgeNyTnT9n_dpwoYd_1mgPCuNwqSkgMLLR872oylblP"/>
       </div>
       <div class="p-4 md:p-6 flex-grow flex flex-col justify-center text-center">
         <div class="mb-4 text-outline flex justify-center"><span class="material-symbols-outlined text-4xl">lock</span></div>
-        <h3 class="text-lg md:text-2xl font-headline font-bold text-on-surface-variant mb-2">第一章：冥府之鑰</h3>
+        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">第一章：冥府之鑰</h3>
         <p class="text-sm text-secondary font-body italic mb-4">需完成前一關卡解鎖</p>
       </div>
     </div>
@@ -190,19 +191,18 @@
       </div>
       <div class="p-4 md:p-6 flex-grow flex flex-col justify-center text-center">
         <div class="mb-4 text-outline flex justify-center"><span class="material-symbols-outlined text-4xl">lock</span></div>
-        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">終章：鐘樓回音</h3>
+        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">第五章：鐘樓回音</h3>
         <p class="text-sm text-secondary font-body italic mb-4">需完成前一關卡解鎖</p>
-        
+        <div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">未解鎖</div>
       </div>
     </div>
   </div>
-
+  
 </div>
 
 <!-- Footer -->
 <footer class="bg-background-light border-t border-primary/10 w-full py-8 flex flex-col items-center gap-4">
 <div class="flex gap-6">
-
 </div>
 <p class="font-['Newsreader'] text-xs uppercase tracking-tighter text-[#755750] dark:text-[#e7e2da] opacity-70">
             © 海清宮 Pao Kung Temple. All Rights Reserved.
@@ -244,11 +244,15 @@
       const chapter = extractChapterNumber(card) || (index + 1);
       const isUnlocked = chapter <= unlocked;
       const target = `../story/index.html?chapter=${chapter}`;
-      const imageWrapper = card.querySelector(".h-48");
+      const imageEl = card.querySelector("img");
+      const imageWrapper = imageEl ? imageEl.parentElement : null;
       const icon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
         .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "menu_book");
       const hintText = card.querySelector("p.text-sm, p.text-xs");
       const lockBadge = card.querySelector("div.text-\\[10px\\].tracking-widest");
+      if (lockBadge) {
+        lockBadge.style.display = "none";
+      }
 
       // Normalize visual size so all story cards are same size.
       card.classList.remove("md:col-span-8", "md:row-span-2", "md:col-start-5", "bg-surface-container-lowest", "border-primary/5");
@@ -271,6 +275,9 @@
         if (imageWrapper) {
           imageWrapper.classList.remove("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.remove("grayscale", "opacity-40");
+        }
 
         if (icon) {
           icon.textContent = "menu_book";
@@ -279,16 +286,14 @@
         if (hintText) {
           hintText.textContent = "已解鎖，點擊閱讀";
         }
-        if (lockBadge) {
-          lockBadge.textContent = "已解鎖";
-          lockBadge.classList.remove("text-secondary");
-          lockBadge.classList.add("text-primary");
-        }
       } else {
         card.onclick = null;
 
         if (imageWrapper) {
           imageWrapper.classList.add("grayscale", "opacity-40");
+        }
+        if (imageEl) {
+          imageEl.classList.add("grayscale", "opacity-40");
         }
         if (icon) {
           icon.textContent = "lock";
@@ -296,11 +301,6 @@
         }
         if (hintText) {
           hintText.textContent = "需完成前一關卡解鎖";
-        }
-        if (lockBadge) {
-          lockBadge.textContent = "未解鎖";
-          lockBadge.classList.remove("text-primary");
-          lockBadge.classList.add("text-secondary");
         }
       }
     });

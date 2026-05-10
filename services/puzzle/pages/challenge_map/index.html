@@ -211,7 +211,9 @@
 </div>
 <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">終局：森羅歸位</h3>
 <p class="text-sm text-secondary font-body italic mb-4">需完成前一關卡解鎖</p>
-
+<div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">
+                        未解鎖
+                    </div>
 </div>
 </div>
 </div>
@@ -251,11 +253,15 @@
       const stage = index + 1;
       const isUnlocked = stage <= unlocked;
       const target = `../challenge/index.html?stage=${stage}`;
-      const imageWrapper = card.querySelector(".h-48");
+      const imageEl = card.querySelector("img");
+      const imageWrapper = imageEl ? imageEl.parentElement : null;
       const lockIcon = Array.from(card.querySelectorAll(".material-symbols-outlined"))
         .find((el) => el.textContent.trim() === "lock" || el.textContent.trim() === "lock_open");
       const hintText = card.querySelector("p.text-sm, p.text-xs");
       const lockBadge = card.querySelector("div.text-\\[10px\\].tracking-widest");
+      if (lockBadge) {
+        lockBadge.style.display = "none";
+      }
 
       if (isUnlocked) {
         card.classList.add("cursor-pointer");
@@ -264,6 +270,9 @@
         if (imageWrapper) {
           imageWrapper.classList.remove("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.remove("grayscale", "opacity-40");
+        }
         if (lockIcon) {
           lockIcon.textContent = "lock_open";
           lockIcon.classList.add("text-primary");
@@ -271,24 +280,17 @@
         if (hintText) {
           hintText.textContent = "已解鎖，點擊前往";
         }
-        if (lockBadge) {
-          lockBadge.textContent = "已解鎖";
-          lockBadge.classList.remove("text-secondary");
-          lockBadge.classList.add("text-primary");
-        }
       } else {
         card.onclick = null;
         if (imageWrapper) {
           imageWrapper.classList.add("grayscale", "opacity-40");
         }
+        if (imageEl) {
+          imageEl.classList.add("grayscale", "opacity-40");
+        }
         if (lockIcon) {
           lockIcon.textContent = "lock";
           lockIcon.classList.remove("text-primary");
-        }
-        if (lockBadge) {
-          lockBadge.textContent = "未解鎖";
-          lockBadge.classList.remove("text-primary");
-          lockBadge.classList.add("text-secondary");
         }
       }
     });
