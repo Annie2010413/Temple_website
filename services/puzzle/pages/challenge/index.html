@@ -174,7 +174,7 @@
                         開啟 AR 探索
                     </button>
 </div>
-<div class="grid grid-cols-2 gap-2">
+<div class="grid grid-cols-2 gap-2 hidden">
 <div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
 <span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
 <span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
@@ -193,7 +193,7 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
                         線索提示
                     </h3>
-  <details class="group border-b border-outline-variant/30 py-1.5">
+  <details class="group border-b border-outline-variant/30 py-5">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint1-title">第一則提示：關於「年代」</span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
@@ -203,7 +203,7 @@
     </p>
   </details>
   
-  <details class="group py-1.5">
+  <details class="group py-1.5 hidden">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint2-title">第二則提示：具體對象</span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
@@ -218,7 +218,7 @@
 <div id="challenge-image-box" class="relative aspect-[3/2] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
 <img id="challenge-image" alt="Visual Clue" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" data-alt="A majestic and ancient Chinese temple stone lion statue, weathered texture, mysterious atmosphere, mystical lighting, cinematic composition, high detail, historical feel, Noto Serif aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC07wZMY0Y8gccHcqmd_7VCBzDhA2fsJ7nHMpZ0euxxQj9sb-0p7RKpU5ubhRj_MKBYrugVf4-CAj1kEVNrTvzt_pcT4vbtfOTgGihdzuw2h_yYECZcX8nd5KoROIJdA6aRFUFyZ-dBNkblnu-weXQpa0xhHRHcNnoUmGozIdl49zhs0sPZjkhUFtsxL28t9TKn6Iwtpp8s-rB8PQEu_VRxlazR32-ACPyW1Lzdng2tWihxjpticBIwRLd9AX5Ehri8B39G7uBbncea"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
-<div class="absolute bottom-3 left-3 right-3">
+<div class="absolute bottom-3 left-3 right-3 hidden">
 <div class="bg-surface/90 backdrop-blur-md p-2 text-[10px] font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">photo_camera</span>
 <span id="challenge-image-caption">現場所見：石柱基座之拓印</span>
