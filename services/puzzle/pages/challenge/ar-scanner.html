@@ -154,10 +154,10 @@
       </header>
 
       <div class="min-h-screen md:min-h-0 p-0 md:p-4 md:space-y-3">
-        <p id="ar-stage-text" class="fixed md:static top-[calc(5rem+env(safe-area-inset-top))] md:top-auto left-3 z-20 px-3 py-1.5 bg-[#fef9f1]/70 md:bg-transparent border border-[#dcc0be]/40 md:border-0 rounded-full md:rounded-none text-xs text-secondary font-headline tracking-wide backdrop-blur md:backdrop-blur-0">關卡：-</p>
+        <p id="ar-stage-text" class="fixed md:static top-[calc(5rem+env(safe-area-inset-top))] md:top-auto left-3 z-20 px-3 py-1.5 bg-[#fef9f1]/70 md:bg-transparent border border-[#dcc0be]/40 md:border-0 rounded-full md:rounded-none text-xs text-secondary font-headline tracking-wide backdrop-blur md:backdrop-blur-0">AR 掃描器</p>
         <div class="hidden md:block bg-surface-container-low border border-outline-variant/30 p-3 text-sm text-on-surface-variant leading-relaxed">
           <p>請將鏡頭對準現場指定圖案（例如石碑紋飾或符文卡），並讓圖案完整出現在畫面內。</p>
-          <p class="mt-1 text-xs text-secondary">偵測成功後道具會浮現在圖案上，點擊道具可查看介紹並收進道具箱。</p>
+          <p class="mt-1 text-xs text-secondary">同一個掃描器可辨識多個 AR 目標；偵測成功後對應道具會浮現在圖案上，點擊道具可查看介紹並收進道具箱。</p>
         </div>
         <div class="ar-viewport md:mt-3 md:mx-auto md:max-w-md md:border md:border-outline-variant/30">
           <div id="ar-stage"></div>
@@ -211,23 +211,24 @@
     const collectBtn = document.getElementById("ar-collect-btn");
     const detectFrame = document.getElementById("ar-detect-frame");
     const detectBadge = document.getElementById("ar-detect-badge");
-    stageText.textContent = `關卡：${stageNumber}`;
+    stageText.textContent = `關卡：${stageNumber}｜多目標 AR`;
 
     let mindarThree = null;
     let started = false;
     let activeItem = null;
     const itemMeshes = [];
+    const foundTargetIndexes = new Set();
     const collectedIds = new Set(
       (window.PuzzleState?.getInventory?.() || [])
         .map((entry) => (entry && entry.id) ? String(entry.id) : "")
         .filter(Boolean)
     );
 
-    function setDetectionUI(found) {
+    function setDetectionUI(found, label = "") {
       if (found) {
         detectFrame.classList.add("is-found");
         detectBadge.classList.add("is-found");
-        detectBadge.textContent = "偵測到目標 ✓";
+        detectBadge.textContent = label ? `偵測到 ${label} ✓` : "偵測到目標 ✓";
       } else {
         detectFrame.classList.remove("is-found");
         detectBadge.classList.remove("is-found");
@@ -412,9 +413,13 @@
         return;
       }
 
-      const itemsForStage = config.items.filter((item) => Number(item.stage) === stageNumber);
+      const targetItems = config.items.filter((item) => item && item.id && Number.isInteger(Number(item.targetIndex)));
       if (!config.mindFile) {
         statusEl.textContent = "尚未設定 AR 目標檔（mindFile）。請先到 MindAR Compile 工具產生 .mind 檔。";
+        return;
+      }
+      if (targetItems.length === 0) {
+        statusEl.textContent = "尚未設定任何 AR 目標道具，請檢查 ar-targets.json 的 items。";
         return;
       }
 
@@ -422,30 +427,36 @@
         mindarThree = new MindARThree({
           container: document.getElementById("ar-stage"),
           imageTargetSrc: config.mindFile,
+          maxTrack: Math.max(1, targetItems.length),
           uiLoading: "no",
           uiScanning: "no",
           uiError: "no"
         });
 
         const { renderer, scene, camera } = mindarThree;
-        const anchors = itemsForStage.map((item) => mindarThree.addAnchor(Number(item.targetIndex) || 0));
+        const anchors = targetItems.map((item) => mindarThree.addAnchor(Number(item.targetIndex) || 0));
 
         anchors.forEach((anchor, idx) => {
-          const item = itemsForStage[idx];
+          const item = targetItems[idx];
+          const targetIndex = Number(item.targetIndex) || 0;
           attachItemMeshToAnchor(anchor, item);
 
           anchor.onTargetFound = () => {
+            foundTargetIndexes.add(targetIndex);
             if (collectedIds.has(item.id)) {
-              statusEl.textContent = "已領取道具，請前往道具庫查看。";
+              statusEl.textContent = `已領取「${item.name || "道具"}」，請前往道具庫查看。`;
             } else {
-              statusEl.textContent = "偵測成功！點擊圖案上的道具查看介紹。";
+              statusEl.textContent = `偵測到「${item.name || "道具"}」！點擊圖案上的道具查看介紹。`;
             }
-            setDetectionUI(true);
+            setDetectionUI(true, item.name || "");
           };
           anchor.onTargetLost = () => {
-            statusEl.textContent = "偵測中斷，請重新對準圖案。";
-            setDetectionUI(false);
-            if (activeItem && activeItem.targetIndex === Number(item.targetIndex)) {
+            foundTargetIndexes.delete(targetIndex);
+            if (foundTargetIndexes.size === 0) {
+              statusEl.textContent = "偵測中斷，請重新對準圖案。";
+              setDetectionUI(false);
+            }
+            if (activeItem && Number(activeItem.targetIndex) === targetIndex) {
               hideItemCard();
             }
           };
@@ -502,7 +513,7 @@
           canvasEl.style.height = "100%";
         }
 
-        statusEl.textContent = "AR 啟動成功，請對準目標圖案。";
+        statusEl.textContent = `AR 啟動成功，可掃描 ${targetItems.length} 個目標圖案。`;
 
         const clock = new THREE.Clock();
         renderer.setAnimationLoop(() => {
