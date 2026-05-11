@@ -48,14 +48,7 @@
       </div>
     </section>
 
-    <section class="mt-6 bg-white border border-[#dcc0be] rounded p-5">
-      <div class="flex items-center justify-between gap-3">
-        <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">道具庫</h2>
-        <span id="inventory-count" class="text-xs text-[#755750]">0 件道具</span>
-      </div>
-      <div id="inventory-list" class="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3"></div>
-      <p id="inventory-empty" class="hidden mt-4 text-sm text-[#755750]">尚未收集任何道具，前往關卡開啟 AR 探索可解鎖。</p>
-    </section>
+   
 
     <section class="mt-6 bg-white border border-[#dcc0be] rounded p-5">
       <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">快速操作</h2>
@@ -235,7 +228,7 @@
         : "目前為訪客模式，進度僅儲存在本機。";
 
       document.getElementById("profile-user").textContent = userText;
-      document.getElementById("story-progress").textContent = `已解鎖 ${progress.unlockedStory} / 7 章`;
+      document.getElementById("story-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 章`;
       document.getElementById("challenge-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 關`;
 
       document.getElementById("continue-story").href = `../story/index.html?chapter=${Math.max(1, progress.unlockedStory)}`;
