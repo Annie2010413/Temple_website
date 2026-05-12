@@ -179,7 +179,7 @@
 
                     </p>
 </article>
-<div class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4">
+<div id="story-nav" class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4 opacity-0 pointer-events-none transition-opacity duration-500">
 <a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex justify-center items-center gap-3 border border-primary text-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] hover:bg-primary/10 transition-all">
 <span class="material-symbols-outlined transition-transform group-hover:-translate-x-2" data-icon="arrow_left_alt">arrow_left_alt</span>
 <span id="story-prev-text">上一章</span>
@@ -234,6 +234,39 @@
     }
   }
 
+  const STORY_SEEN_KEY = "puzzle_story_seen_chapters";
+
+  function getSeenChapters() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORY_SEEN_KEY) || "[]");
+      if (!Array.isArray(raw)) return [];
+      return raw.map((n) => Number(n)).filter((n) => Number.isInteger(n));
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  function hasSeenChapter(chapter) {
+    return getSeenChapters().includes(Number(chapter));
+  }
+
+  function markChapterSeen(chapter) {
+    const seen = new Set(getSeenChapters());
+    seen.add(Number(chapter));
+    try {
+      localStorage.setItem(STORY_SEEN_KEY, JSON.stringify(Array.from(seen)));
+    } catch (_error) {
+      // Ignore storage errors (e.g. private mode).
+    }
+  }
+
+  function revealStoryNav() {
+    const navEl = document.getElementById("story-nav");
+    if (!navEl) return;
+    navEl.classList.remove("opacity-0", "pointer-events-none");
+    navEl.classList.add("opacity-100");
+  }
+
   function typeText(element, text, speed = 35, onTick = null) {
     return new Promise((resolve) => {
       element.textContent = "";
@@ -252,9 +285,10 @@
     });
   }
 
-  async function typeStoryContent(chapter) {
+  async function typeStoryContent(chapter, options = {}) {
+    const { skipTyping = false } = options;
     const stageEl = document.getElementById("story-stage");
-    if (stageEl) {
+    if (stageEl && !skipTyping) {
       stageEl.classList.remove("story-cinematic-on");
       void stageEl.offsetWidth;
       stageEl.classList.add("story-cinematic-on");
@@ -267,6 +301,14 @@
       { id: "story-paragraph-4", text: chapter.p4, speed: 55 },
       { id: "story-highlight", text: chapter.highlight, speed: 62 }
     ];
+
+    if (skipTyping) {
+      for (const item of storyElements) {
+        const el = document.getElementById(item.id);
+        if (el) el.textContent = item.text || "";
+      }
+      return;
+    }
 
     for (const item of storyElements) {
       const el = document.getElementById(item.id);
@@ -322,6 +364,7 @@
       prevLink.setAttribute("aria-hidden", "true");
       prevLink.setAttribute("tabindex", "-1");
       prevLink.onclick = null;
+      nextLink.classList.add("md:ml-auto");
     } else {
       prevLink.style.display = "inline-flex";
       prevLink.style.visibility = "visible";
@@ -330,6 +373,7 @@
       prevLink.href = `./index.html?chapter=${allowedChapter - 1}`;
       prevText.textContent = `返回上一章（第 ${allowedChapter - 1} 章）`;
       prevLink.onclick = null;
+      nextLink.classList.remove("md:ml-auto");
     }
 
     if (allowedChapter <= 5) {
@@ -362,12 +406,17 @@
     document.getElementById("mission-text").textContent = chapter.mission;
     document.getElementById("tools-text").textContent = chapter.tools;
     document.getElementById("location-text").textContent = chapter.location;
-    await typeStoryContent(chapter);
+
+    const skipTyping = hasSeenChapter(allowedChapter);
+    await typeStoryContent(chapter, { skipTyping });
+    markChapterSeen(allowedChapter);
+    revealStoryNav();
   }
 
   loadStoryChapter().catch(() => {
     document.getElementById("chapter-title").textContent = "故事載入失敗";
     document.getElementById("story-highlight").textContent = "請使用本機伺服器開啟頁面（例如 Live Server），不要直接以 file:// 開啟。";
+    revealStoryNav();
   });
 </script>
 </body></html>
