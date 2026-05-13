@@ -29,7 +29,57 @@
 }
 .back-link:hover { opacity: 0.7; }
 
-/* 籤筒圖片 */
+/* ── 第零階段：選擇主題 ── */
+.topic-panel {
+  width: 100%; max-width: 520px; text-align: center;
+}
+.topic-title {
+  font-size: 1.1rem; font-weight: 900; color: var(--text-dark);
+  letter-spacing: .12em; margin-bottom: 16px;
+}
+.topic-grid {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  margin-bottom: 28px;
+}
+.topic-item {
+  padding: 8px 20px; font-size: 0.92rem; font-family: inherit; font-weight: 600;
+  letter-spacing: .1em; color: var(--text-dark);
+  background: transparent; border: 1px solid rgba(192,57,43,0.2); border-radius: 8px;
+  cursor: pointer; transition: background .2s, color .2s, border-color .2s;
+}
+.topic-item:hover {
+  background: var(--red); color: white; border-color: var(--red);
+}
+.topic-item.selected {
+  background: var(--red); color: white; border-color: var(--red);
+}
+.prayer-box {
+  background: transparent; border: 1px solid rgba(192,57,43,0.15); border-radius: 12px;
+  padding: 20px 22px; margin-bottom: 24px; text-align: left;
+}
+.prayer-label {
+  font-size: 0.82rem; font-weight: 700; color: var(--red);
+  letter-spacing: .1em; margin-bottom: 10px; text-align: center; opacity: 0.7;
+}
+.prayer-text {
+  font-size: 0.92rem; color: var(--text-dark); line-height: 2.2;
+  letter-spacing: .04em;
+}
+.prayer-text .blank {
+  display: inline-block; min-width: 2em;
+  border-bottom: 1px solid rgba(192,57,43,0.3); color: var(--red); text-align: center; opacity: 0.6;
+}
+.ask-btn {
+  display: block; margin: 0 auto;
+  padding: 12px 48px; font-size: 1.1rem; font-family: inherit; font-weight: 700;
+  letter-spacing: 0.25em; background: linear-gradient(135deg, var(--red), var(--red-dark));
+  color: white; border: none; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(192,57,43,0.3); transition: transform 0.15s;
+}
+.ask-btn:hover { transform: translateY(-2px); }
+.ask-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+/* ── 籤筒圖片 ── */
 .tube-wrap { cursor: pointer; margin-bottom: 16px; user-select: none; }
 .tube-img { display: block; margin: 0 auto; height: 160px; width: auto; }
 .tube-wrap.shaking .tube-img { animation: tubeShake 0.65s ease; }
@@ -39,15 +89,13 @@
   60%{transform:rotate(4deg)}75%{transform:rotate(-2deg)}
 }
 
-/* 抽籤按鈕 */
+/* ── 抽籤按鈕 ── */
 .draw-btn {
+  display: block; margin: 0 auto 24px;
   padding: 12px 48px; font-size: 1.1rem; font-family: inherit; font-weight: 700;
   letter-spacing: 0.25em; background: linear-gradient(135deg, var(--red), var(--red-dark));
   color: white; border: none; cursor: pointer;
-  box-shadow: 0 4px 14px rgba(192,57,43,0.3); transition: transform 0.15s; margin-bottom: 24px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  box-shadow: 0 4px 14px rgba(192,57,43,0.3); transition: transform 0.15s;
 }
 .draw-btn:hover { transform: translateY(-2px); }
 
@@ -104,8 +152,8 @@
   letter-spacing: 0.2em; margin-bottom: 6px;
 }
 .overlay-subtitle {
-  color: #9a7a5a; font-size: 0.78rem;
-  letter-spacing: 0.12em; margin-bottom: 22px;
+  color: #9a7a5a; font-size: 0.82rem;
+  letter-spacing: 0.06em; margin-bottom: 18px; line-height: 1.8;
 }
 .jb-hint-text {
   color: rgba(0,0,0,0.35); font-size: 0.82rem;
@@ -323,15 +371,40 @@
     <p>誠心默念所求之事，搖動籤筒，恭請包公爺指引。</p>
   </div>
 
-  <!-- 第一階段：搖籤筒 -->
-  <div id="phase-tube">
+  <!-- ═══ 第零階段：選擇主題 + 禱詞 + 擲筊請示 ═══ -->
+  <div class="topic-panel" id="phaseAsk">
+    <div class="topic-title">請選擇求籤主題</div>
+    <div class="topic-grid" id="topicGrid">
+      <span class="topic-item" data-topic="工作事業">工作事業</span>
+      <span class="topic-item" data-topic="感情姻緣">感情姻緣</span>
+      <span class="topic-item" data-topic="學業考試">學業考試</span>
+      <span class="topic-item" data-topic="家庭">家庭</span>
+      <span class="topic-item" data-topic="財運">財運</span>
+      <span class="topic-item" data-topic="健康">健康</span>
+      <span class="topic-item" data-topic="人際關係">人際關係</span>
+      <span class="topic-item" data-topic="重大決定">重大決定</span>
+      <span class="topic-item" data-topic="其他">其他</span>
+    </div>
+
+    <div class="prayer-box">
+      <div class="prayer-label">請在心中默念以下禱詞</div>
+      <div class="prayer-text">
+        包公在上，弟子<span class="blank">〇〇〇</span>，國曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生（農曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生），住在<span class="blank">〇〇〇〇〇〇</span>，因<span class="blank">〇〇〇</span>一事，懇請包公作主，賜籤指點，以解弟子心中疑惑。如果包公恩准弟子所求，請應一聖筊。
+      </div>
+    </div>
+
+    <button class="ask-btn" id="askBtn" disabled>擲 筊 請 示</button>
+  </div>
+
+  <!-- ═══ 第一階段：搖籤筒 ═══ -->
+  <div id="phaseTube" style="display:none;">
     <div class="tube-wrap" id="tubeWrap" title="點擊搖籤">
       <img class="tube-img" src="籤筒.png" alt="籤筒">
     </div>
     <button class="draw-btn" id="drawBtn">搖 籤 筒</button>
   </div>
 
-  <!-- 第二階段：抽出籤，等待擲筊 -->
+  <!-- ═══ 第二階段：抽出籤，等待擲筊確認 ═══ -->
   <div class="stick-area" id="stickArea">
     <img class="stick-img" src="籤.png" alt="抽出的籤">
     <div class="stick-label" id="stickLabel"></div>
@@ -339,7 +412,7 @@
     <button class="jiaobei-btn" id="jiaoBtn">擲 筊 確 認</button>
   </div>
 
-  <!-- 第三階段：開示籤詩 -->
+  <!-- ═══ 第三階段：開示籤詩 ═══ -->
   <div class="card-wrap" id="cardWrap">
     <div class="card-inner" id="cardInner">
       <div class="card-face card-front" id="cardFront"></div>
@@ -352,12 +425,12 @@
   </div>
 </div>
 
-<!-- ══════════ 擲筊 Overlay ══════════ -->
+<!-- ══════════ 擲筊 Overlay（共用） ══════════ -->
 <div id="jiaobei-overlay" class="full-overlay">
   <div class="overlay-card">
     <button class="overlay-close" id="jbCloseBtn">✕</button>
-    <div class="overlay-title">擲筊確認</div>
-    <p class="overlay-subtitle">請在心中默念：包公爺，這支籤是否為弟子所求之籤？</p>
+    <div class="overlay-title" id="jb-overlay-title">擲筊請示</div>
+    <p class="overlay-subtitle" id="jb-overlay-sub">請在心中默念禱詞，再點擊擲筊</p>
     <p class="jb-hint-text">默念完畢後，點擊擲筊</p>
 
     <div class="jb-stage">
@@ -411,25 +484,17 @@ function parseCSV(text) {
   while (i < text.length) {
     const ch = text[i];
     if (inQuotes) {
-      if (ch === '"' && text[i + 1] === '"') {
-        field += '"'; i += 2;
-      } else if (ch === '"') {
-        inQuotes = false; i++;
-      } else {
-        field += ch; i++;
-      }
+      if (ch === '"' && text[i + 1] === '"') { field += '"'; i += 2; }
+      else if (ch === '"') { inQuotes = false; i++; }
+      else { field += ch; i++; }
     } else {
-      if (ch === '"') {
-        inQuotes = true; i++;
-      } else if (ch === ',') {
-        fields.push(field); field = ''; i++;
-      } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+      if (ch === '"') { inQuotes = true; i++; }
+      else if (ch === ',') { fields.push(field); field = ''; i++; }
+      else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
         fields.push(field); field = '';
         result.push(fields.slice()); fields.length = 0;
         i += (ch === '\r') ? 2 : 1;
-      } else {
-        field += ch; i++;
-      }
+      } else { field += ch; i++; }
     }
   }
   if (field || fields.length) { fields.push(field); result.push(fields); }
@@ -478,17 +543,18 @@ async function loadFortunes() {
     const text = await resp.text();
     const rows = parseCSV(text);
     fortunes = buildFortunes(rows);
-    drawBtn.disabled = false;
-    drawBtn.textContent = '搖 籤 筒';
   } catch (e) {
-    drawBtn.textContent = '載入失敗，請重新整理';
+    console.error('載入籤詩失敗', e);
   }
 }
+loadFortunes();
 
-/* ══════════ DOM 取得 ══════════ */
+/* ══════════ DOM ══════════ */
+const phaseAsk   = document.getElementById('phaseAsk');
+const askBtn     = document.getElementById('askBtn');
+const phaseTube  = document.getElementById('phaseTube');
 const drawBtn    = document.getElementById('drawBtn');
 const tubeWrap   = document.getElementById('tubeWrap');
-const phaseTube  = document.getElementById('phase-tube');
 const stickArea  = document.getElementById('stickArea');
 const stickLabel = document.getElementById('stickLabel');
 const jiaoBtn    = document.getElementById('jiaoBtn');
@@ -496,66 +562,48 @@ const cardWrap   = document.getElementById('cardWrap');
 const cardInner  = document.getElementById('cardInner');
 const flipBtn    = document.getElementById('flipBtn');
 const redrawBtn  = document.getElementById('redrawBtn');
+const jbThrowBtn = document.getElementById('jb-throw-btn');
 
 let flipped = false;
 let currentFortune = null;
 let jbThrowing = false;
+let jbMode = 'throw';   // 'throw' | 'next' | 'retry' | 'view' | 'redraw'
+let jbPurpose = 'ask';  // 'ask'（請示階段）| 'confirm'（確認籤階段）
 
-drawBtn.disabled = true;
-drawBtn.textContent = '載入中…';
-loadFortunes();
+/* ══════════ 第零階段：選擇主題 ══════════ */
+let selectedTopic = '';
 
-/* ══════════ 工具函式 ══════════ */
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+document.getElementById('topicGrid').addEventListener('click', e => {
+  const item = e.target.closest('.topic-item');
+  if (!item) return;
+  document.querySelectorAll('.topic-item').forEach(el => el.classList.remove('selected'));
+  item.classList.add('selected');
+  selectedTopic = item.dataset.topic;
+  askBtn.disabled = false;
+});
 
-/** 表格值換行：6字→3+3，7字→4+3 */
-function formatCell(s) {
-  const t = s.trim();
-  const len = t.length;
-  if (len === 6) return escHtml(t.slice(0,3)) + '<br>' + escHtml(t.slice(3));
-  if (len === 7) return escHtml(t.slice(0,4)) + '<br>' + escHtml(t.slice(4));
-  return escHtml(t);
-}
+askBtn.addEventListener('click', () => {
+  if (!selectedTopic) return;
+  openJiaobei('ask');
+});
 
-/* ══════════ 第一階段：搖籤筒 → 抽出一支籤 ══════════ */
-function draw() {
-  if (!fortunes.length) return;
-  // 搖晃動畫
-  tubeWrap.classList.add('shaking');
-  drawBtn.disabled = true;
-
-  setTimeout(() => {
-    tubeWrap.classList.remove('shaking');
-
-    // 隨機抽一支
-    currentFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-
-    // 隱藏籤筒，顯示抽出的籤
-    phaseTube.style.display = 'none';
-    stickLabel.textContent = '抽到：' + currentFortune.number;
-    stickArea.classList.add('show');
-
-    // 重置卡片
-    cardWrap.classList.remove('show');
-    cardInner.classList.remove('flipped');
-    flipped = false;
-    flipBtn.textContent = '查看解說 ↻';
-
-    stickArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 700);
-}
-
-drawBtn.addEventListener('click', draw);
-tubeWrap.addEventListener('click', () => { if (fortunes.length && !drawBtn.disabled) draw(); });
-
-/* ══════════ 第二階段：擲筊確認 ══════════ */
-jiaoBtn.addEventListener('click', openJiaobei);
-
-function openJiaobei() {
+/* ══════════ 擲筊 Overlay（共用） ══════════ */
+function openJiaobei(purpose) {
+  jbPurpose = purpose;
   jbThrowing = false;
   jbMode = 'throw';
+
+  const titleEl = document.getElementById('jb-overlay-title');
+  const subEl   = document.getElementById('jb-overlay-sub');
+
+  if (purpose === 'ask') {
+    titleEl.textContent = '擲筊請示';
+    subEl.textContent = '請在心中默念禱詞，再點擊擲筊，請求包公爺恩准賜籤';
+  } else {
+    titleEl.textContent = '擲筊確認';
+    subEl.textContent = '請在心中默念：包公爺，這支籤是否為弟子所求之籤？';
+  }
+
   const result = document.getElementById('jb-result');
   result.textContent = '';
   result.classList.remove('show');
@@ -573,14 +621,13 @@ function closeJiaobei() {
 
 document.getElementById('jbCloseBtn').addEventListener('click', () => {
   closeJiaobei();
-  // 關閉等於放棄，回到籤筒
-  resetToTube();
+  if (jbPurpose === 'confirm') resetToTube();
 });
 
 document.getElementById('jiaobei-overlay').addEventListener('click', e => {
   if (e.target === e.currentTarget) {
     closeJiaobei();
-    resetToTube();
+    if (jbPurpose === 'confirm') resetToTube();
   }
 });
 
@@ -597,19 +644,30 @@ function resetJbBlocks() {
   ri.style.display = 'none';
 }
 
-const jbThrowBtn = document.getElementById('jb-throw-btn');
-
-// 用一個變數追蹤按鈕目前的模式
-let jbMode = 'throw'; // 'throw' | 'view' | 'redraw'
-
+/* ══════════ 擲筊主邏輯 ══════════ */
 jbThrowBtn.addEventListener('click', () => {
   if (jbMode === 'throw') {
     doThrowJiaobei();
+  } else if (jbMode === 'retry') {
+    // 非聖筊，重新擲筊（ask 階段：換個問法再擲）
+    jbMode = 'throw';
+    jbThrowBtn.textContent = '擲　筊';
+    resetJbBlocks();
+    document.getElementById('jb-result').textContent = '';
+    document.getElementById('jb-result').classList.remove('show');
+  } else if (jbMode === 'next') {
+    // ask 階段聖筊 → 進入搖籤筒
+    closeJiaobei();
+    phaseAsk.style.display = 'none';
+    phaseTube.style.display = '';
+    jbMode = 'throw';
   } else if (jbMode === 'view') {
+    // confirm 階段聖筊 → 開示籤詩
     closeJiaobei();
     showFortuneCard();
     jbMode = 'throw';
   } else if (jbMode === 'redraw') {
+    // confirm 階段非聖筊 → 重新抽籤
     closeJiaobei();
     redrawFromStick();
     jbMode = 'throw';
@@ -626,7 +684,6 @@ function doThrowJiaobei() {
   const flyWrap = document.getElementById('jb-fly-wrap');
   const ri      = document.getElementById('jb-result-img');
 
-  // 重置
   result.classList.remove('show');
   result.textContent = '';
   pl.classList.remove('throw-left');
@@ -640,47 +697,97 @@ function doThrowJiaobei() {
   const rand = Math.random();
   let text, imgSrc, isHoly;
   if (rand < 0.50) {
-    text   = '聖筊　包公爺已應允此籤！';
     imgSrc = '聖筊.png';
     isHoly = true;
+    if (jbPurpose === 'ask') {
+      text = '聖筊　包公爺恩准賜籤！';
+    } else {
+      text = '聖筊　包公爺已應允此籤！';
+    }
   } else if (rand < 0.75) {
-    text   = '笑筊\n此籤尚非包公爺所指示，請重新抽籤';
     imgSrc = '笑筊.png';
     isHoly = false;
+    if (jbPurpose === 'ask') {
+      text = '笑筊\n包公爺尚未應允，請換個方式再問一次';
+    } else {
+      text = '笑筊\n此籤尚非包公爺所指示，請重新抽籤';
+    }
   } else {
-    text   = '陰筊\n此籤並非包公爺所指示，請重新抽籤';
     imgSrc = '陰筊.png';
     isHoly = false;
+    if (jbPurpose === 'ask') {
+      text = '陰筊\n包公爺暫不應允，請換個方式再問一次';
+    } else {
+      text = '陰筊\n此籤並非包公爺所指示，請重新抽籤';
+    }
   }
 
-  // 左右各自飛出
   pl.classList.add('throw-left');
   setTimeout(() => pr.classList.add('throw-right'), 75);
 
-  // 880ms 後落地
   setTimeout(() => {
     flyWrap.style.display = 'none';
     ri.src = imgSrc;
     ri.style.display = 'block';
     requestAnimationFrame(() => requestAnimationFrame(() => ri.classList.add('landing')));
 
-    // 結果文字淡入
     setTimeout(() => {
       result.textContent = text;
       result.classList.add('show');
       jbThrowing = false;
       jbThrowBtn.disabled = false;
 
-      if (isHoly) {
-        jbMode = 'view';
-        jbThrowBtn.textContent = '查看籤詩';
+      if (jbPurpose === 'ask') {
+        if (isHoly) {
+          jbMode = 'next';
+          jbThrowBtn.textContent = '開始抽籤';
+        } else {
+          jbMode = 'retry';
+          jbThrowBtn.textContent = '再擲一次';
+        }
       } else {
-        jbMode = 'redraw';
-        jbThrowBtn.textContent = '重新抽籤';
+        // confirm
+        if (isHoly) {
+          jbMode = 'view';
+          jbThrowBtn.textContent = '查看籤詩';
+        } else {
+          jbMode = 'redraw';
+          jbThrowBtn.textContent = '重新抽籤';
+        }
       }
     }, 450);
   }, 880);
 }
+
+/* ══════════ 第一階段：搖籤筒 ══════════ */
+function draw() {
+  if (!fortunes.length) return;
+  tubeWrap.classList.add('shaking');
+  drawBtn.disabled = true;
+
+  setTimeout(() => {
+    tubeWrap.classList.remove('shaking');
+    currentFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    phaseTube.style.display = 'none';
+    stickLabel.textContent = '抽到：' + currentFortune.number;
+    stickArea.classList.add('show');
+    stickArea.style.display = '';
+
+    cardWrap.classList.remove('show');
+    cardInner.classList.remove('flipped');
+    flipped = false;
+    flipBtn.textContent = '查看解說 ↻';
+
+    stickArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 700);
+}
+
+drawBtn.addEventListener('click', draw);
+tubeWrap.addEventListener('click', () => { if (fortunes.length && !drawBtn.disabled) draw(); });
+
+/* ══════════ 第二階段：擲筊確認籤 ══════════ */
+jiaoBtn.addEventListener('click', () => openJiaobei('confirm'));
 
 /* ══════════ 第三階段：開示籤詩 ══════════ */
 function showFortuneCard() {
@@ -689,6 +796,19 @@ function showFortuneCard() {
   render(currentFortune);
   cardWrap.classList.add('show');
   cardWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/** 表格值換行：6字→3+3，7字→4+3 */
+function formatCell(s) {
+  const t = s.trim();
+  const len = t.length;
+  if (len === 6) return escHtml(t.slice(0,3)) + '<br>' + escHtml(t.slice(3));
+  if (len === 7) return escHtml(t.slice(0,4)) + '<br>' + escHtml(t.slice(4));
+  return escHtml(t);
 }
 
 function render(f) {
@@ -708,7 +828,6 @@ function render(f) {
     <div class="card-meta"><div class="card-story">${escHtml(f.story)}</div><div class="card-element">${escHtml(f.element)}</div></div>
     <div class="ftable-wrap"><table class="ftable">${tableHtml}</table></div>`;
 
-  // 統一解說段落
   let explainHtml = '';
   if (f.explain.includes('\n')) {
     explainHtml = f.explain.split('\n').map(p => '<p>' + escHtml(p.trim()) + '</p>').filter(p => p !== '<p></p>').join('');
@@ -731,13 +850,11 @@ function render(f) {
   });
 }
 
-/* ══════════ 重新抽籤（非聖筊或再抽一籤） ══════════ */
+/* ══════════ 重新抽籤 / 重置 ══════════ */
 function redrawFromStick() {
-  // 從籤畫面重新搖籤筒
   stickArea.classList.remove('show');
   stickArea.style.display = 'none';
   resetToTube();
-  // 自動搖
   setTimeout(draw, 300);
 }
 
@@ -756,11 +873,16 @@ flipBtn.addEventListener('click', () => {
 });
 
 redrawBtn.addEventListener('click', () => {
+  // 再抽一籤 → 回到最初的主題選擇
   cardWrap.classList.remove('show');
   cardInner.classList.remove('flipped');
   flipped = false;
   flipBtn.textContent = '查看解說 ↻';
-  resetToTube();
+  phaseTube.style.display = 'none';
+  stickArea.style.display = 'none';
+  stickArea.classList.remove('show');
+  phaseAsk.style.display = '';
+  // 保留已選主題，直接可再按擲筊請示
 });
 </script>
 </body>
