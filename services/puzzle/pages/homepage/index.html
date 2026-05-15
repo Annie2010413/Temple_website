@@ -87,16 +87,35 @@
             writing-mode: vertical-rl;
             text-orientation: upright;
         }
+        #auth-signin-slot {
+            min-width: 0;
+        }
+        #google-signin-container {
+            width: 100%;
+            min-width: 0;
+        }
+        #google-signin-hidden-host {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
+<link href="../../css/puzzle-nav.css" rel="stylesheet"/>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
-<header class="sticky top-0 z-50 bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20">
+<header class="puzzle-nav sticky top-0 z-50 bg-[#f2ede5]/95 backdrop-blur-sm border-b border-[#dcc0be]/50 shadow-sm">
 <nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">
+<div class="puzzle-nav__brand text-[#6c171a] dark:text-[#fef9f1]">
                 海清宮
             </div>
-<div class="hidden md:flex gap-8 items-center font-['Noto_Serif'] font-bold tracking-widest text-sm">
+<div class="puzzle-nav__links hidden md:flex gap-8 items-center">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1 hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
@@ -107,13 +126,14 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 </nav>
-<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
-<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/40 bg-[#f2ede5]">
+<div class="puzzle-nav__menu flex flex-col gap-3 pt-3">
 <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#6c171a] font-bold" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+<div id="user-nav-slot-mobile" class="pt-3 mt-1 border-t border-[#dcc0be]/30"></div>
 </div>
 </div>
 </header>
@@ -129,26 +149,24 @@
 <p class="text-lg md:text-2xl text-secondary max-w-xl leading-relaxed mb-8 md:mb-10 italic">
                         穿梭於古老廟宇的紅牆綠瓦間，解開塵封百年的神祕圖騰，一場結合歷史文化與實境解謎的奇幻旅程。
                     </p>
-<div class="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
-<a href="../story/index.html?chapter=1" class="inline-block text-center bg-primary text-on-primary px-6 sm:px-10 py-3 md:py-4 rounded-sm font-headline text-base md:text-lg tracking-widest transition-all hover:brightness-110 editorial-shadow">
+<div class="w-full max-w-md lg:max-w-xl">
+<div id="hero-cta" class="grid grid-cols-2 gap-3">
+<a id="start-journey-btn" href="../story/index.html?chapter=1" class="w-full min-w-0 h-11 inline-flex items-center justify-center bg-primary text-on-primary rounded-sm font-headline text-sm md:text-base tracking-widest transition-all hover:brightness-110 editorial-shadow">
                             即刻啟程
                         </a>
-
+<div id="auth-signin-slot" class="w-full min-w-0 min-h-11 flex items-center justify-center overflow-hidden rounded-sm">
+<div id="google-signin-container" class="w-full min-w-0"></div>
 </div>
-<div class="mt-4 flex flex-wrap items-stretch gap-3 text-sm">
-<button id="guest-start-btn" class="border border-primary/40 text-primary h-10 px-5 rounded-sm font-headline tracking-widest hover:bg-primary/5 transition-all">
-                            訪客模式開始
-                        </button>
-<div id="google-signin-container" class="h-10 flex items-center"></div>
-<button id="logout-btn" class="border border-primary/20 text-secondary h-10 px-5 rounded-sm font-headline tracking-widest hover:bg-primary/5 transition-all" style="display:none;">
+<button id="logout-btn" type="button" class="hidden w-full min-w-0 h-11 px-4 rounded-sm border border-primary/20 text-secondary font-headline text-sm md:text-base tracking-widest hover:bg-primary/5 transition-all">
                             登出
                         </button>
-<span id="auth-status" class="text-secondary">目前：訪客模式（僅本機儲存）</span>
+</div>
+<p id="auth-status" class="mt-3 text-sm text-secondary leading-relaxed">目前：訪客模式（僅本機儲存）</p>
 </div>
 </div>
 <div class="lg:col-span-5 relative">
 <div class="relative aspect-[4/5] overflow-hidden rounded-sm editorial-shadow">
-<img alt="Traditional Chinese temple architecture" class="w-full h-full object-cover grayscale-[0.2] sepia-[0.1]" data-alt="dramatic low angle shot of ancient chinese temple roof with ornate dragon carvings against a soft golden twilight sky" src="../../../../包公廟.png"/>
+<img alt="Traditional Chinese temple architecture" class="w-full h-full object-cover grayscale-[0.2] sepia-[0.1]" data-alt="dramatic low angle shot of ancient chinese temple roof with ornate dragon carvings against a soft golden twilight sky" src="../../../../包公廟.png" fetchpriority="high" decoding="async"/>
 </div>
 
 </div>
@@ -160,10 +178,10 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
 <div class="order-2 lg:order-1 flex gap-4">
 <div class="flex-1 mt-12">
-<img alt="Temple Door" class="w-full aspect-[3/4] object-cover rounded-sm editorial-shadow" data-alt="close up of weathered red wooden temple door with ancient bronze knockers and peeling paint texture" src="/services/puzzle/pages/challenge/assets/picture/haiching_temple_spirit_cat_mystery.png"/>
+<img alt="Temple Door" class="w-full aspect-[3/4] object-cover rounded-sm editorial-shadow" loading="lazy" decoding="async" data-alt="close up of weathered red wooden temple door with ancient bronze knockers and peeling paint texture" src="../challenge/assets/picture/haiching_temple_spirit_cat_mystery.png"/>
 </div>
 <div class="flex-1">
-<img alt="Manuscript" class="w-full aspect-[3/4] object-cover rounded-sm editorial-shadow" data-alt="ancient chinese calligraphy manuscript on yellowed rice paper with a vermillion ink stamp in the corner" src="/services/puzzle/pages/challenge/assets/picture/haiching_mystery_pawprints.png"/>
+<img alt="Manuscript" class="w-full aspect-[3/4] object-cover rounded-sm editorial-shadow" loading="lazy" decoding="async" data-alt="ancient chinese calligraphy manuscript on yellowed rice paper with a vermillion ink stamp in the corner" src="../challenge/assets/picture/haiching_mystery_pawprints.png"/>
 </div>
 </div>
 <div class="order-1 lg:order-2">
@@ -239,26 +257,69 @@
     }
 
     const authStatus = document.getElementById("auth-status");
-    const guestBtn = document.getElementById("guest-start-btn");
+    const heroCta = document.getElementById("hero-cta");
+    const authSigninSlot = document.getElementById("auth-signin-slot");
+    const startJourneyBtn = document.getElementById("start-journey-btn");
     const googleContainer = document.getElementById("google-signin-container");
     const logoutBtn = document.getElementById("logout-btn");
+    let googleInitialized = false;
+    let googleHiddenHost = null;
+
+    const GOOGLE_G_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+
+    function triggerGoogleSignIn() {
+      const gsiBtn = googleHiddenHost?.querySelector('[role="button"]');
+      if (gsiBtn) {
+        gsiBtn.click();
+        return;
+      }
+      window.google.accounts.id.prompt();
+    }
+
+    function renderGoogleButton() {
+      if (!googleInitialized || !window.google?.accounts?.id || !googleContainer) return;
+      if (authSigninSlot?.classList.contains("hidden")) return;
+
+      googleContainer.innerHTML = "";
+      googleContainer.classList.add("relative");
+
+      googleHiddenHost = document.createElement("div");
+      googleHiddenHost.id = "google-signin-hidden-host";
+      googleHiddenHost.setAttribute("aria-hidden", "true");
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "w-full min-w-0 h-11 inline-flex items-center justify-center gap-2 px-3 rounded-sm border border-outline-variant/60 bg-surface text-on-surface font-headline text-sm md:text-base tracking-wide hover:bg-surface-container-low transition-all";
+      btn.innerHTML = `${GOOGLE_G_SVG}<span class="truncate">Google 登入</span>`;
+      btn.addEventListener("click", triggerGoogleSignIn);
+
+      googleContainer.append(googleHiddenHost, btn);
+
+      window.google.accounts.id.renderButton(googleHiddenHost, {
+        type: "icon",
+        size: "large",
+        shape: "circle"
+      });
+    }
+
     function refreshAuthStatus() {
       const auth = window.PuzzleState.getAuth();
       if (auth?.user?.name) {
         authStatus.textContent = `目前：已登入 ${auth.user.name}（可跨裝置同步）`;
-        logoutBtn.style.display = "inline-block";
+        if (authSigninSlot) authSigninSlot.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
       } else {
         authStatus.textContent = "目前：訪客模式（僅本機儲存）";
-        logoutBtn.style.display = "none";
+        if (authSigninSlot) {
+          authSigninSlot.classList.remove("hidden");
+          renderGoogleButton();
+        }
+        logoutBtn.classList.add("hidden");
       }
     }
 
-    guestBtn.onclick = () => {
-      window.location.href = "../story/index.html?chapter=1";
-    };
-
     function setupGoogleButton() {
-      if (!window.google || !window.google.accounts || !window.google.accounts.id) {
+      if (!window.google?.accounts?.id) {
         setTimeout(setupGoogleButton, 300);
         return;
       }
@@ -268,26 +329,26 @@
         return;
       }
 
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: async (response) => {
-          try {
-            await window.PuzzleState.signInWithGoogleIdToken(response.credential);
-            refreshAuthStatus();
-            document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
-          } catch (_error) {
-            authStatus.textContent = "Google 登入失敗，請確認後端與 Client ID 設定。";
+      if (!googleInitialized) {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+          use_fedcm_for_prompt: false,
+          callback: async (response) => {
+            try {
+              await window.PuzzleState.signInWithGoogleIdToken(response.credential);
+              refreshAuthStatus();
+              document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
+            } catch (_error) {
+              authStatus.textContent = "Google 登入失敗，請確認後端與 Client ID 設定。";
+            }
           }
-        }
-      });
+        });
+        googleInitialized = true;
+      }
 
-      window.google.accounts.id.renderButton(googleContainer, {
-        theme: "outline",
-        size: "large",
-        text: "signin_with",
-        shape: "rectangular",
-        width: 190
-      });
+      renderGoogleButton();
     }
 
     logoutBtn.onclick = () => {

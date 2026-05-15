@@ -31,18 +31,25 @@
       }
     };
   </script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     #scanner-reader video {
       border-radius: 0.125rem;
       border: 1px solid rgba(220, 192, 190, 0.5);
     }
+    @keyframes qrToastIn {
+      0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .qr-toast-card {
+      animation: qrToastIn 0.22s ease-out;
+    }
   </style>
 </head>
-<body class="bg-background text-on-surface font-body min-h-screen">
+<body class="bg-background text-on-surface font-body min-h-screen" data-puzzle-gate="challenge-stage" data-puzzle-gate-redirect="./index.html">
+  <script>document.documentElement.classList.add("puzzle-gate-pending");</script>
   <main class="min-h-screen max-w-7xl mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 flex items-start md:items-center justify-center">
     <section class="w-full max-w-3xl md:max-w-5xl bg-surface border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden">
-      <header class="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 border-b border-outline-variant/30 bg-surface-container-low">
+      <header class="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 border-b border-outline-variant/50 bg-surface-container-high shadow-sm">
         <div>
           <p class="text-[11px] tracking-[0.2em] font-headline text-secondary">PUZZLE SCAN</p>
           <h1 class="text-lg md:text-xl font-headline font-black text-primary">QR 掃描器</h1>
@@ -62,6 +69,18 @@
     </section>
   </main>
 
+  <div id="qr-wrong-stage-alert" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" role="alertdialog" aria-modal="true" aria-labelledby="qr-wrong-stage-title">
+    <div id="qr-wrong-stage-backdrop" class="absolute inset-0 bg-black/45 backdrop-blur-[2px]"></div>
+    <div class="qr-toast-card relative w-full max-w-xs bg-surface border border-outline-variant/40 shadow-2xl px-5 py-4 text-center">
+      <p id="qr-wrong-stage-title" class="font-headline font-bold text-primary text-base leading-relaxed">此 QRcode 不是這關的題目！</p>
+      <p class="mt-1 text-xs text-secondary font-headline">請掃描第 <span id="qr-wrong-stage-hint">-</span> 關專用的 QR Code。</p>
+      <button id="qr-wrong-stage-ok" type="button" class="mt-4 w-full py-2.5 bg-primary text-white font-headline text-sm tracking-widest hover:opacity-90 transition-opacity">知道了</button>
+    </div>
+  </div>
+
+  <script src="../../js/runtime-config.js"></script>
+  <script src="../../js/state.js"></script>
+  <script src="../../js/puzzle-gate.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const stageNumber = Number(params.get("stage")) || 1;
@@ -70,10 +89,17 @@
     const statusEl = document.getElementById("scanner-status");
     const closeBtn = document.getElementById("scanner-close-btn");
     const readerEl = document.getElementById("scanner-reader");
+    const wrongStageAlert = document.getElementById("qr-wrong-stage-alert");
+    const wrongStageBackdrop = document.getElementById("qr-wrong-stage-backdrop");
+    const wrongStageOk = document.getElementById("qr-wrong-stage-ok");
+    const wrongStageHint = document.getElementById("qr-wrong-stage-hint");
     stageText.textContent = `關卡：${stageNumber}`;
+    wrongStageHint.textContent = String(stageNumber);
 
     let scanner = null;
     let scanning = false;
+    let wrongStageAlertOpen = false;
+    let wrongStageCooldownUntil = 0;
 
     function normalizeHash(value) {
       return String(value || "").trim().toLowerCase();
@@ -157,10 +183,28 @@
       closeAndBack();
     };
 
+    function showWrongStageAlert() {
+      if (wrongStageAlertOpen || Date.now() < wrongStageCooldownUntil) return;
+      wrongStageAlertOpen = true;
+      wrongStageAlert.classList.remove("hidden");
+    }
+
+    function hideWrongStageAlert() {
+      wrongStageAlertOpen = false;
+      wrongStageAlert.classList.add("hidden");
+      wrongStageCooldownUntil = Date.now() + 2000;
+    }
+
+    wrongStageOk.onclick = hideWrongStageAlert;
+    wrongStageBackdrop.onclick = hideWrongStageAlert;
+
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeAndBack();
+      if (event.key !== "Escape") return;
+      if (wrongStageAlertOpen) {
+        hideWrongStageAlert();
+        return;
       }
+      closeAndBack();
     });
 
     window.addEventListener("beforeunload", () => {
@@ -168,6 +212,19 @@
     });
 
     (async function startScannerFlow() {
+      if (window.PuzzleGate) {
+        const gateOk = await window.PuzzleGate.ready();
+        if (gateOk === false) return;
+        if (!window.Html5Qrcode) {
+          try {
+            await window.PuzzleGate.loadScript("https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js");
+          } catch (_error) {
+            statusEl.textContent = "找不到 QR 掃描器套件，請稍後再試。";
+            return;
+          }
+        }
+      }
+
       if (!window.Html5Qrcode) {
         statusEl.textContent = "找不到 QR 掃描器套件，請稍後再試。";
         return;
@@ -183,11 +240,11 @@
 
       scanner = new Html5Qrcode("scanner-reader");
 
-      const findRewardByHash = (decodedText) => {
+      const findRewardByHash = (decodedText, stageFilter) => {
         const hashCandidates = extractPossibleHashes(decodedText);
         return rewards.find((item) => {
           if (!item) return false;
-          if (Number(item.stage) !== stageNumber) return false;
+          if (stageFilter !== null && Number(item.stage) !== stageFilter) return false;
           const mappedHash = normalizeHash(item.hash);
           return mappedHash && hashCandidates.includes(mappedHash);
         });
@@ -198,16 +255,27 @@
           { facingMode: "environment" },
           { fps: 10, qrbox: { width: 240, height: 240 } },
           async (decodedText) => {
-            const matchedItem = findRewardByHash(decodedText);
-            await stopScanner();
-
-            if (!matchedItem) {
-              statusEl.textContent = "已掃描到 QR Code，但沒有對應圖片。可按右上角叉叉返回。";
+            const matchedItem = findRewardByHash(decodedText, stageNumber);
+            if (matchedItem) {
+              await stopScanner();
+              replaceReaderWithResult(matchedItem.title || "掃描結果", matchedItem.image || "");
+              statusEl.textContent = "掃描成功，按右上角叉叉返回原頁。";
               return;
             }
 
-            replaceReaderWithResult(matchedItem.title || "掃描結果", matchedItem.image || "");
-            statusEl.textContent = "掃描成功，按右上角叉叉返回原頁。";
+            const wrongStageItem = rewards.find((item) => {
+              if (!item || Number(item.stage) === stageNumber) return false;
+              const hashCandidates = extractPossibleHashes(decodedText);
+              const mappedHash = normalizeHash(item.hash);
+              return mappedHash && hashCandidates.includes(mappedHash);
+            });
+            if (wrongStageItem) {
+              showWrongStageAlert();
+              return;
+            }
+
+            await stopScanner();
+            statusEl.textContent = "已掃描到 QR Code，但沒有對應圖片。可按右上角叉叉返回。";
           },
           () => {
             // Ignore decode failure per frame.

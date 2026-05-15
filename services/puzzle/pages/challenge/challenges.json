@@ -11,7 +11,7 @@
     "image": "./assets/picture/temple_rooftop_cat.png",
     "imageCaption": "現場所見：石柱基座之拓印",
     "answerHelp": "請輸入一個數字",
-    "difficulty": "難易度：中等",
+    "difficulty": 1,
     "progress": "當前進度：1 / 5",
     "lore": "正氣傳說",
     "inventory": "3 道具"
@@ -28,7 +28,7 @@
     "image": "./assets/picture/temple_cat_mystery_final.png",
     "imageCaption": "現場所見：主殿銅環",
     "answerHelp": "請輸入數個中文字",
-    "difficulty": "難易度：中等",
+    "difficulty": 4,
     "progress": "當前進度：2 / 5",
     "lore": "門神誓約",
     "inventory": "4 道具"
@@ -45,7 +45,7 @@
     "image": "./assets/picture/grey_cute_cat_altar.png",
     "imageCaption": "現場所見：內院影牆",
     "answerHelp": "請輸入一串數字",
-    "difficulty": "難易度：偏高",
+    "difficulty": 2,
     "progress": "當前進度：3 / 5",
     "lore": "判詞殘篇",
     "inventory": "5 道具"
@@ -62,7 +62,7 @@
     "image": "./assets/picture/haiching_mystery_symbols.png",
     "imageCaption": "現場所見：後殿古秤",
     "answerHelp": "請輸入一個數字",
-    "difficulty": "難易度：高",
+    "difficulty": 2,
     "progress": "當前進度：4 / 5",
     "lore": "公正之衡",
     "inventory": "6 道具"
@@ -79,7 +79,7 @@
     "image": "./assets/picture/haiching_mystery_altar_shadow.png",
     "imageCaption": "現場所見：密室審判臺",
     "answerHelp": "請輸入最右邊圖形的編號",
-    "difficulty": "難易度：極高",
+    "difficulty": 3,
     "progress": "當前進度：5 / 5",
     "lore": "終局卷宗",
     "inventory": "7 道具"
