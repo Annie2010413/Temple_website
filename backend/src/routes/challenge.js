@@ -48,9 +48,17 @@ router.post("/submit", submitLimiter, async (req, res) => {
     return res.json({ correct: false });
   }
 
+  const userId = readOptionalUserId(req);
+  if (userId) {
+    const existing = await Progress.findOne({ userId });
+    const allowedStage = Math.max(1, Number(existing?.unlockedChallenge) || 1);
+    if (stage > allowedStage) {
+      return res.status(403).json({ error: "Stage not unlocked" });
+    }
+  }
+
   const unlockedChallenge = Math.min(stage + 1, MAX_CHALLENGE);
   const unlockedStory = stage >= MAX_CHALLENGE ? MAX_STORY : stage + 1;
-  const userId = readOptionalUserId(req);
 
   if (!userId) {
     return res.json({
@@ -60,10 +68,10 @@ router.post("/submit", submitLimiter, async (req, res) => {
     });
   }
 
-  const existing = await Progress.findOne({ userId });
+  const progressRecord = await Progress.findOne({ userId });
   const merged = {
-    unlockedStory: Math.min(MAX_STORY, Math.max(existing?.unlockedStory || 1, unlockedStory)),
-    unlockedChallenge: Math.min(MAX_CHALLENGE, Math.max(existing?.unlockedChallenge || 1, unlockedChallenge))
+    unlockedStory: Math.min(MAX_STORY, Math.max(progressRecord?.unlockedStory || 1, unlockedStory)),
+    unlockedChallenge: Math.min(MAX_CHALLENGE, Math.max(progressRecord?.unlockedChallenge || 1, unlockedChallenge))
   };
 
   const progress = await Progress.findOneAndUpdate(

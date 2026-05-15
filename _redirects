@@ -1,0 +1,2 @@
+/backend    /index.html   404
+/backend/*  /index.html   404
