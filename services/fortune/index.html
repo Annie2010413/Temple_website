@@ -368,7 +368,7 @@
     <div class="section-tag">FORTUNE DRAW</div>
     <h1>線上<em>抽籤</em></h1>
     <div class="rule"></div>
-    <p>誠心默念所求之事，搖動籤筒，恭請包公爺指引。</p>
+    <p>誠心默念所求之事，搖動籤筒，恭請包公祖指引。</p>
   </div>
 
   <!-- ═══ 第零階段：選擇主題 + 禱詞 + 擲筊請示 ═══ -->
@@ -408,7 +408,7 @@
   <div class="stick-area" id="stickArea">
     <img class="stick-img" src="籤.png" alt="抽出的籤">
     <div class="stick-label" id="stickLabel"></div>
-    <div class="stick-hint">請擲筊確認此籤是否為包公爺所指示</div>
+    <div class="stick-hint">請擲筊確認此籤是否為包公祖所指示</div>
     <button class="jiaobei-btn" id="jiaoBtn">擲 筊 確 認</button>
   </div>
 
@@ -598,10 +598,10 @@ function openJiaobei(purpose) {
 
   if (purpose === 'ask') {
     titleEl.textContent = '擲筊請示';
-    subEl.textContent = '請在心中默念禱詞，再點擊擲筊，請求包公爺恩准賜籤';
+    subEl.textContent = '請在心中默念禱詞，再點擊擲筊，請求包公祖恩准賜籤';
   } else {
     titleEl.textContent = '擲筊確認';
-    subEl.textContent = '請在心中默念：包公爺，這支籤是否為弟子所求之籤？';
+    subEl.textContent = '請在心中默念：包公祖，這支籤是否為弟子所求之籤？';
   }
 
   const result = document.getElementById('jb-result');
@@ -700,25 +700,25 @@ function doThrowJiaobei() {
     imgSrc = '聖筊.png';
     isHoly = true;
     if (jbPurpose === 'ask') {
-      text = '聖筊　包公爺恩准賜籤！';
+      text = '聖筊　包公祖恩准賜籤！';
     } else {
-      text = '聖筊　包公爺已應允此籤！';
+      text = '聖筊　包公祖已應允此籤！';
     }
   } else if (rand < 0.75) {
     imgSrc = '笑筊.png';
     isHoly = false;
     if (jbPurpose === 'ask') {
-      text = '笑筊\n包公爺尚未應允，請換個方式再問一次';
+      text = '笑筊\n包公祖尚未應允，請換個方式再問一次';
     } else {
-      text = '笑筊\n此籤尚非包公爺所指示，請重新抽籤';
+      text = '笑筊\n此籤尚非包公祖所指示，請重新抽籤';
     }
   } else {
     imgSrc = '陰筊.png';
     isHoly = false;
     if (jbPurpose === 'ask') {
-      text = '陰筊\n包公爺暫不應允，請換個方式再問一次';
+      text = '陰筊\n包公祖暫不應允，請換個方式再問一次';
     } else {
-      text = '陰筊\n此籤並非包公爺所指示，請重新抽籤';
+      text = '陰筊\n此籤並非包公祖所指示，請重新抽籤';
     }
   }
 

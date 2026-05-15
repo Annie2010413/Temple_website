@@ -1,94 +1,86 @@
 /**
- * 三重海清宮包公廟 — 線上點燈 表單接收 Apps Script
+ * 三重海清宮包公廟 — 線上點燈 Apps Script
  *
- * 部署步驟（第一次使用時做一次就好）：
- *  1. 打開你的 Google Sheet：
- *     https://docs.google.com/spreadsheets/d/1eSQu31o3fjDcFXpGAsMTZ_vLduzGHBuJMaOoKLx5YLE/edit
- *  2. 上方選單：擴充功能 → Apps Script
- *  3. 把這個檔案整份貼進去，覆蓋原本的 Code.gs
- *  4. 執行一次 `setupSheet` 函式（會寫入標題列並把手機/匯款後五碼欄設為文字格式）
- *     → 第一次執行會要求授權，按「允許」即可
- *  5. 點右上角「部署」→「新增部署作業」
- *     - 類型：網頁應用程式
- *     - 執行身分：我（你的帳號）
- *     - 誰可以存取：所有人
- *     - 按「部署」，複製「網頁應用程式網址」
- *  6. 把網址貼到 index.html 裡的 SCRIPT_URL 變數
+ * ★ 這版只接受帶有正確 secret 的請求 ★
+ * 前端不再直接打這個 URL，改打 Node 後端 → Node 後端帶 secret 進來
  *
- *  之後如果修改這份程式碼，要重新部署（部署 → 管理部署 → 編輯 → 新版本）
+ * ─────────── 設定步驟 ───────────
+ * 1) 在 Apps Script 編輯器：專案設定 → 指令碼屬性 → 新增屬性
+ *    名稱：LIGHT_SHARED_SECRET
+ *    數值：（與 Node 後端 .env 的 LIGHT_SHARED_SECRET 完全一致，至少 32 字隨機字串）
+ * 2) 部署 → 管理部署 → 新版本 → 部署
+ * 3) 部署網址貼到 Node 後端 .env 的 LIGHT_APPS_SCRIPT_URL
+ *
+ *  — 廟方查詢用的 doGet 後台網址完全不變 —
  */
 
 const SHEET_ID = '1eSQu31o3fjDcFXpGAsMTZ_vLduzGHBuJMaOoKLx5YLE';
-const SHEET_NAME = '工作表1'; // 若你的分頁名稱不同，改這裡
 
-const HEADERS = [
-  '申請時間', '申請編號', '申請人姓名', '燈種', '出生年月日',
-  '住址', '手機號碼', 'Email', '匯款後五碼', '金額',
-  '是否收到匯款', '是否寄送確認信'
-];
-
-/** 第一次使用時手動執行 */
-function setupSheet() {
-  const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
-  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
-  // 手機號碼（G欄）、匯款後五碼（I欄）設為純文字，避免首位0被吃掉
-  sheet.getRange('G:G').setNumberFormat('@');
-  sheet.getRange('I:I').setNumberFormat('@');
-}
-
-/**
- * 找到第一個真正空白的資料列
- * （不用 appendRow，因為試算表已預放勾選框，會把 lastRow 推到很後面）
- */
-function findFirstEmptyRow(sheet) {
-  // 以 A 欄（申請時間）為基準判斷
-  const maxRows = sheet.getMaxRows();
-  const values = sheet.getRange(2, 1, maxRows - 1, 1).getValues();
-  for (let i = 0; i < values.length; i++) {
-    if (values[i][0] === '' || values[i][0] === null) {
-      return i + 2; // 因為從第 2 列開始找
-    }
-  }
-  return maxRows + 1;
-}
-
-/** 接收前端 POST 送來的點燈申請 */
 function doPost(e) {
+  var sheet = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
+
   try {
-    const data = JSON.parse(e.postData.contents);
-    const sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName(SHEET_NAME);
+    var data = JSON.parse(e.postData.contents);
 
-    const now = new Date();
-    const timestamp = Utilities.formatDate(now, 'Asia/Taipei', 'yyyy-MM-dd HH:mm:ss');
-    const orderId = 'L' + Utilities.formatDate(now, 'Asia/Taipei', 'yyyyMMddHHmmss');
+    // ── 1. 檢查 secret（沒帶或不對就拒絕） ──
+    var expected = PropertiesService.getScriptProperties().getProperty('LIGHT_SHARED_SECRET');
+    if (!expected || data._secret !== expected) {
+      return ContentService
+        .createTextOutput(JSON.stringify({ success: false, error: 'Unauthorized' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
 
-    const row = findFirstEmptyRow(sheet);
+    // ── 2. 後端再驗一次基本欄位 ──
+    var requiredFields = ['lamp', 'name', 'birthday', 'address', 'phone', 'transferCode', 'amount'];
+    for (var i = 0; i < requiredFields.length; i++) {
+      if (!data[requiredFields[i]]) {
+        return ContentService
+          .createTextOutput(JSON.stringify({ success: false, error: 'Missing field: ' + requiredFields[i] }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
 
-    // 只寫入 A~J 欄（前 10 欄），K/L 欄（勾選框）完全不動
-    sheet.getRange(row, 1, 1, 10).setValues([[
-      timestamp,
-      orderId,
-      data.name || '',
-      data.lamp || '',
-      data.birthday || '',
-      data.address || '',
-      "'" + (data.phone || ''),         // 加單引號前綴，強制純文字，保留開頭0
-      data.email || '',
-      "'" + (data.transferCode || ''),  // 同上
-      Number(data.amount) || ''
-    ]]);
+    // ── 3. 產生時間、編號 ──
+    var now = new Date();
+    var applyTime = Utilities.formatDate(now, 'Asia/Taipei', 'yyyy/MM/dd HH:mm:ss');
+    var applyId = 'LD' + Utilities.formatDate(now, 'Asia/Taipei', 'yyMMddHHmm');
+
+    var rowData = [
+      applyTime,                              // A 申請時間
+      applyId,                                // B 申請編號
+      '',                                     // C Line ID（網站送出無）
+      data.name,                              // D 申請人姓名
+      data.lamp,                              // E 燈種
+      data.birthday,                          // F 出生年月日
+      data.address,                           // G 住址
+      "'" + data.phone,                       // H 手機號碼（前綴 ' 保留開頭 0）
+      data.email || '',                       // I Email
+      "'" + data.transferCode,                // J 匯款後五碼
+      Number(data.amount),                    // K 金額
+      false,                                  // L 是否收到匯款
+      false,                                  // M 是否寄送確認信
+      '',                                     // N 通知方式
+      '',                                     // O 確認收款時間
+      '',                                     // P 寄送時間
+      ''                                      // Q 寄送結果
+    ];
+
+    sheet.appendRow(rowData);
+    var newRow = sheet.getLastRow();
+    sheet.getRange(newRow, 12, 1, 2).insertCheckboxes(); // L、M 欄勾選框
 
     return ContentService
-      .createTextOutput(JSON.stringify({ success: true, orderId: orderId }))
+      .createTextOutput(JSON.stringify({ success: true, orderId: applyId }))
       .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
+
+  } catch (error) {
     return ContentService
-      .createTextOutput(JSON.stringify({ success: false, error: err.toString() }))
+      .createTextOutput(JSON.stringify({ success: false, error: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-/** 測試用：瀏覽部署網址時會看到這個訊息，代表部署成功 */
+/** 測試用 */
 function doGet() {
-  return ContentService.createTextOutput('三重海清宮線上點燈 API 運作中');
+  return ContentService.createTextOutput('線上點燈 API 運作中');
 }
