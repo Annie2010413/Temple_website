@@ -148,7 +148,7 @@
 </header>
 <main id="story-stage" class="relative overflow-hidden flex flex-col items-center">
 <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
-<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80"/>
+<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80" loading="lazy" decoding="async"/>
 </div>
 <div class="cinematic-layer"></div>
 <section class="story-motion-track relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
@@ -169,7 +169,7 @@
 
                     </p>
 <div class="py-6 flex justify-center hidden">
-<img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
+<img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" fetchpriority="high" decoding="async" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
 </div>
 <p id="story-paragraph-3">
 
@@ -218,6 +218,7 @@
 </footer>
 <script src="../../js/runtime-config.js"></script>
 <script src="../../js/state.js"></script>
+<script src="../../js/puzzle-gate.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
   const mobileToggle = document.getElementById("mobile-nav-toggle");
@@ -338,20 +339,20 @@
   async function loadStoryChapter() {
     clearStoryContent();
     const chapterNumber = Number(new URLSearchParams(window.location.search).get("chapter")) || 1;
+    const access = window.PuzzleGate
+      ? await window.PuzzleGate.ensureStoryChapter(chapterNumber, "./index.html")
+      : { ok: true, progress: await window.PuzzleState.getProgress() };
+    if (!access.ok) return;
+
     const response = await fetch("./chapters.json");
     if (!response.ok) {
       throw new Error("Failed to load chapters.json");
     }
     const chapters = await response.json();
-    const progress = await window.PuzzleState.getProgress();
-    const allowedChapter = Math.min(Math.max(chapterNumber, 1), Math.max(progress.unlockedStory, 1));
-    const chapter = chapters[String(allowedChapter)] || chapters["1"];
+    const progress = access.progress;
+    const chapter = chapters[String(chapterNumber)] || chapters["1"];
     const maxChapter = 5;
-
-    if (allowedChapter !== chapterNumber) {
-      window.location.replace(`./index.html?chapter=${allowedChapter}`);
-      return;
-    }
+    const allowedChapter = chapterNumber;
 
     document.getElementById("chapter-title").textContent = chapter.title;
     document.getElementById("chapter-badge").textContent = chapter.badge;
@@ -383,13 +384,11 @@
       nextText.textContent = `進入挑戰：第 ${allowedChapter} 關`;
       nextLink.onclick = async (event) => {
         event.preventDefault();
-        try {
+        if (!window.PuzzleState.isLoggedIn()) {
           await window.PuzzleState.updateProgress({
             unlockedStory: allowedChapter,
             unlockedChallenge: allowedChapter
           });
-        } catch (_error) {
-          // Ignore and continue navigation to avoid blocking user flow.
         }
         window.location.href = `../challenge/index.html?stage=${allowedChapter}`;
       };

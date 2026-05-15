@@ -4,7 +4,9 @@ Minimal backend for:
 
 - `POST /api/auth/google`
 - `GET /api/progress`
-- `PUT /api/progress`
+- `POST /api/challenge/submit` (advances progress on correct answers)
+
+`PUT /api/progress` is disabled to prevent client-side progress cheating.
 
 ## Quick Start
 
@@ -42,4 +44,4 @@ If your backend is `http://localhost:5501`, add this before `state.js`:
 ## Notes
 
 - Google OAuth verification uses `google-auth-library` and ID token verification.
-- Progress only moves forward (`max` merge strategy).
+- Progress only advances through validated challenge submissions.

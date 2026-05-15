@@ -399,14 +399,14 @@
   <!-- ═══ 第一階段：搖籤筒 ═══ -->
   <div id="phaseTube" style="display:none;">
     <div class="tube-wrap" id="tubeWrap" title="點擊搖籤">
-      <img class="tube-img" src="籤筒.png" alt="籤筒">
+      <img class="tube-img" src="籤筒.png" alt="籤筒" decoding="async">
     </div>
     <button class="draw-btn" id="drawBtn">搖 籤 筒</button>
   </div>
 
   <!-- ═══ 第二階段：抽出籤，等待擲筊確認 ═══ -->
   <div class="stick-area" id="stickArea">
-    <img class="stick-img" src="籤.png" alt="抽出的籤">
+    <img class="stick-img" src="籤.png" alt="抽出的籤" loading="lazy" decoding="async">
     <div class="stick-label" id="stickLabel"></div>
     <div class="stick-hint">請擲筊確認此籤是否為包公爺所指示</div>
     <button class="jiaobei-btn" id="jiaoBtn">擲 筊 確 認</button>
@@ -438,7 +438,7 @@
         <div class="jb-piece left"  id="jb-piece-left"></div>
         <div class="jb-piece right" id="jb-piece-right"></div>
       </div>
-      <img id="jb-result-img" class="jb-result-img" src="" alt="擲筊結果">
+      <img id="jb-result-img" class="jb-result-img" src="" alt="擲筊結果" loading="lazy" decoding="async">
     </div>
 
     <div class="jb-result" id="jb-result"></div>
