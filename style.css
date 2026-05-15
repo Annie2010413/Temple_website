@@ -462,7 +462,7 @@
    }
    
    /* ══════════ Responsive ══════════ */
-   @media (max-width: 1024px) {
+   @media (max-width: 1200px), (max-width: 1366px) and (pointer: coarse) {
     #navbar > ul {
       display: none;
     }
