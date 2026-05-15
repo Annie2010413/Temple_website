@@ -1,15 +1,15 @@
 {
   "items": [
     {
-      "stage": 1,
+      "stage": 2,
       "hash": "f1d4dad0ffff700338552752184e919f87eaa5a98f0833e99c9d0caac80ec32c",
-      "title": "第一關卡謎題",
+      "title": "第二關卡謎題",
       "image": "./assets/qr/challenge1.png"
     },
     {
-      "stage": 2,
+      "stage": 1,
       "hash": "297ce13de50a32577c8e7b0644084ba5af1dcdc5a012393227b9d6c5576065ad",
-      "title": "第二關卡謎題",
+      "title": "第一關卡謎題",
       "image": "./assets/qr/challenge2.png"
     },
     {

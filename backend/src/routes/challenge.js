@@ -9,8 +9,8 @@ const router = express.Router();
 const MAX_STORY = 7;
 const MAX_CHALLENGE = 5;
 const ANSWERS = {
-  1: "靈願善心現",
-  2: "13",
+  1: "13",
+  2: "靈願善心現",
   3: "23322333",
   4: "2",
   5: "BE6128"
