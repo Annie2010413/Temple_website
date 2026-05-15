@@ -71,6 +71,7 @@
     const initial = getInitial(user.name, user.email);
 
     const wrapper = document.createElement("div");
+    wrapper.className = "puzzle-nav__user";
     wrapper.style.position = "relative";
     wrapper.style.marginLeft = "14px";
     wrapper.style.display = "inline-flex";
@@ -251,10 +252,12 @@
 
   function mountUserMenu() {
     if (!window.PuzzleState) return;
-    const slot = document.getElementById("user-nav-slot");
-    if (!slot) return;
-    slot.innerHTML = "";
-    slot.appendChild(createUserMenu());
+    ["user-nav-slot", "user-nav-slot-mobile"].forEach((slotId) => {
+      const slot = document.getElementById(slotId);
+      if (!slot) return;
+      slot.innerHTML = "";
+      slot.appendChild(createUserMenu());
+    });
   }
 
   if (document.readyState === "loading") {

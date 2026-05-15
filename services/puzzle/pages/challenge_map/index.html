@@ -4,7 +4,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="../../css/puzzle-nav.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -68,7 +69,7 @@
                         "full": "0.75rem"
                     },
                     "fontFamily": {
-                        "headline": ["Noto Serif"],
+                        "headline": ["Noto Serif TC", "serif"],
                         "body": ["Newsreader"],
                         "label": ["Newsreader"]
                     }
@@ -91,10 +92,10 @@
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
 <!-- TopNavBar -->
-<header class="bg-[#fef9f1]/90 backdrop-blur-sm border-b border-[#dcc0be]/20 fixed top-0 left-0 right-0 z-50">
+<header class="puzzle-nav bg-[#f2ede5]/95 backdrop-blur-sm border-b border-[#dcc0be]/50 shadow-sm fixed top-0 left-0 right-0 z-50">
 <nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] font-headline tracking-widest">海清宮</div>
-<div class="hidden md:flex gap-8 items-center font-['Noto_Serif'] font-bold tracking-widest text-sm">
+<div class="puzzle-nav__brand text-[#6c171a]">海清宮</div>
+<div class="puzzle-nav__links hidden md:flex gap-8 items-center">
 <a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#6c171a] border-b-2 border-[#6c171a] pb-1" href="../challenge_map">遊戲關卡</a>
@@ -105,13 +106,14 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 </nav>
-<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
-<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/40 bg-[#f2ede5]">
+<div class="puzzle-nav__menu flex flex-col gap-3 pt-3">
 <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#6c171a] font-bold" href="../challenge_map/index.html">遊戲關卡</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+<div id="user-nav-slot-mobile" class="pt-3 mt-1 border-t border-[#dcc0be]/30"></div>
 </div>
 </div>
 </header>
