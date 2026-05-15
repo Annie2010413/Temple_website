@@ -146,30 +146,18 @@
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start">
 <section class="lg:col-span-7 space-y-4 order-1">
 <header class="space-y-4">
-<div id="challenge-level" class="inline-block bg-primary px-3 py-1 text-on-primary text-xs font-headline tracking-widest">
-                        LEVEL 01
-                    </div>
-<h1 id="challenge-title" class="text-2xl sm:text-3xl md:text-4xl font-headline font-black text-primary leading-tight">
-                        森羅殿之謎
-                    </h1>
-<p id="challenge-subtitle" class="text-on-primary-fixed-variant font-semibold tracking-wide italic">
-                        The Mystery of the Hall of Justice
-                    </p>
+<div id="challenge-level" class="inline-block bg-primary px-3 py-1 text-on-primary text-xs font-headline tracking-widest">—</div>
+<h1 id="challenge-title" class="text-2xl sm:text-3xl md:text-4xl font-headline font-black text-primary leading-tight">載入中…</h1>
+<p id="challenge-subtitle" class="text-on-primary-fixed-variant font-semibold tracking-wide italic"></p>
 <div class="flex items-center gap-1.5 pt-1">
 <span class="text-sm text-secondary font-headline tracking-wide">難度:</span>
 <div id="challenge-difficulty" class="flex items-center gap-0.5" role="img" aria-label="難易度"></div>
 </div>
 </header>
 <div class="prose prose-stone max-w-none text-on-surface-variant space-y-2 leading-relaxed text-[0.95rem]">
-<p id="challenge-desc1">
-                        在雲林三條崙的海清宮中，座落著巍峨的森羅殿。相傳每當夜深人靜之際，殿內的朱紅石柱會隱約浮現出不屬於這個時代的印記。包公座前的兩側，立著肅穆的威武石獅，其底座刻有繁複的雲紋。
-                    </p>
-<p id="challenge-desc2" class="font-semibold text-on-surface">
-                        「正氣凌雲，鐵面無私。欲開此門，必尋其根。」
-                    </p>
-<p id="challenge-desc3">
-                        你面前的石台上有一個空的凹槽，形狀如同一枚失落的官印。根據老廟祝留下的殘卷，這個凹槽指向了一個特定的年份——那一年，海清宮迎來了第一次的大規模修繕，也是正義之光重新綻放的時刻。
-                    </p>
+<p id="challenge-desc1"></p>
+<p id="challenge-desc2" class="font-semibold text-on-surface"></p>
+<p id="challenge-desc3"></p>
 </div>
 <div class="space-y-2 md:space-y-3">
 <div id="challenge-scanner-actions" class="grid grid-cols-1 gap-2">
@@ -189,7 +177,7 @@
 <div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
 <span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
 <span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
-<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
+<span id="challenge-lore" class="font-headline font-bold text-xs"></span>
 </div>
 </div>
 </div>
@@ -201,33 +189,41 @@
                     </h3>
   <details class="group border-b border-outline-variant/30 py-5">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
-      <span id="challenge-hint1-title">第一則提示：關於「年代」</span>
+      <span id="challenge-hint1-title"></span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
     </summary>
-    <p id="challenge-hint1-body" class="mt-2 text-on-surface-variant italic text-sm">
-      查看廟口前的龍柱底座，刻有乾隆年間的字樣，但我們找的是「重建」的起始年份。
-    </p>
+    <p id="challenge-hint1-body" class="mt-2 text-on-surface-variant italic text-sm"></p>
   </details>
   
-  <details class="group py-1.5 hidden">
+  <details id="challenge-hint2-block" class="group py-1.5 hidden">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
-      <span id="challenge-hint2-title">第二則提示：具體對象</span>
+      <span id="challenge-hint2-title"></span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
     </summary>
-    <p id="challenge-hint2-body" class="mt-2 text-on-surface-variant italic text-sm">
-      關鍵數字隱藏在正門左側的捐獻碑林中，那是清乾隆年間的一個庚子年。
-    </p>
+    <p id="challenge-hint2-body" class="mt-2 text-on-surface-variant italic text-sm"></p>
   </details>
+</div>
+
+<div id="challenge-ar-inventory" class="hidden mt-4 p-3 rounded-sm relative overflow-hidden bg-[#fef9f1] border border-[#dcc0be]">
+  <h3 class="font-headline font-bold text-primary mb-1 flex items-center gap-2">
+    <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+    AR 獲得物品
+  </h3>
+  <p class="text-xs text-secondary font-headline mb-3">於 AR 探索中收下的線索，可在解題時參考。</p>
+  <p id="challenge-ar-inventory-empty" class="text-sm text-on-surface-variant leading-relaxed">
+    尚未獲得道具。請點上方「開啟 AR 探索」掃描卡片圖案並收下道具。
+  </p>
+  <div id="challenge-ar-inventory-list" class="grid grid-cols-3 sm:grid-cols-4 gap-2 hidden" role="list"></div>
 </div>
 </section>
 <aside class="lg:col-span-5 space-y-3 order-2">
 <div id="challenge-image-box" class="relative aspect-[3/2] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
-<img id="challenge-image" alt="關卡線索圖" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" fetchpriority="high" decoding="async"/>
+<img id="challenge-image" alt="關卡線索圖" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" fetchpriority="high" decoding="async" hidden/>
 <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
 <div class="absolute bottom-3 left-3 right-3 hidden">
 <div class="bg-surface/90 backdrop-blur-md p-2 text-[10px] font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">photo_camera</span>
-<span id="challenge-image-caption">現場所見：石柱基座之拓印</span>
+<span id="challenge-image-caption"></span>
                         </div>
 </div>
 </div>
@@ -237,7 +233,7 @@
 <span class="material-symbols-outlined">edit</span>
                             輸入解答
                         </h4>
-<p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-2">請輸入四位數字年份 (例如：1738)</p>
+<p id="challenge-answer-help" class="text-xs text-on-surface-variant mb-2"></p>
 <div class="relative">
 <input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-lg tracking-[0.55rem] py-1.5 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
 </div>
@@ -249,7 +245,7 @@
 <div class="flex justify-end items-center px-1">
 <div class="flex items-center gap-2 text-xs text-secondary">
 <span class="material-symbols-outlined text-sm">person</span>
-<span id="challenge-progress">當前進度：1 / 5</span>
+<span id="challenge-progress"></span>
                         </div>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
@@ -270,6 +266,20 @@
             </p>
 </div>
 </footer>
+
+<div id="challenge-ar-item-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="challenge-ar-item-modal-name">
+  <div id="challenge-ar-item-backdrop" class="absolute inset-0 bg-black/65 backdrop-blur-sm"></div>
+  <div class="relative w-full max-w-sm bg-surface border border-outline-variant/40 shadow-2xl px-5 pt-6 pb-5 text-center">
+    <button id="challenge-ar-item-close" type="button" class="absolute top-2 right-2 w-8 h-8 rounded-full text-secondary hover:bg-surface-container-low transition-colors font-headline" aria-label="關閉">✕</button>
+    <p class="text-[11px] tracking-[0.3em] font-headline text-secondary mb-3">物 品 介 紹</p>
+    <div class="flex justify-center mb-4">
+      <img id="challenge-ar-item-image" class="w-28 h-28 object-contain bg-surface-container-highest border border-outline-variant/30" alt="道具圖片" loading="lazy" decoding="async"/>
+    </div>
+    <p id="challenge-ar-item-modal-name" class="font-headline font-black text-primary text-2xl mb-2">—</p>
+    <p id="challenge-ar-item-modal-desc" class="text-sm text-on-surface-variant leading-relaxed"></p>
+  </div>
+</div>
+
 <script src="../../js/runtime-config.js"></script>
 <script src="../../js/state.js"></script>
 <script src="../../js/puzzle-gate.js"></script>
@@ -309,7 +319,133 @@
     el.textContent = `${items.length} 道具`;
   }
 
-  document.addEventListener("puzzle-inventory-changed", refreshInventoryBadge);
+  document.addEventListener("puzzle-inventory-changed", () => {
+    refreshInventoryBadge();
+    if (Number(new URLSearchParams(window.location.search).get("stage")) === 5) {
+      renderArInventory();
+    }
+  });
+
+  function sanitizeInventoryImagePath(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    if (!raw.startsWith("./") && !raw.startsWith("../")) return "";
+    const lowered = raw.toLowerCase();
+    if (lowered.startsWith("javascript:") || lowered.startsWith("data:") || lowered.startsWith("vbscript:")) return "";
+    return raw;
+  }
+
+  async function syncInventoryWithCatalog() {
+    try {
+      const response = await fetch("./ar-targets.json", { cache: "no-cache" });
+      if (!response.ok) return;
+      const data = await response.json();
+      const catalog = Array.isArray(data?.items) ? data.items : [];
+      if (catalog.length === 0) return;
+
+      const byId = new Map(catalog.filter((c) => c && c.id).map((c) => [String(c.id), c]));
+      const stored = window.PuzzleState?.getInventory?.() || [];
+      let changed = false;
+      const merged = stored.map((entry) => {
+        if (!entry || !entry.id) return entry;
+        const fresh = byId.get(String(entry.id));
+        if (!fresh) return entry;
+        const next = {
+          ...entry,
+          name: String(fresh.name ?? entry.name ?? ""),
+          image: String(fresh.image ?? entry.image ?? ""),
+          description: String(fresh.description ?? entry.description ?? "")
+        };
+        if (next.name !== entry.name || next.image !== entry.image || next.description !== entry.description) {
+          changed = true;
+        }
+        return next;
+      });
+      if (changed) {
+        localStorage.setItem("puzzle_inventory", JSON.stringify(merged));
+      }
+    } catch (_error) {
+      // Catalog unavailable.
+    }
+  }
+
+  function openArItemModal(item) {
+    const modal = document.getElementById("challenge-ar-item-modal");
+    const imageEl = document.getElementById("challenge-ar-item-image");
+    const nameEl = document.getElementById("challenge-ar-item-modal-name");
+    const descEl = document.getElementById("challenge-ar-item-modal-desc");
+    const safeSrc = sanitizeInventoryImagePath(item.image);
+    imageEl.src = safeSrc || "";
+    imageEl.hidden = !safeSrc;
+    nameEl.textContent = String(item.name || "未命名道具");
+    descEl.textContent = String(item.description || "暫無描述");
+    modal.classList.remove("hidden");
+  }
+
+  function closeArItemModal() {
+    document.getElementById("challenge-ar-item-modal")?.classList.add("hidden");
+  }
+
+  const arItemClose = document.getElementById("challenge-ar-item-close");
+  const arItemBackdrop = document.getElementById("challenge-ar-item-backdrop");
+  if (arItemClose) arItemClose.onclick = closeArItemModal;
+  if (arItemBackdrop) arItemBackdrop.onclick = closeArItemModal;
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeArItemModal();
+  });
+
+  function renderArInventory() {
+    const section = document.getElementById("challenge-ar-inventory");
+    const listEl = document.getElementById("challenge-ar-inventory-list");
+    const emptyEl = document.getElementById("challenge-ar-inventory-empty");
+    if (!section || !listEl || !emptyEl) return;
+
+    const items = (window.PuzzleState?.getInventory?.() || []).filter((i) => i && i.id);
+    listEl.replaceChildren();
+
+    if (items.length === 0) {
+      emptyEl.classList.remove("hidden");
+      listEl.classList.add("hidden");
+      return;
+    }
+
+    emptyEl.classList.add("hidden");
+    listEl.classList.remove("hidden");
+
+    items.forEach((item) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "border border-outline-variant/40 rounded-sm p-2 bg-surface-container-low flex flex-col items-center text-center transition-all hover:border-primary/50 hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/30";
+      card.setAttribute("role", "listitem");
+
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "w-full aspect-square bg-surface border border-outline-variant/30 flex items-center justify-center overflow-hidden";
+
+      const safeSrc = sanitizeInventoryImagePath(item.image);
+      if (safeSrc) {
+        const img = document.createElement("img");
+        img.alt = String(item.name || "道具圖片");
+        img.className = "max-w-full max-h-full object-contain pointer-events-none";
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.src = safeSrc;
+        imgWrap.appendChild(img);
+      } else {
+        const placeholder = document.createElement("span");
+        placeholder.className = "text-xs text-secondary font-headline";
+        placeholder.textContent = "無圖";
+        imgWrap.appendChild(placeholder);
+      }
+
+      const name = document.createElement("p");
+      name.className = "mt-1.5 text-xs font-headline font-bold text-primary leading-tight line-clamp-2";
+      name.textContent = String(item.name || "未命名道具");
+
+      card.append(imgWrap, name);
+      card.addEventListener("click", () => openArItemModal(item));
+      listEl.appendChild(card);
+    });
+  }
 
   async function loadChallengeStage() {
     const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
@@ -328,23 +464,58 @@
     const progress = access.progress;
     const stage = stages[String(stageNumber)] || stages["1"];
 
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const text = String(value || "").trim();
+      el.textContent = text;
+      if (el.tagName === "P" || el.tagName === "SPAN") {
+        el.hidden = !text;
+      }
+    }
+
     document.getElementById("challenge-level").textContent = stage.level;
     document.getElementById("challenge-title").textContent = stage.title;
-    document.getElementById("challenge-subtitle").textContent = stage.subtitle;
-    document.getElementById("challenge-desc1").textContent = stage.desc1;
-    document.getElementById("challenge-desc2").textContent = stage.desc2;
-    document.getElementById("challenge-desc3").textContent = stage.desc3;
-    document.getElementById("challenge-hint1-title").textContent = stage.hint1Title;
-    document.getElementById("challenge-hint1-body").textContent = stage.hint1Body;
-    document.getElementById("challenge-hint2-title").textContent = stage.hint2Title;
-    document.getElementById("challenge-hint2-body").textContent = stage.hint2Body;
-    document.getElementById("challenge-image").src = stage.image;
-    document.getElementById("challenge-image-caption").textContent = stage.imageCaption;
+    setText("challenge-subtitle", stage.subtitle);
+    setText("challenge-desc1", stage.desc1);
+    setText("challenge-desc2", stage.desc2);
+    setText("challenge-desc3", stage.desc3);
+    setText("challenge-hint1-title", stage.hint1Title);
+    setText("challenge-hint1-body", stage.hint1Body);
+    setText("challenge-hint2-title", stage.hint2Title);
+    setText("challenge-hint2-body", stage.hint2Body);
+
+    const hint2Block = document.getElementById("challenge-hint2-block");
+    const hasHint2 = Boolean(String(stage.hint2Title || "").trim() || String(stage.hint2Body || "").trim());
+    if (hint2Block) {
+      hint2Block.classList.toggle("hidden", !hasHint2);
+    }
+
+    const challengeImage = document.getElementById("challenge-image");
+    if (stage.image) {
+      challengeImage.src = stage.image;
+      challengeImage.hidden = false;
+    } else {
+      challengeImage.removeAttribute("src");
+      challengeImage.hidden = true;
+    }
+    setText("challenge-image-caption", stage.imageCaption);
     document.getElementById("challenge-answer-help").textContent = stage.answerHelp;
     renderDifficultyStars(document.getElementById("challenge-difficulty"), stage.difficulty);
     document.getElementById("challenge-progress").textContent = stage.progress;
     document.getElementById("challenge-lore").textContent = stage.lore;
     refreshInventoryBadge();
+
+    const arInventorySection = document.getElementById("challenge-ar-inventory");
+    if (arInventorySection) {
+      if (stageNumber === 5) {
+        arInventorySection.classList.remove("hidden");
+        await syncInventoryWithCatalog();
+        renderArInventory();
+      } else {
+        arInventorySection.classList.add("hidden");
+      }
+    }
 
     const prevLink = document.getElementById("challenge-prev-link");
     const nextLink = document.getElementById("challenge-next-link");
@@ -382,16 +553,17 @@
     const scannerActions = document.getElementById("challenge-scanner-actions");
     const showArScanner = stageNumber === 5;
 
+    if (qrButton) {
+      qrButton.classList.toggle("hidden", showArScanner);
+    }
     if (arButton && scannerActions) {
       if (showArScanner) {
         arButton.classList.remove("hidden");
-        scannerActions.classList.remove("grid-cols-1");
-        scannerActions.classList.add("grid-cols-2");
       } else {
         arButton.classList.add("hidden");
-        scannerActions.classList.remove("grid-cols-2");
-        scannerActions.classList.add("grid-cols-1");
       }
+      scannerActions.classList.remove("grid-cols-2");
+      scannerActions.classList.add("grid-cols-1");
     }
 
     async function handleSubmit() {
@@ -447,9 +619,11 @@
       }
     });
 
-    qrButton.onclick = () => {
-      window.location.href = `./qr-scanner.html?stage=${stageNumber}`;
-    };
+    if (qrButton && !showArScanner) {
+      qrButton.onclick = () => {
+        window.location.href = `./qr-scanner.html?stage=${stageNumber}`;
+      };
+    }
 
     if (arButton && showArScanner) {
       arButton.onclick = () => {

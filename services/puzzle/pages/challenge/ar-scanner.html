@@ -157,8 +157,8 @@
       <div class="min-h-screen md:min-h-0 p-0 md:p-4 md:space-y-3">
         <p id="ar-stage-text" class="fixed md:static top-[calc(5rem+env(safe-area-inset-top))] md:top-auto left-3 z-20 px-3 py-1.5 bg-[#fef9f1]/70 md:bg-transparent border border-[#dcc0be]/40 md:border-0 rounded-full md:rounded-none text-xs text-secondary font-headline tracking-wide backdrop-blur md:backdrop-blur-0">AR 掃描器</p>
         <div class="hidden md:block bg-surface-container-low border border-outline-variant/30 p-3 text-sm text-on-surface-variant leading-relaxed">
-          <p>請將鏡頭對準現場指定圖案（例如石碑紋飾或符文卡），並讓圖案完整出現在畫面內。</p>
-          <p class="mt-1 text-xs text-secondary">同一個掃描器可辨識多個 AR 目標；偵測成功後對應道具會浮現在圖案上，點擊道具可查看介紹並收進道具箱。</p>
+          <p>請將鏡頭對準現場指定圖案（小貓卡片），並讓圖案完整出現在畫面內。</p>
+          <p class="mt-1 text-xs text-secondary">掃描器可同時辨識多個 AR 目標；偵測成功後對應道具會浮現在圖案上，點擊物品可查看介紹並收下物品。</p>
         </div>
         <div class="ar-viewport md:mt-3 md:mx-auto md:max-w-md md:border md:border-outline-variant/30">
           <div id="ar-stage"></div>
@@ -175,12 +175,12 @@
     <div id="ar-item-card" class="ar-modal-card relative w-full max-w-sm bg-surface border border-outline-variant/40 shadow-2xl">
       <button id="ar-item-close-btn" class="absolute top-2 right-2 w-8 h-8 rounded-full text-secondary hover:bg-surface-container-low transition-colors font-headline" aria-label="關閉">✕</button>
       <div class="px-5 pt-6 pb-5 text-center">
-        <p class="text-[11px] tracking-[0.3em] font-headline text-secondary mb-3">獲 得 道 具</p>
+        <p class="text-[11px] tracking-[0.3em] font-headline text-secondary mb-3">獲 得 物 品</p>
         <div class="flex justify-center mb-4">
           <img id="ar-item-image" class="w-28 h-28 object-contain bg-surface-container-highest border border-outline-variant/30" alt="道具圖片" loading="lazy" decoding="async"/>
         </div>
-        <p id="ar-item-name" class="font-headline font-black text-primary text-2xl mb-2">道具名稱</p>
-        <p id="ar-item-desc" class="text-sm text-on-surface-variant leading-relaxed">道具描述</p>
+        <p id="ar-item-name" class="font-headline font-black text-primary text-2xl mb-2">物品名稱</p>
+        <p id="ar-item-desc" class="text-sm text-on-surface-variant leading-relaxed">物品描述</p>
       </div>
       <div class="grid grid-cols-2 border-t border-outline-variant/30">
         <button id="ar-item-cancel-btn" class="py-3 font-headline tracking-[0.12em] text-secondary hover:bg-surface-container-low transition-colors">稍 後 再 說</button>
@@ -219,7 +219,7 @@
     const collectBtn = document.getElementById("ar-collect-btn");
     const detectFrame = document.getElementById("ar-detect-frame");
     const detectBadge = document.getElementById("ar-detect-badge");
-    stageText.textContent = `關卡：${stageNumber}｜多目標 AR`;
+    stageText.textContent = `關卡：${stageNumber}`;
 
     let mindarThree = null;
     let started = false;
@@ -521,7 +521,7 @@
           canvasEl.style.height = "100%";
         }
 
-        statusEl.textContent = `AR 啟動成功，可掃描 ${targetItems.length} 個目標圖案。`;
+        statusEl.textContent = `AR 啟動成功`;
 
         const clock = new THREE.Clock();
         renderer.setAnimationLoop(() => {
