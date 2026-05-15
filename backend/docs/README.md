@@ -1,5 +1,7 @@
 # Puzzle Backend
 
+> **給後端開發者：** 完整架構、API 契約、如何新增 route、**本地怎麼接前端測** 請看 **[BACKEND_GUIDE.md](./BACKEND_GUIDE.md)**（§4.2：目前前端預設連 Render，要測本機需改 `LOCAL_FLAG`）。
+
 Minimal backend for:
 
 - `POST /api/auth/google`

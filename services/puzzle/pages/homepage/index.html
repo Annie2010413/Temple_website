@@ -94,13 +94,16 @@
             width: 100%;
             min-width: 0;
         }
-        #google-signin-container > div {
-            width: 100% !important;
-            max-width: 100%;
-        }
-        #google-signin-container iframe {
-            width: 100% !important;
-            max-width: 100%;
+        #google-signin-hidden-host {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     </style>
 <link href="../../css/puzzle-nav.css" rel="stylesheet"/>
@@ -260,41 +263,42 @@
     const googleContainer = document.getElementById("google-signin-container");
     const logoutBtn = document.getElementById("logout-btn");
     let googleInitialized = false;
+    let googleHiddenHost = null;
 
-    function getGoogleButtonWidth() {
-      const slot = authSigninSlot;
-      if (slot && !slot.classList.contains("hidden")) {
-        const slotWidth = slot.getBoundingClientRect().width;
-        if (slotWidth > 0) {
-          return Math.min(400, Math.max(Math.floor(slotWidth), 200));
-        }
+    const GOOGLE_G_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+
+    function triggerGoogleSignIn() {
+      const gsiBtn = googleHiddenHost?.querySelector('[role="button"]');
+      if (gsiBtn) {
+        gsiBtn.click();
+        return;
       }
-      const grid = heroCta;
-      if (!grid) return 280;
-      const gap = 12;
-      const twoColumns = window.matchMedia("(min-width: 768px)").matches;
-      const gridWidth = grid.clientWidth || Math.min(window.innerWidth - 32, 576);
-      const cellWidth = twoColumns ? (gridWidth - gap) / 2 : gridWidth;
-      return Math.min(400, Math.max(Math.floor(cellWidth), 200));
+      window.google.accounts.id.prompt();
     }
 
     function renderGoogleButton() {
       if (!googleInitialized || !window.google?.accounts?.id || !googleContainer) return;
       if (authSigninSlot?.classList.contains("hidden")) return;
 
-      const width = getGoogleButtonWidth();
-      if (width < 50) {
-        requestAnimationFrame(renderGoogleButton);
-        return;
-      }
-
       googleContainer.innerHTML = "";
-      window.google.accounts.id.renderButton(googleContainer, {
-        theme: "outline",
+      googleContainer.classList.add("relative");
+
+      googleHiddenHost = document.createElement("div");
+      googleHiddenHost.id = "google-signin-hidden-host";
+      googleHiddenHost.setAttribute("aria-hidden", "true");
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "w-full min-w-0 h-11 inline-flex items-center justify-center gap-2 px-3 rounded-sm border border-outline-variant/60 bg-surface text-on-surface font-headline text-sm md:text-base tracking-wide hover:bg-surface-container-low transition-all";
+      btn.innerHTML = `${GOOGLE_G_SVG}<span class="truncate">Google 登入</span>`;
+      btn.addEventListener("click", triggerGoogleSignIn);
+
+      googleContainer.append(googleHiddenHost, btn);
+
+      window.google.accounts.id.renderButton(googleHiddenHost, {
+        type: "icon",
         size: "large",
-        text: "signin_with",
-        shape: "rectangular",
-        width
+        shape: "circle"
       });
     }
 
@@ -308,9 +312,7 @@
         authStatus.textContent = "目前：訪客模式（僅本機儲存）";
         if (authSigninSlot) {
           authSigninSlot.classList.remove("hidden");
-          requestAnimationFrame(() => {
-            requestAnimationFrame(renderGoogleButton);
-          });
+          renderGoogleButton();
         }
         logoutBtn.classList.add("hidden");
       }
@@ -330,6 +332,9 @@
       if (!googleInitialized) {
         window.google.accounts.id.initialize({
           client_id: googleClientId,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+          use_fedcm_for_prompt: false,
           callback: async (response) => {
             try {
               await window.PuzzleState.signInWithGoogleIdToken(response.credential);
@@ -343,16 +348,8 @@
         googleInitialized = true;
       }
 
-      requestAnimationFrame(() => {
-        requestAnimationFrame(renderGoogleButton);
-      });
+      renderGoogleButton();
     }
-
-    window.addEventListener("resize", () => {
-      if (googleInitialized && authSigninSlot && !authSigninSlot.classList.contains("hidden")) {
-        renderGoogleButton();
-      }
-    });
 
     logoutBtn.onclick = () => {
       window.PuzzleState.signOut();
