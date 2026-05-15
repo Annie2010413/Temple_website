@@ -87,11 +87,16 @@
             writing-mode: vertical-rl;
             text-orientation: upright;
         }
+        #auth-signin-slot {
+            min-width: 0;
+        }
         #google-signin-container {
             width: 100%;
+            min-width: 0;
         }
         #google-signin-container > div {
             width: 100% !important;
+            max-width: 100%;
         }
         #google-signin-container iframe {
             width: 100% !important;
@@ -142,15 +147,17 @@
                         穿梭於古老廟宇的紅牆綠瓦間，解開塵封百年的神祕圖騰，一場結合歷史文化與實境解謎的奇幻旅程。
                     </p>
 <div class="w-full max-w-md lg:max-w-xl">
-<div id="auth-actions" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-<a id="start-journey-btn" href="../story/index.html?chapter=1" class="w-full h-11 inline-flex items-center justify-center bg-primary text-on-primary rounded-sm font-headline text-sm md:text-base tracking-widest transition-all hover:brightness-110 editorial-shadow">
+<div id="hero-cta" class="grid grid-cols-2 gap-3">
+<a id="start-journey-btn" href="../story/index.html?chapter=1" class="w-full min-w-0 h-11 inline-flex items-center justify-center bg-primary text-on-primary rounded-sm font-headline text-sm md:text-base tracking-widest transition-all hover:brightness-110 editorial-shadow">
                             即刻啟程
                         </a>
-<div id="google-signin-container" class="w-full min-h-11 flex items-center justify-center rounded-sm"></div>
+<div id="auth-signin-slot" class="w-full min-w-0 min-h-11 flex items-center justify-center overflow-hidden rounded-sm">
+<div id="google-signin-container" class="w-full min-w-0"></div>
 </div>
-<button id="logout-btn" type="button" class="hidden w-full h-11 mt-3 px-4 rounded-sm border border-primary/20 text-secondary font-headline text-sm tracking-widest hover:bg-primary/5 transition-all">
+<button id="logout-btn" type="button" class="hidden w-full min-w-0 h-11 px-4 rounded-sm border border-primary/20 text-secondary font-headline text-sm md:text-base tracking-widest hover:bg-primary/5 transition-all">
                             登出
                         </button>
+</div>
 <p id="auth-status" class="mt-3 text-sm text-secondary leading-relaxed">目前：訪客模式（僅本機儲存）</p>
 </div>
 </div>
@@ -247,13 +254,22 @@
     }
 
     const authStatus = document.getElementById("auth-status");
-    const authActions = document.getElementById("auth-actions");
+    const heroCta = document.getElementById("hero-cta");
+    const authSigninSlot = document.getElementById("auth-signin-slot");
+    const startJourneyBtn = document.getElementById("start-journey-btn");
     const googleContainer = document.getElementById("google-signin-container");
     const logoutBtn = document.getElementById("logout-btn");
     let googleInitialized = false;
 
     function getGoogleButtonWidth() {
-      const grid = authActions;
+      const slot = authSigninSlot;
+      if (slot && !slot.classList.contains("hidden")) {
+        const slotWidth = slot.getBoundingClientRect().width;
+        if (slotWidth > 0) {
+          return Math.min(400, Math.max(Math.floor(slotWidth), 200));
+        }
+      }
+      const grid = heroCta;
       if (!grid) return 280;
       const gap = 12;
       const twoColumns = window.matchMedia("(min-width: 768px)").matches;
@@ -263,14 +279,22 @@
     }
 
     function renderGoogleButton() {
-      if (!googleInitialized || !window.google?.accounts?.id) return;
+      if (!googleInitialized || !window.google?.accounts?.id || !googleContainer) return;
+      if (authSigninSlot?.classList.contains("hidden")) return;
+
+      const width = getGoogleButtonWidth();
+      if (width < 50) {
+        requestAnimationFrame(renderGoogleButton);
+        return;
+      }
+
       googleContainer.innerHTML = "";
       window.google.accounts.id.renderButton(googleContainer, {
         theme: "outline",
         size: "large",
         text: "signin_with",
         shape: "rectangular",
-        width: getGoogleButtonWidth()
+        width
       });
     }
 
@@ -278,13 +302,15 @@
       const auth = window.PuzzleState.getAuth();
       if (auth?.user?.name) {
         authStatus.textContent = `目前：已登入 ${auth.user.name}（可跨裝置同步）`;
-        if (authActions) authActions.classList.add("hidden");
+        if (authSigninSlot) authSigninSlot.classList.add("hidden");
         logoutBtn.classList.remove("hidden");
       } else {
         authStatus.textContent = "目前：訪客模式（僅本機儲存）";
-        if (authActions) {
-          authActions.classList.remove("hidden");
-          requestAnimationFrame(renderGoogleButton);
+        if (authSigninSlot) {
+          authSigninSlot.classList.remove("hidden");
+          requestAnimationFrame(() => {
+            requestAnimationFrame(renderGoogleButton);
+          });
         }
         logoutBtn.classList.add("hidden");
       }
@@ -323,7 +349,7 @@
     }
 
     window.addEventListener("resize", () => {
-      if (googleInitialized && !authActions.classList.contains("hidden")) {
+      if (googleInitialized && authSigninSlot && !authSigninSlot.classList.contains("hidden")) {
         renderGoogleButton();
       }
     });
