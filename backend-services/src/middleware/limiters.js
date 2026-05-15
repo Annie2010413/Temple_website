@@ -18,4 +18,13 @@ const lightApplyLimiter = rateLimit({
   message: { error: "申請過於頻繁，請稍後再試或來電洽詢" }
 });
 
-module.exports = { generalLimiter, lightApplyLimiter };
+// 活動報名：每 IP 每 10 分鐘 5 次
+const signupApplyLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "申請過於頻繁，請稍後再試或來電洽詢" }
+});
+
+module.exports = { generalLimiter, lightApplyLimiter, signupApplyLimiter };

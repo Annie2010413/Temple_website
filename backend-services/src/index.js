@@ -3,6 +3,7 @@ const cors = require("cors");
 const config = require("./config");
 const { generalLimiter } = require("./middleware/limiters");
 const lightRoutes = require("./routes/light");
+const signupRoutes = require("./routes/signup");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/light", lightRoutes);
+app.use("/api/signup", signupRoutes);
 
 app.get("/", (_req, res) => {
   res.status(404).json({ error: "Not Found" });
