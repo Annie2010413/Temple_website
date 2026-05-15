@@ -1,21 +1,21 @@
-﻿// Runtime API config for puzzle frontend.
-// Priority:
-// 1) window.PUZZLE_API_BASE (set manually before this script)
-// 2) localhost defaults for development
-// 3) same-origin /api for deployment
+﻿// Runtime config for puzzle frontend (committed — safe to deploy).
+// Priority for API: window.PUZZLE_API_BASE > LOCAL_FLAG below
+// Priority for Google Client ID: window.PUZZLE_GOOGLE_CLIENT_ID > auth-config.js > GOOGLE_CLIENT_ID below
 (function () {
-  if (window.PUZZLE_API_BASE) return;
+  // Toggle: true = local backend, false = Render production API
+  const LOCAL_FLAG = false;
 
-  const host = window.location.hostname;
-  const isLocal = host === "localhost" || host === "127.0.0.1" || host === "::1";
+  const REMOTE_API_BASE = "https://temple-website-wmxr.onrender.com";
+  const LOCAL_API_BASE = "http://localhost:5501";
 
-  if (isLocal) {
-    window.PUZZLE_API_BASE = "http://localhost:5501";
-    return;
+  // Web Client ID (public; not a secret). Must match Render GOOGLE_CLIENT_ID.
+  const GOOGLE_CLIENT_ID = "849811597506-ek7nmqbrf3bqks1m0pu4ms2o9ugdtm55.apps.googleusercontent.com";
+
+  if (!window.PUZZLE_API_BASE) {
+    window.PUZZLE_API_BASE = LOCAL_FLAG ? LOCAL_API_BASE : REMOTE_API_BASE;
   }
 
-  // If frontend/backend are on different domains,
-  // replace this with your backend URL.
-  // Example: window.PUZZLE_API_BASE = "https://api.your-domain.com";
-  window.PUZZLE_API_BASE = `${window.location.origin}/api`;
+  if (!window.PUZZLE_GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID) {
+    window.PUZZLE_GOOGLE_CLIENT_ID = GOOGLE_CLIENT_ID;
+  }
 })();
