@@ -100,6 +100,7 @@
 <a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#6c171a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
+<a class="text-[#755750] hover:text-[#6c171a] transition-colors duration-300" href="../profile/index.html">我的進度</a>
 <div id="user-nav-slot"></div>
 </div>
 <button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
@@ -129,7 +130,7 @@
 </div>
 <div class="hidden md:block">
 <div class="text-right border-l-2 border-primary/20 pl-6">
-<span class="block text-3xl font-headline font-bold text-primary">01 / 05</span>
+<span class="block text-3xl font-headline font-bold text-primary">01 / 06</span>
 <span class="text-xs uppercase tracking-widest text-secondary">已解鎖進度</span>
 </div>
 </div>
@@ -191,13 +192,28 @@
       </div>
       <div class="p-4 md:p-6 flex-grow flex flex-col justify-center text-center">
         <div class="mb-4 text-outline flex justify-center"><span class="material-symbols-outlined text-4xl">lock</span></div>
-        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">終章：鐘樓回音</h3>
+        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">第五章：鐘樓回音</h3>
         <p class="text-sm text-secondary font-body italic mb-4">需完成前一關卡解鎖</p>
         <div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">未解鎖</div>
       </div>
     </div>
   </div>
   
+
+  <div class="md:col-span-4 bg-surface-container-high/50 manuscript-shadow border border-outline-variant/10 relative overflow-hidden group">
+    <div class="h-full flex flex-col">
+      <div class="h-40 md:h-48 overflow-hidden grayscale opacity-40">
+        <img class="w-full h-full object-cover" loading="lazy" decoding="async" src="../challenge/assets/picture/haiching_temple_spirit_cat_mystery.png"/>
+      </div>
+      <div class="p-4 md:p-6 flex-grow flex flex-col justify-center text-center">
+        <div class="mb-4 text-outline flex justify-center"><span class="material-symbols-outlined text-4xl">lock</span></div>
+        <h3 class="text-lg md:text-xl font-headline font-bold text-on-surface-variant mb-2">終章：靈貓歸位</h3>
+        <p class="text-sm text-secondary font-body italic mb-4">需完成第五關挑戰解鎖</p>
+        <div class="px-4 py-1 border border-outline-variant bg-surface text-[10px] text-secondary tracking-widest">未解鎖</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Footer -->
@@ -220,21 +236,22 @@
 
   async function applyStoryMapState() {
     const progress = await window.PuzzleState.getProgress();
-    const unlocked = Math.min(progress.unlockedStory, 5);
+    const unlocked = Math.min(progress.unlockedStory, 6);
     const progressText = document.querySelector("main .text-right span.block");
     if (progressText) {
-      progressText.textContent = `${String(unlocked).padStart(2, "0")} / 05`;
+      progressText.textContent = `${String(unlocked).padStart(2, "0")} / 06`;
     }
 
     const mapGrid = document.querySelector("main .grid");
     if (!mapGrid) return;
-    const cards = Array.from(mapGrid.children).slice(0, 5);
-    const chapterMap = { "一": 1, "二": 2, "三": 3, "四": 4, "五": 5};
+    const cards = Array.from(mapGrid.children).slice(0, 6);
+    const chapterMap = { "一": 1, "二": 2, "三": 3, "四": 4, "五": 5, "六": 6 };
 
     function extractChapterNumber(card) {
       const title = card.querySelector("h2, h3");
       const text = title ? title.textContent : "";
-      const cnMatch = text.match(/第([一二三四五])章/);
+      if (text.includes("終章")) return 6;
+      const cnMatch = text.match(/第([一二三四五六])章/);
       if (cnMatch) return chapterMap[cnMatch[1]];
       const numMatch = text.match(/第(\d+)章/);
       if (numMatch) return Number(numMatch[1]);

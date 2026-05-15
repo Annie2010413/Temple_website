@@ -129,6 +129,7 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
+<a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../profile/index.html">我的進度</a>
 <div id="user-nav-slot"></div>
 </nav>
 <button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
@@ -157,7 +158,7 @@
 <span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.18em] md:tracking-[0.3em] text-base md:text-lg uppercase text-center">序章：冥府之鑰</span>
 <div class="w-12 h-px bg-primary/30"></div>
 </div>
-<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
+<div class="relative parchment-texture p-8 sm:p-8 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
 <div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-12 h-12 md:w-16 md:h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-xl md:text-2xl font-black rounded-sm shadow-lg">
 <span id="chapter-badge">壹</span>
                 </div>
@@ -351,7 +352,7 @@
     const chapters = await response.json();
     const progress = access.progress;
     const chapter = chapters[String(chapterNumber)] || chapters["1"];
-    const maxChapter = 5;
+    const maxChapter = Math.max(...Object.keys(chapters).map(Number));
     const allowedChapter = chapterNumber;
 
     document.getElementById("chapter-title").textContent = chapter.title;
@@ -393,12 +394,12 @@
         window.location.href = `../challenge/index.html?stage=${allowedChapter}`;
       };
     } else if (allowedChapter >= maxChapter) {
-      nextLink.href = "../challenge_map/index.html";
-      nextText.textContent = "前往關卡地圖";
+      nextLink.href = "../homepage/index.html";
+      nextText.textContent = "旅程結束 · 返回首頁";
       nextLink.onclick = null;
     } else {
-      nextLink.href = "../challenge_map/index.html";
-      nextText.textContent = "前往關卡地圖";
+      nextLink.href = `../story/index.html?chapter=${allowedChapter + 1}`;
+      nextText.textContent = `繼續故事：第 ${allowedChapter + 1} 章`;
       nextLink.onclick = null;
     }
 
