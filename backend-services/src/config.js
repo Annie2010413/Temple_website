@@ -20,6 +20,10 @@ const config = {
   light: {
     appsScriptUrl: requireEnv("LIGHT_APPS_SCRIPT_URL"),
     sharedSecret: requireEnv("LIGHT_SHARED_SECRET")
+  },
+  signup: {
+    appsScriptUrl: requireEnv("SIGNUP_APPS_SCRIPT_URL"),
+    sharedSecret: requireEnv("SIGNUP_SHARED_SECRET")
   }
 };
 
