@@ -6,7 +6,7 @@ const { submitLimiter } = require("../middleware/limiters");
 const { invalidateProgressCache } = require("../util/progress-cache");
 
 const router = express.Router();
-const MAX_STORY = 7;
+const MAX_STORY = 6;
 const MAX_CHALLENGE = 5;
 const ANSWERS = {
   1: "13",

@@ -38,3 +38,119 @@
   font-size: 0.875rem;
   letter-spacing: 0.05em;
 }
+
+.puzzle-nav__user {
+  position: relative;
+  margin-left: 14px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 60;
+}
+
+.puzzle-nav__user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(139, 114, 112, 0.35);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #5c403a;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.puzzle-nav__user-label {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.puzzle-nav__user-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  min-width: 170px;
+  max-width: min(280px, calc(100vw - 1.5rem));
+  padding: 8px;
+  border: 1px solid rgba(139, 114, 112, 0.35);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: none;
+  box-sizing: border-box;
+}
+
+.puzzle-nav__user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  text-decoration: none;
+  color: #5c403a;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.puzzle-nav__user-menu-item:hover {
+  background: #f8f3eb;
+}
+
+.puzzle-nav__user-menu-item--danger {
+  color: #8b2e2e;
+}
+
+.puzzle-nav__user-menu-item--danger:hover {
+  background: #fdf2f2;
+}
+
+.puzzle-nav__user-google {
+  display: none;
+  padding: 8px 10px 2px;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.puzzle-nav__user-google > div,
+.puzzle-nav__user-google iframe {
+  max-width: 100% !important;
+}
+
+/* Mobile hamburger drawer: expand in-flow instead of floating past viewport */
+#user-nav-slot-mobile .puzzle-nav__user {
+  width: 100%;
+  margin-left: 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#user-nav-slot-mobile .puzzle-nav__user-trigger {
+  width: 100%;
+  justify-content: space-between;
+}
+
+#user-nav-slot-mobile .puzzle-nav__user-label {
+  max-width: none;
+  flex: 1;
+  min-width: 0;
+}
+
+#user-nav-slot-mobile .puzzle-nav__user-menu {
+  position: static;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-top: 8px;
+  transform: none !important;
+}
+
+#mobile-nav-menu {
+  overflow-x: clip;
+}

@@ -62,7 +62,34 @@
     return googleReadyPromise;
   }
 
-  function createUserMenu() {
+  function clampMenuToViewport(menu) {
+    menu.style.transform = "";
+    const rect = menu.getBoundingClientRect();
+    const pad = 12;
+    let shift = 0;
+    if (rect.right > window.innerWidth - pad) {
+      shift = window.innerWidth - pad - rect.right;
+    }
+    const nextLeft = rect.left + shift;
+    if (nextLeft < pad) {
+      shift += pad - nextLeft;
+    }
+    if (shift !== 0) {
+      menu.style.transform = `translateX(${shift}px)`;
+    }
+  }
+
+  function googleButtonWidth(wrapEl, isMobile) {
+    if (isMobile) {
+      const slot = document.getElementById("user-nav-slot-mobile");
+      const width = slot?.clientWidth || wrapEl?.clientWidth || window.innerWidth;
+      return Math.max(200, Math.min(280, width - 24));
+    }
+    const menuWidth = wrapEl?.closest(".puzzle-nav__user-menu")?.clientWidth || 170;
+    return Math.max(150, Math.min(280, menuWidth - 16));
+  }
+
+  function createUserMenu({ isMobile = false } = {}) {
     const auth = window.PuzzleState?.getAuth?.();
     const isLoggedIn = Boolean(auth?.token);
     const user = auth?.user || {};
@@ -72,24 +99,10 @@
 
     const wrapper = document.createElement("div");
     wrapper.className = "puzzle-nav__user";
-    wrapper.style.position = "relative";
-    wrapper.style.marginLeft = "14px";
-    wrapper.style.display = "inline-flex";
-    wrapper.style.alignItems = "center";
-    wrapper.style.zIndex = "60";
 
     const trigger = document.createElement("button");
     trigger.type = "button";
-    trigger.style.display = "inline-flex";
-    trigger.style.alignItems = "center";
-    trigger.style.gap = "8px";
-    trigger.style.padding = "6px 10px";
-    trigger.style.border = "1px solid rgba(139,114,112,0.35)";
-    trigger.style.borderRadius = "8px";
-    trigger.style.background = "#fff";
-    trigger.style.cursor = "pointer";
-    trigger.style.fontSize = "0.85rem";
-    trigger.style.color = "#5c403a";
+    trigger.className = "puzzle-nav__user-trigger";
     trigger.title = isLoggedIn ? displayName : "登入 / 進度";
 
     const avatar = document.createElement("span");
@@ -104,6 +117,7 @@
     avatar.style.fontSize = "0.8rem";
     avatar.style.fontWeight = "700";
     avatar.style.overflow = "hidden";
+    avatar.style.flexShrink = "0";
 
     if (avatarUrl) {
       const img = document.createElement("img");
@@ -118,59 +132,27 @@
     }
 
     const label = document.createElement("span");
+    label.className = "puzzle-nav__user-label";
     label.textContent = isLoggedIn ? displayName : "登入";
-    label.style.maxWidth = "100px";
-    label.style.overflow = "hidden";
-    label.style.textOverflow = "ellipsis";
-    label.style.whiteSpace = "nowrap";
 
     const arrow = document.createElement("span");
     arrow.textContent = "▾";
     arrow.style.fontSize = "0.8rem";
     arrow.style.color = "#755750";
+    arrow.style.flexShrink = "0";
 
     trigger.appendChild(avatar);
     trigger.appendChild(label);
     trigger.appendChild(arrow);
 
     const menu = document.createElement("div");
-    menu.style.position = "absolute";
-    menu.style.top = "110%";
-    menu.style.right = "0";
-    menu.style.minWidth = "170px";
-    menu.style.padding = "8px";
-    menu.style.border = "1px solid rgba(139,114,112,0.35)";
-    menu.style.borderRadius = "10px";
-    menu.style.background = "#fff";
-    menu.style.boxShadow = "0 8px 20px rgba(0,0,0,0.08)";
-    menu.style.display = "none";
-
-    const profileLink = document.createElement("a");
-    profileLink.href = "../profile/index.html";
-    profileLink.textContent = "我的進度";
-    profileLink.style.display = "block";
-    profileLink.style.padding = "8px 10px";
-    profileLink.style.borderRadius = "6px";
-    profileLink.style.textDecoration = "none";
-    profileLink.style.color = "#5c403a";
-    profileLink.onmouseenter = () => { profileLink.style.background = "#f8f3eb"; };
-    profileLink.onmouseleave = () => { profileLink.style.background = "transparent"; };
-    menu.appendChild(profileLink);
+    menu.className = "puzzle-nav__user-menu";
 
     if (isLoggedIn) {
       const logoutBtn = document.createElement("button");
       logoutBtn.type = "button";
+      logoutBtn.className = "puzzle-nav__user-menu-item puzzle-nav__user-menu-item--danger";
       logoutBtn.textContent = "登出";
-      logoutBtn.style.width = "100%";
-      logoutBtn.style.textAlign = "left";
-      logoutBtn.style.padding = "8px 10px";
-      logoutBtn.style.border = "none";
-      logoutBtn.style.borderRadius = "6px";
-      logoutBtn.style.background = "transparent";
-      logoutBtn.style.color = "#8b2e2e";
-      logoutBtn.style.cursor = "pointer";
-      logoutBtn.onmouseenter = () => { logoutBtn.style.background = "#fdf2f2"; };
-      logoutBtn.onmouseleave = () => { logoutBtn.style.background = "transparent"; };
       logoutBtn.onclick = () => {
         window.PuzzleState.signOut();
         window.location.reload();
@@ -179,20 +161,10 @@
     } else {
       const loginBtn = document.createElement("button");
       loginBtn.type = "button";
+      loginBtn.className = "puzzle-nav__user-menu-item";
       loginBtn.textContent = "Google 登入";
-      loginBtn.style.width = "100%";
-      loginBtn.style.textAlign = "left";
-      loginBtn.style.padding = "8px 10px";
-      loginBtn.style.border = "none";
-      loginBtn.style.borderRadius = "6px";
-      loginBtn.style.background = "transparent";
-      loginBtn.style.color = "#5c403a";
-      loginBtn.style.cursor = "pointer";
-      loginBtn.onmouseenter = () => { loginBtn.style.background = "#f8f3eb"; };
-      loginBtn.onmouseleave = () => { loginBtn.style.background = "transparent"; };
       const googleBtnWrap = document.createElement("div");
-      googleBtnWrap.style.display = "none";
-      googleBtnWrap.style.padding = "8px 10px 2px";
+      googleBtnWrap.className = "puzzle-nav__user-google";
 
       let googleRendered = false;
       loginBtn.onclick = async () => {
@@ -218,7 +190,7 @@
               size: "medium",
               text: "signin_with",
               shape: "rectangular",
-              width: 150
+              width: googleButtonWidth(googleBtnWrap, isMobile)
             });
             googleRendered = true;
           }
@@ -235,13 +207,20 @@
       menu.appendChild(googleBtnWrap);
     }
 
-    trigger.onclick = () => {
-      menu.style.display = menu.style.display === "none" ? "block" : "none";
+    const toggleMenu = () => {
+      const opening = menu.style.display === "none" || menu.style.display === "";
+      menu.style.display = opening ? "block" : "none";
+      if (opening && !isMobile) {
+        requestAnimationFrame(() => clampMenuToViewport(menu));
+      }
     };
+
+    trigger.onclick = toggleMenu;
 
     document.addEventListener("click", (event) => {
       if (!wrapper.contains(event.target)) {
         menu.style.display = "none";
+        menu.style.transform = "";
       }
     });
 
@@ -252,11 +231,15 @@
 
   function mountUserMenu() {
     if (!window.PuzzleState) return;
-    ["user-nav-slot", "user-nav-slot-mobile"].forEach((slotId) => {
-      const slot = document.getElementById(slotId);
+    const slots = [
+      { id: "user-nav-slot", isMobile: false },
+      { id: "user-nav-slot-mobile", isMobile: true }
+    ];
+    slots.forEach(({ id, isMobile }) => {
+      const slot = document.getElementById(id);
       if (!slot) return;
       slot.innerHTML = "";
-      slot.appendChild(createUserMenu());
+      slot.appendChild(createUserMenu({ isMobile }));
     });
   }
 
