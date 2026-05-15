@@ -1,4 +1,4 @@
-﻿// Runtime config for puzzle frontend (committed — safe to deploy).
+// Runtime config for puzzle frontend (committed — safe to deploy).
 // Priority for API: window.PUZZLE_API_BASE > LOCAL_FLAG below
 // Priority for Google Client ID: window.PUZZLE_GOOGLE_CLIENT_ID > auth-config.js > GOOGLE_CLIENT_ID below
 (function () {

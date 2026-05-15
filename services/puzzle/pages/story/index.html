@@ -118,12 +118,13 @@
     100% { transform: translateY(-14px) scale(1); }
 }
 </style>
+<link href="../../css/puzzle-nav.css" rel="stylesheet"/>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-<header class="bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15 sticky top-0 z-50">
+<header class="puzzle-nav bg-[#f2ede5] dark:bg-[#32302b] border-b border-[#dcc0be]/50 shadow-sm sticky top-0 z-50">
 <div class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
-<nav class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
+<div class="puzzle-nav__brand text-[#6c171a] dark:text-[#fef9f1]">海清宮</div>
+<nav class="puzzle-nav__links hidden md:flex gap-8 items-center">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
@@ -134,13 +135,14 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
-<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
-<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/40 bg-[#f2ede5] dark:bg-[#32302b]">
+<div class="puzzle-nav__menu flex flex-col gap-3 pt-3">
 <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
 <a class="text-[#6c171a] font-bold" href="../story_map/index.html">遊戲故事</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+<div id="user-nav-slot-mobile" class="pt-3 mt-1 border-t border-[#dcc0be]/30"></div>
 </div>
 </div>
 </header>
