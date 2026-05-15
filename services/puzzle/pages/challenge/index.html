@@ -222,7 +222,7 @@
 </section>
 <aside class="lg:col-span-5 space-y-3 order-2">
 <div id="challenge-image-box" class="relative aspect-[3/2] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
-<img id="challenge-image" alt="關卡線索圖" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]"/>
+<img id="challenge-image" alt="關卡線索圖" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" fetchpriority="high" decoding="async"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
 <div class="absolute bottom-3 left-3 right-3 hidden">
 <div class="bg-surface/90 backdrop-blur-md p-2 text-[10px] font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
@@ -272,6 +272,7 @@
 </footer>
 <script src="../../js/runtime-config.js"></script>
 <script src="../../js/state.js"></script>
+<script src="../../js/puzzle-gate.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
   const mobileToggle = document.getElementById("mobile-nav-toggle");
@@ -312,6 +313,11 @@
 
   async function loadChallengeStage() {
     const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
+    const access = window.PuzzleGate
+      ? await window.PuzzleGate.ensureChallengeStage(stageNumber, "./index.html")
+      : { ok: true, progress: await window.PuzzleState.getProgress() };
+    if (!access.ok) return;
+
     const response = await fetch("./challenges.json");
     if (!response.ok) {
       throw new Error("Failed to load challenges.json");
@@ -319,14 +325,8 @@
 
     const stages = await response.json();
     const maxStage = Math.max(...Object.keys(stages).map(Number));
-    const progress = await window.PuzzleState.getProgress();
-    const allowedStage = Math.min(Math.max(stageNumber, 1), Math.max(progress.unlockedChallenge, 1));
-    const stage = stages[String(allowedStage)] || stages["1"];
-
-    if (allowedStage !== stageNumber) {
-      window.location.replace(`./index.html?stage=${allowedStage}`);
-      return;
-    }
+    const progress = access.progress;
+    const stage = stages[String(stageNumber)] || stages["1"];
 
     document.getElementById("challenge-level").textContent = stage.level;
     document.getElementById("challenge-title").textContent = stage.title;
@@ -380,7 +380,7 @@
     const qrButton = document.getElementById("challenge-qr-btn");
     const arButton = document.getElementById("challenge-ar-btn");
     const scannerActions = document.getElementById("challenge-scanner-actions");
-    const showArScanner = allowedStage === 5;
+    const showArScanner = stageNumber === 5;
 
     if (arButton && scannerActions) {
       if (showArScanner) {

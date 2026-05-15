@@ -31,7 +31,6 @@
       }
     };
   </script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     #scanner-reader video {
       border-radius: 0.125rem;
@@ -46,7 +45,8 @@
     }
   </style>
 </head>
-<body class="bg-background text-on-surface font-body min-h-screen">
+<body class="bg-background text-on-surface font-body min-h-screen" data-puzzle-gate="challenge-stage" data-puzzle-gate-redirect="./index.html">
+  <script>document.documentElement.classList.add("puzzle-gate-pending");</script>
   <main class="min-h-screen max-w-7xl mx-auto px-2 sm:px-3 md:px-4 py-3 md:py-6 flex items-start md:items-center justify-center">
     <section class="w-full max-w-3xl md:max-w-5xl bg-surface border border-outline-variant/30 shadow-2xl rounded-sm overflow-hidden">
       <header class="flex items-center justify-between px-4 py-3 md:px-5 md:py-4 border-b border-outline-variant/50 bg-surface-container-high shadow-sm">
@@ -78,6 +78,9 @@
     </div>
   </div>
 
+  <script src="../../js/runtime-config.js"></script>
+  <script src="../../js/state.js"></script>
+  <script src="../../js/puzzle-gate.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
     const stageNumber = Number(params.get("stage")) || 1;
@@ -209,6 +212,19 @@
     });
 
     (async function startScannerFlow() {
+      if (window.PuzzleGate) {
+        const gateOk = await window.PuzzleGate.ready();
+        if (gateOk === false) return;
+        if (!window.Html5Qrcode) {
+          try {
+            await window.PuzzleGate.loadScript("https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js");
+          } catch (_error) {
+            statusEl.textContent = "找不到 QR 掃描器套件，請稍後再試。";
+            return;
+          }
+        }
+      }
+
       if (!window.Html5Qrcode) {
         statusEl.textContent = "找不到 QR 掃描器套件，請稍後再試。";
         return;

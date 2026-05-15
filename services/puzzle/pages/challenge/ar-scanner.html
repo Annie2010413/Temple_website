@@ -142,7 +142,8 @@
     }
   </style>
 </head>
-<body class="bg-black md:bg-background text-on-surface font-body min-h-screen overflow-hidden md:overflow-auto">
+<body class="bg-black md:bg-background text-on-surface font-body min-h-screen overflow-hidden md:overflow-auto" data-puzzle-gate="ar-scanner" data-puzzle-gate-redirect="./index.html">
+  <script>document.documentElement.classList.add("puzzle-gate-pending");</script>
   <main class="min-h-screen md:max-w-7xl md:mx-auto p-0 md:px-4 md:py-6 flex items-stretch md:items-center justify-center">
     <section class="relative w-full min-h-screen md:min-h-0 md:max-w-5xl bg-black md:bg-surface md:border md:border-outline-variant/30 md:shadow-2xl md:rounded-sm md:overflow-hidden">
       <header class="fixed md:static top-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] md:px-5 md:py-4 border-b border-[#dcc0be]/50 bg-[#f2ede5] shadow-sm">
@@ -176,7 +177,7 @@
       <div class="px-5 pt-6 pb-5 text-center">
         <p class="text-[11px] tracking-[0.3em] font-headline text-secondary mb-3">獲 得 道 具</p>
         <div class="flex justify-center mb-4">
-          <img id="ar-item-image" class="w-28 h-28 object-contain bg-surface-container-highest border border-outline-variant/30" alt="道具圖片"/>
+          <img id="ar-item-image" class="w-28 h-28 object-contain bg-surface-container-highest border border-outline-variant/30" alt="道具圖片" loading="lazy" decoding="async"/>
         </div>
         <p id="ar-item-name" class="font-headline font-black text-primary text-2xl mb-2">道具名稱</p>
         <p id="ar-item-desc" class="text-sm text-on-surface-variant leading-relaxed">道具描述</p>
@@ -190,9 +191,16 @@
 
   <script src="../../js/runtime-config.js"></script>
   <script src="../../js/state.js"></script>
+  <script src="../../js/puzzle-gate.js"></script>
   <script type="module">
-    import { MindARThree } from "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js";
-    import * as THREE from "three";
+    (async () => {
+    if (window.PuzzleGate) {
+      const gateOk = await window.PuzzleGate.ready();
+      if (gateOk === false) return;
+    }
+
+    const { MindARThree } = await import("https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js");
+    const THREE = await import("three");
 
     const params = new URLSearchParams(window.location.search);
     const stageNumber = Number(params.get("stage")) || 1;
@@ -532,6 +540,7 @@
         console.error("[AR] start failed", error);
         statusEl.textContent = "無法啟動 AR。請確認相機權限，並使用 HTTPS 或 localhost 開啟。";
       }
+    })();
     })();
   </script>
 </body>
