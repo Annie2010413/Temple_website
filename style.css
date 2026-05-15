@@ -462,31 +462,64 @@
    }
    
    /* ══════════ Responsive ══════════ */
-   @media (max-width: 900px) {
-     .news-layout { grid-template-columns: 1fr; }
-     .history-layout { grid-template-columns: 1fr; gap: 32px; }
-     .stats-grid { grid-template-columns: repeat(2, 1fr); }
-     .footer-main { grid-template-columns: 1fr; padding: 36px 24px 24px; gap: 28px; }
-   }
-   @media (max-width: 768px) {
-     #navbar ul { display: none; }
-     #menu-toggle { display: flex; }
-     .nav-logo-block { min-width: 0; }
-     .section { padding: 48px 20px; }
-     .quick-grid { grid-template-columns: repeat(2, 1fr); }
-     #topbar { display: none; }
-   }
-   @media (max-width: 480px) {
-     .hero-title-cn { font-size: 2.8rem; }
-     .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
-   }
-   
-   @media (max-width: 768px) {
-     #hero {
-       background-attachment: scroll;
-       background-position: center 30%;
-     }
-   }
+   @media (max-width: 1024px) {
+    #navbar > ul {
+      display: none;
+    }
+  
+    #menu-toggle {
+      display: flex;
+    }
+  
+    .nav-logo-block {
+      min-width: 0;
+      padding: 0 20px;
+    }
+  
+    .nav-logo-main {
+      font-size: 1.2rem;
+    }
+  
+    #topbar {
+      padding: 6px 24px;
+      font-size: 0.9rem;
+    }
+  
+    #hero {
+      height: 520px;
+    }
+  
+    .section {
+      padding: 64px 28px;
+    }
+  
+    .quick-item {
+      padding: 24px 12px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .news-layout { grid-template-columns: 1fr; }
+    .history-layout { grid-template-columns: 1fr; gap: 32px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-main { grid-template-columns: 1fr; padding: 36px 24px 24px; gap: 28px; }
+  }
+  
+  @media (max-width: 768px) {
+    .section { padding: 48px 20px; }
+    .quick-grid { grid-template-columns: repeat(2, 1fr); }
+    #topbar { display: none; }
+  
+    #hero {
+      background-attachment: scroll;
+      background-position: center 30%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-title-cn { font-size: 2.8rem; }
+    .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+  }
    
    .committee-img-wrapper {
      display: flex;
@@ -499,3 +532,5 @@
      height: auto;
      border-radius: 8px;
    }
+
+   
