@@ -102,6 +102,7 @@
         padding-bottom: 0.35rem !important;
     }
     #challenge-submit-btn,
+    #challenge-qr-btn,
     #challenge-prev-link,
     #challenge-next-link {
         padding-top: 0.45rem !important;
@@ -116,7 +117,7 @@
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
 <nav class="sticky top-0 z-50 bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15">
-<div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
 <div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
 <div class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
@@ -125,17 +126,28 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../story_map">遊戲故事</a>
 <div id="user-nav-slot"></div>
 </div>
-
+<button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+<a class="text-[#6c171a] font-bold" href="../challenge_map/index.html">遊戲關卡</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
+<a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+</div>
 </div>
 </nav>
-<main class="max-w-7xl mx-auto px-6 py-3 md:py-4">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-<section class="lg:col-span-7 space-y-4">
+<main class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-start">
+<section class="lg:col-span-7 space-y-4 order-1">
 <header class="space-y-4">
 <div id="challenge-level" class="inline-block bg-primary px-3 py-1 text-on-primary text-xs font-headline tracking-widest">
                         LEVEL 01
                     </div>
-<h1 id="challenge-title" class="text-3xl md:text-4xl font-headline font-black text-primary leading-tight">
+<h1 id="challenge-title" class="text-2xl sm:text-3xl md:text-4xl font-headline font-black text-primary leading-tight">
                         森羅殿之謎
                     </h1>
 <p id="challenge-subtitle" class="text-on-primary-fixed-variant font-semibold tracking-wide italic">
@@ -153,13 +165,35 @@
                         你面前的石台上有一個空的凹槽，形狀如同一枚失落的官印。根據老廟祝留下的殘卷，這個凹槽指向了一個特定的年份——那一年，海清宮迎來了第一次的大規模修繕，也是正義之光重新綻放的時刻。
                     </p>
 </div>
+<div class="space-y-2 md:space-y-3">
+<div class="grid grid-cols-2 gap-2">
+<button id="challenge-qr-btn" class="w-full border border-primary text-primary py-2 font-headline font-bold tracking-[0.14em] hover:bg-primary/10 transition-all">
+                        掃描 QR Code
+                    </button>
+<button id="challenge-ar-btn" class="w-full bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.14em] hover:opacity-90 transition-all">
+                        開啟 AR 探索
+                    </button>
+</div>
+<div class="grid grid-cols-2 gap-2 hidden">
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
+<span id="challenge-inventory" class="font-headline font-bold text-xs">3 道具</span>
+</div>
+<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
+<span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
+<span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
+<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
+</div>
+</div>
+</div>
 <div class="p-3 rounded-sm relative overflow-hidden group bg-[#fef9f1]" style="background-color: #fef9f1; border: 1px solid #dcc0be;">
 <div class="absolute top-4 right-4 text-primary/10 select-none"><span class="material-symbols-outlined text-8xl opacity-10" style="color: #8B2E2E">balance</span></div>
 <h3 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
                         線索提示
                     </h3>
-  <details class="group border-b border-outline-variant/30 py-1.5">
+  <details class="group border-b border-outline-variant/30 py-5">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint1-title">第一則提示：關於「年代」</span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
@@ -169,7 +203,7 @@
     </p>
   </details>
   
-  <details class="group py-1.5">
+  <details class="group py-1.5 hidden">
     <summary class="flex items-center cursor-pointer font-semibold text-secondary hover:text-primary transition-colors">
       <span id="challenge-hint2-title">第二則提示：具體對象</span>
       <span class="material-symbols-outlined text-base ml-1 transition-transform group-open:rotate-180">expand_more</span>
@@ -180,18 +214,18 @@
   </details>
 </div>
 </section>
-<aside class="lg:col-span-5 space-y-3">
+<aside class="lg:col-span-5 space-y-3 order-2">
 <div id="challenge-image-box" class="relative aspect-[3/2] overflow-hidden shadow-2xl shadow-on-surface/5 border border-outline-variant/10 bg-[#f2ede5]">
 <img id="challenge-image" alt="Visual Clue" class="w-full h-full object-cover mix-blend-multiply opacity-90 filter sepia-[0.2]" data-alt="A majestic and ancient Chinese temple stone lion statue, weathered texture, mysterious atmosphere, mystical lighting, cinematic composition, high detail, historical feel, Noto Serif aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC07wZMY0Y8gccHcqmd_7VCBzDhA2fsJ7nHMpZ0euxxQj9sb-0p7RKpU5ubhRj_MKBYrugVf4-CAj1kEVNrTvzt_pcT4vbtfOTgGihdzuw2h_yYECZcX8nd5KoROIJdA6aRFUFyZ-dBNkblnu-weXQpa0xhHRHcNnoUmGozIdl49zhs0sPZjkhUFtsxL28t9TKn6Iwtpp8s-rB8PQEu_VRxlazR32-ACPyW1Lzdng2tWihxjpticBIwRLd9AX5Ehri8B39G7uBbncea"/>
 <div class="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent"></div>
-<div class="absolute bottom-3 left-3 right-3">
+<div class="absolute bottom-3 left-3 right-3 hidden">
 <div class="bg-surface/90 backdrop-blur-md p-2 text-[10px] font-headline tracking-tighter uppercase text-secondary flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">photo_camera</span>
 <span id="challenge-image-caption">現場所見：石柱基座之拓印</span>
                         </div>
 </div>
 </div>
-<div class="bg-surface-container-highest p-3 space-y-2">
+<div class="bg-surface-container-highest p-3 md:p-4 space-y-2 md:space-y-3">
 <div>
 <h4 class="font-headline font-bold text-primary mb-2 flex items-center gap-2">
 <span class="material-symbols-outlined">edit</span>
@@ -202,7 +236,7 @@
 <input id="challenge-answer-input" class="w-full bg-transparent border-0 border-b-2 border-outline focus:ring-0 focus:border-primary transition-all text-lg tracking-[0.55rem] py-1.5 placeholder:opacity-30 placeholder:tracking-normal font-headline" placeholder="XXXX" type="text"/>
 </div>
 </div>
-<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.14em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
+<button id="challenge-submit-btn" class="w-full bg-primary text-on-primary py-2.5 font-headline font-bold tracking-[0.14em] shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.98] transition-all">
                         提交驗證
                     </button>
 <p id="challenge-feedback" class="text-xs font-headline tracking-wide text-secondary"></p>
@@ -216,21 +250,9 @@
 <span id="challenge-progress">當前進度：1 / 5</span>
                         </div>
 </div>
-<div class="grid grid-cols-2 gap-2 mt-2">
-<a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-2 font-headline font-bold tracking-[0.1em] hover:bg-primary/10 transition-all">上一關</a>
-<a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-2 font-headline font-bold tracking-[0.1em] hover:opacity-90 transition-all">下一關</a>
-</div>
-<div class="grid grid-cols-2 gap-2">
-<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-1 block text-lg">history_edu</span>
-<span class="text-[9px] uppercase tracking-widest text-secondary block">Lore Found</span>
-<span id="challenge-lore" class="font-headline font-bold text-xs">正氣傳說</span>
-</div>
-<div class="p-2 border border-outline-variant/20 bg-surface-container-low text-center">
-<span class="material-symbols-outlined text-primary mb-1 block text-lg">inventory_2</span>
-<span class="text-[9px] uppercase tracking-widest text-secondary block">Inventory</span>
-<span id="challenge-inventory" class="font-headline font-bold text-xs">3 道具</span>
-</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+<a id="challenge-prev-link" href="./index.html?stage=1" class="text-center border border-primary text-primary py-2.5 font-headline font-bold tracking-[0.1em] hover:bg-primary/10 transition-all">上一關</a>
+<a id="challenge-next-link" href="./index.html?stage=2" class="text-center bg-primary text-on-primary py-2.5 font-headline font-bold tracking-[0.1em] hover:opacity-90 transition-all">下一關</a>
 </div>
 </aside>
 </div>
@@ -246,13 +268,30 @@
             </p>
 </div>
 </footer>
+<script src="../../js/runtime-config.js"></script>
 <script src="../../js/state.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
+  const mobileToggle = document.getElementById("mobile-nav-toggle");
+  const mobileMenu = document.getElementById("mobile-nav-menu");
+  if (mobileToggle && mobileMenu) {
+    mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
+  }
 
   function normalizeAnswer(value) {
     return value.replace(/\s+/g, "").toLowerCase();
   }
+
+  function refreshInventoryBadge() {
+    const el = document.getElementById("challenge-inventory");
+    if (!el) return;
+    const items = (window.PuzzleState && typeof window.PuzzleState.getInventory === "function")
+      ? window.PuzzleState.getInventory()
+      : [];
+    el.textContent = `${items.length} 道具`;
+  }
+
+  document.addEventListener("puzzle-inventory-changed", refreshInventoryBadge);
 
   async function loadChallengeStage() {
     const stageNumber = Number(new URLSearchParams(window.location.search).get("stage")) || 1;
@@ -288,7 +327,7 @@
     document.getElementById("challenge-difficulty").textContent = stage.difficulty;
     document.getElementById("challenge-progress").textContent = stage.progress;
     document.getElementById("challenge-lore").textContent = stage.lore;
-    document.getElementById("challenge-inventory").textContent = stage.inventory;
+    refreshInventoryBadge();
 
     const prevLink = document.getElementById("challenge-prev-link");
     const nextLink = document.getElementById("challenge-next-link");
@@ -321,35 +360,71 @@
     const input = document.getElementById("challenge-answer-input");
     const submitButton = document.getElementById("challenge-submit-btn");
     const feedback = document.getElementById("challenge-feedback");
+    const qrButton = document.getElementById("challenge-qr-btn");
 
-    submitButton.onclick = async () => {
+    async function handleSubmit() {
       const userAnswer = normalizeAnswer(input.value || "");
       if (!userAnswer) {
         feedback.textContent = "請先輸入答案。";
         feedback.className = "text-sm font-headline tracking-wide text-secondary";
         return;
       }
+      if (!window.PuzzleState || typeof window.PuzzleState.submitChallengeAnswer !== "function") {
+        feedback.textContent = "驗證功能未載入完成，請重新整理頁面。";
+        feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "驗證中...";
       let result;
       try {
         result = await window.PuzzleState.submitChallengeAnswer(stageNumber, userAnswer);
       } catch (_error) {
         feedback.textContent = "驗證失敗，請確認後端服務是否啟動。";
         feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        submitButton.disabled = false;
+        submitButton.textContent = "提交驗證";
         return;
       }
 
       if (!result.correct) {
         feedback.textContent = "答案不正確，再檢查一次線索。";
         feedback.className = "text-sm font-headline tracking-wide text-red-700";
+        submitButton.disabled = false;
+        submitButton.textContent = "提交驗證";
         return;
       }
 
       feedback.textContent = "答對了！正在前往下一段故事...";
       feedback.className = "text-sm font-headline tracking-wide text-green-700";
+      submitButton.textContent = "驗證成功";
+      // Keep challenge -> story transition deterministic by current stage,
+      // so replaying old stages won't jump based on global unlocked progress.
+      const nextChapter = Math.min(stageNumber + 1, 7);
       setTimeout(() => {
-        window.location.href = `../story/index.html?chapter=${Math.min(stageNumber + 1, 7)}`;
+        window.location.href = `../story/index.html?chapter=${nextChapter}`;
       }, 700);
+    }
+
+    submitButton.onclick = handleSubmit;
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleSubmit();
+      }
+    });
+
+    qrButton.onclick = () => {
+      window.location.href = `./qr-scanner.html?stage=${stageNumber}`;
     };
+
+    const arButton = document.getElementById("challenge-ar-btn");
+    if (arButton) {
+      arButton.onclick = () => {
+        window.location.href = `./ar-scanner.html?stage=${stageNumber}`;
+      };
+    }
   }
 
   loadChallengeStage().catch(() => {

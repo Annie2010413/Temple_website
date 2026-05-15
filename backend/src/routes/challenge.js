@@ -2,16 +2,18 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const Progress = require("../models/Progress");
+const { submitLimiter } = require("../middleware/limiters");
+const { invalidateProgressCache } = require("../util/progress-cache");
 
 const router = express.Router();
 const MAX_STORY = 7;
 const MAX_CHALLENGE = 5;
 const ANSWERS = {
-  1: "1738",
-  2: "1321",
-  3: "明斷心",
-  4: "3142756",
-  5: "正義昭明"
+  1: "13",
+  2: "靈願善心現",
+  3: "23322333",
+  4: "2",
+  5: "BE6128"
 };
 
 function normalizeAnswer(value) {
@@ -30,7 +32,7 @@ function readOptionalUserId(req) {
   }
 }
 
-router.post("/submit", async (req, res) => {
+router.post("/submit", submitLimiter, async (req, res) => {
   const stage = Number(req.body?.stage);
   const answer = normalizeAnswer(req.body?.answer);
   const expected = normalizeAnswer(ANSWERS[stage]);
@@ -69,6 +71,8 @@ router.post("/submit", async (req, res) => {
     { $set: merged },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  invalidateProgressCache(userId);
 
   return res.json({
     correct: true,

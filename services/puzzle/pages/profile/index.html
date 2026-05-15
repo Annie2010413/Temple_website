@@ -9,7 +9,7 @@
 </head>
 <body class="bg-[#fef9f1] text-[#1d1c17]">
   <header class="sticky top-0 z-50 bg-[#fef9f1] border-b border-[#dcc0be]/40">
-    <nav class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+    <nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
       <div class="text-xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">海清宮</div>
       <div class="hidden md:flex gap-8 items-center text-sm font-bold tracking-widest" style="font-family:'Noto Serif TC',serif;">
         <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
@@ -18,11 +18,23 @@
         <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map">遊戲故事</a>
         <div id="user-nav-slot"></div>
       </div>
+      <button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
+        ☰
+      </button>
     </nav>
+    <div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
+      <div class="flex flex-col gap-3 pt-3 text-sm tracking-wider" style="font-family:'Noto Serif TC',serif;">
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
+        <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
+        <a class="text-[#6c171a] font-bold" href="../profile/index.html">我的進度</a>
+      </div>
+    </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">我的進度</h1>
+  <main class="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-10">
+    <h1 class="text-2xl md:text-3xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">我的進度</h1>
     <p id="profile-user" class="mt-2 text-[#755750]">讀取中...</p>
 
     <section class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -36,18 +48,177 @@
       </div>
     </section>
 
+   
+
     <section class="mt-6 bg-white border border-[#dcc0be] rounded p-5">
       <h2 class="text-lg font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">快速操作</h2>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <a id="continue-story" class="px-4 py-2 bg-[#6c171a] text-white rounded" href="../story/index.html?chapter=1">繼續故事</a>
-        <a id="continue-challenge" class="px-4 py-2 border border-[#6c171a] text-[#6c171a] rounded" href="../challenge/index.html?stage=1">繼續關卡</a>
+      <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3">
+        <a id="continue-story" class="px-4 py-2 text-center bg-[#6c171a] text-white rounded" href="../story/index.html?chapter=1">繼續故事</a>
+        <a id="continue-challenge" class="px-4 py-2 text-center border border-[#6c171a] text-[#6c171a] rounded" href="../challenge/index.html?stage=1">繼續關卡</a>
       </div>
     </section>
   </main>
 
+  <div id="inventory-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div id="inventory-modal-backdrop" class="absolute inset-0 bg-black/65 backdrop-blur-sm"></div>
+    <div id="inventory-modal-card" class="relative w-full max-w-sm bg-[#fef9f1] border border-[#dcc0be] shadow-2xl">
+      <button id="inventory-modal-close" class="absolute top-2 right-2 w-8 h-8 rounded-full text-[#755750] hover:bg-[#f8f3eb] transition-colors" aria-label="關閉" style="font-family:'Noto Serif TC',serif;">✕</button>
+      <div class="px-5 pt-6 pb-5 text-center">
+        <p class="text-[11px] tracking-[0.3em] text-[#755750] mb-3" style="font-family:'Noto Serif TC',serif;">道 具 介 紹</p>
+        <div class="flex justify-center mb-4">
+          <img id="inventory-modal-image" class="w-28 h-28 object-contain bg-white border border-[#dcc0be]/60" alt="道具圖片"/>
+        </div>
+        <p id="inventory-modal-name" class="font-black text-[#6c171a] text-2xl mb-2" style="font-family:'Noto Serif TC',serif;">道具名稱</p>
+        <p id="inventory-modal-desc" class="text-sm text-[#564241] leading-relaxed">道具描述</p>
+        <p id="inventory-modal-time" class="mt-3 text-xs text-[#897270]">獲得於 -</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/runtime-config.js"></script>
   <script src="../../js/state.js"></script>
   <script src="../../js/nav-user.js"></script>
   <script>
+    const mobileToggle = document.getElementById("mobile-nav-toggle");
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.onclick = () => mobileMenu.classList.toggle("hidden");
+    }
+
+    function sanitizeImagePath(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      if (!raw.startsWith("./") && !raw.startsWith("../") && !raw.startsWith("/") && !raw.startsWith("http://") && !raw.startsWith("https://")) return "";
+      const lowered = raw.toLowerCase();
+      if (lowered.startsWith("javascript:") || lowered.startsWith("data:") || lowered.startsWith("vbscript:")) return "";
+      return raw;
+    }
+
+    async function syncInventoryWithCatalog() {
+      try {
+        const response = await fetch("../challenge/ar-targets.json", { cache: "no-cache" });
+        if (!response.ok) return;
+        const data = await response.json();
+        const catalog = Array.isArray(data?.items) ? data.items : [];
+        if (catalog.length === 0) return;
+
+        const byId = new Map(catalog.filter((c) => c && c.id).map((c) => [String(c.id), c]));
+        const stored = (window.PuzzleState?.getInventory?.() || []);
+        let changed = false;
+        const merged = stored.map((entry) => {
+          if (!entry || !entry.id) return entry;
+          const fresh = byId.get(String(entry.id));
+          if (!fresh) return entry;
+          const next = {
+            ...entry,
+            name: String(fresh.name ?? entry.name ?? ""),
+            image: String(fresh.image ?? entry.image ?? ""),
+            description: String(fresh.description ?? entry.description ?? "")
+          };
+          if (next.name !== entry.name || next.image !== entry.image || next.description !== entry.description) {
+            changed = true;
+          }
+          return next;
+        });
+        if (changed) {
+          localStorage.setItem("puzzle_inventory", JSON.stringify(merged));
+        }
+      } catch (_error) {
+        // Catalog not available — keep stored values as-is.
+      }
+    }
+
+    function renderInventory() {
+      const items = (window.PuzzleState?.getInventory?.() || []).filter((i) => i && i.id);
+      const listEl = document.getElementById("inventory-list");
+      const emptyEl = document.getElementById("inventory-empty");
+      const countEl = document.getElementById("inventory-count");
+
+      countEl.textContent = `${items.length} 件道具`;
+      listEl.replaceChildren();
+
+      if (items.length === 0) {
+        emptyEl.classList.remove("hidden");
+        return;
+      }
+      emptyEl.classList.add("hidden");
+
+      items.forEach((item) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "border border-[#dcc0be] rounded p-2 bg-[#f8f3eb] flex flex-col items-center text-center transition-all hover:border-[#6c171a]/60 hover:bg-white hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#6c171a]/30";
+
+        const imgWrap = document.createElement("div");
+        imgWrap.className = "w-full aspect-square bg-white border border-[#dcc0be]/60 flex items-center justify-center overflow-hidden";
+
+        const safeSrc = sanitizeImagePath(item.image);
+        if (safeSrc) {
+          const img = document.createElement("img");
+          img.alt = String(item.name || "道具圖片");
+          img.className = "max-w-full max-h-full object-contain pointer-events-none";
+          img.src = `../challenge/${safeSrc.replace(/^\.\//, "")}`;
+          imgWrap.appendChild(img);
+        } else {
+          const placeholder = document.createElement("span");
+          placeholder.className = "text-[#897270] text-xs";
+          placeholder.textContent = "無圖";
+          imgWrap.appendChild(placeholder);
+        }
+
+        const name = document.createElement("p");
+        name.className = "mt-1.5 text-xs sm:text-sm font-bold text-[#6c171a] leading-tight";
+        name.style.fontFamily = "'Noto Serif TC',serif";
+        name.textContent = String(item.name || "未命名道具");
+
+        card.append(imgWrap, name);
+        card.addEventListener("click", () => openInventoryModal(item));
+        listEl.appendChild(card);
+      });
+    }
+
+    function formatAcquiredAt(timestamp) {
+      const ms = Number(timestamp);
+      if (!Number.isFinite(ms) || ms <= 0) return "獲得於 -";
+      try {
+        const date = new Date(ms);
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        const hh = String(date.getHours()).padStart(2, "0");
+        const mm = String(date.getMinutes()).padStart(2, "0");
+        return `獲得於 ${y}/${m}/${d} ${hh}:${mm}`;
+      } catch (_error) {
+        return "獲得於 -";
+      }
+    }
+
+    function openInventoryModal(item) {
+      const modal = document.getElementById("inventory-modal");
+      const imageEl = document.getElementById("inventory-modal-image");
+      const nameEl = document.getElementById("inventory-modal-name");
+      const descEl = document.getElementById("inventory-modal-desc");
+      const timeEl = document.getElementById("inventory-modal-time");
+
+      const safeSrc = sanitizeImagePath(item.image);
+      imageEl.src = safeSrc ? `../challenge/${safeSrc.replace(/^\.\//, "")}` : "";
+      imageEl.alt = String(item.name || "道具圖片");
+      nameEl.textContent = String(item.name || "未命名道具");
+      descEl.textContent = String(item.description || "暫無描述");
+      timeEl.textContent = formatAcquiredAt(item.acquiredAt);
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeInventoryModal() {
+      document.getElementById("inventory-modal").classList.add("hidden");
+    }
+
+    document.getElementById("inventory-modal-close").onclick = closeInventoryModal;
+    document.getElementById("inventory-modal-backdrop").onclick = closeInventoryModal;
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeInventoryModal();
+    });
+
     (async function initProfile() {
       const auth = window.PuzzleState.getAuth();
       const progress = await window.PuzzleState.getProgress();
@@ -57,11 +228,14 @@
         : "目前為訪客模式，進度僅儲存在本機。";
 
       document.getElementById("profile-user").textContent = userText;
-      document.getElementById("story-progress").textContent = `已解鎖 ${progress.unlockedStory} / 7 章`;
+      document.getElementById("story-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 章`;
       document.getElementById("challenge-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 關`;
 
       document.getElementById("continue-story").href = `../story/index.html?chapter=${Math.max(1, progress.unlockedStory)}`;
       document.getElementById("continue-challenge").href = `../challenge/index.html?stage=${Math.max(1, progress.unlockedChallenge)}`;
+
+      await syncInventoryWithCatalog();
+      renderInventory();
     })();
   </script>
 </body>

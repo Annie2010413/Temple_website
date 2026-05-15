@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "stage": 2,
+      "hash": "f1d4dad0ffff700338552752184e919f87eaa5a98f0833e99c9d0caac80ec32c",
+      "title": "第二關卡謎題",
+      "image": "./assets/qr/challenge1.png"
+    },
+    {
+      "stage": 1,
+      "hash": "297ce13de50a32577c8e7b0644084ba5af1dcdc5a012393227b9d6c5576065ad",
+      "title": "第一關卡謎題",
+      "image": "./assets/qr/challenge2.png"
+    },
+    {
+      "stage": 3,
+      "hash": "d1208bd7a34773accd2977a29761eaa676924713734dce03139b39347c22b55c",
+      "title": "第三關卡謎題",
+      "image": "./assets/qr/challenge3.png"
+    },
+    {
+      "stage": 4,
+      "hash": "d40021a8e705ba1d5a884ef2309c93238b9589f9e52da2b8b7244d3a74fb7a69",
+      "title": "第四關卡謎題",
+      "image": "./assets/qr/challenge4.png"
+    },
+    {
+      "stage": 5,
+      "hash": "575988a02cf35f78ae1e34d6565a017a230af32d3862ba154462c56e8f5d0c0f",
+      "title": "第五關卡謎題",
+      "image": "./assets/qr/challenge5.png"
+    }
+  ]
+}

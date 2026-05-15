@@ -32,12 +32,24 @@
     });
   }
 
+  function resolvePuzzleJsUrl(fileName) {
+    const navScript = document.querySelector('script[src*="nav-user.js"]');
+    if (navScript?.src) {
+      return new URL(fileName, navScript.src).href;
+    }
+    return new URL(`../../js/${fileName}`, window.location.href).href;
+  }
+
   async function ensureGoogleReady() {
     if (googleReadyPromise) return googleReadyPromise;
 
     googleReadyPromise = (async () => {
       if (!window.PUZZLE_GOOGLE_CLIENT_ID) {
-        await loadScript("../../js/auth-config.js");
+        try {
+          await loadScript(resolvePuzzleJsUrl("auth-config.js"));
+        } catch (_error) {
+          // auth-config.js is optional when runtime-config.js sets the client id.
+        }
       }
       if (!window.google?.accounts?.id) {
         await loadScript("https://accounts.google.com/gsi/client");

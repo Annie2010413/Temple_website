@@ -1,7 +1,42 @@
 (() => {
   const AUTH_KEY = "puzzle_auth";
   const GUEST_PROGRESS_KEY = "puzzle_guest_progress";
+  const INVENTORY_KEY = "puzzle_inventory";
   const API_BASE = window.PUZZLE_API_BASE || "http://localhost:5501";
+
+  function getInventory() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(INVENTORY_KEY) || "[]");
+      return Array.isArray(raw) ? raw : [];
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  function setInventory(items) {
+    localStorage.setItem(INVENTORY_KEY, JSON.stringify(Array.isArray(items) ? items : []));
+  }
+
+  function addInventoryItem(item) {
+    if (!item || !item.id) return getInventory();
+    const items = getInventory();
+    if (items.find((existing) => existing.id === item.id)) return items;
+    const next = items.concat([{
+      id: String(item.id),
+      name: String(item.name || "未命名道具"),
+      image: String(item.image || ""),
+      description: String(item.description || ""),
+      acquiredAt: Date.now()
+    }]);
+    setInventory(next);
+    document.dispatchEvent(new CustomEvent("puzzle-inventory-changed", { detail: { items: next } }));
+    return next;
+  }
+
+  function clearInventory() {
+    setInventory([]);
+    document.dispatchEvent(new CustomEvent("puzzle-inventory-changed", { detail: { items: [] } }));
+  }
 
   function sanitizeProgress(raw) {
     return {
@@ -65,7 +100,14 @@
     const auth = getAuth();
     if (!auth?.token) return getGuestProgress();
     try {
-      return sanitizeProgress(await getCloudProgress());
+      const cloud = sanitizeProgress(await getCloudProgress());
+      const local = getGuestProgress();
+      const merged = {
+        unlockedStory: Math.max(cloud.unlockedStory, local.unlockedStory),
+        unlockedChallenge: Math.max(cloud.unlockedChallenge, local.unlockedChallenge)
+      };
+      setGuestProgress(merged);
+      return merged;
     } catch (error) {
       if (String(error?.message || "").includes("401")) {
         clearAuth();
@@ -79,8 +121,14 @@
     const auth = getAuth();
     if (auth?.token) {
       try {
-        const saved = await putCloudProgress(sanitizeProgress(next));
-        return sanitizeProgress(saved);
+        const saved = sanitizeProgress(await putCloudProgress(sanitizeProgress(next)));
+        const local = getGuestProgress();
+        const merged = {
+          unlockedStory: Math.max(saved.unlockedStory, local.unlockedStory),
+          unlockedChallenge: Math.max(saved.unlockedChallenge, local.unlockedChallenge)
+        };
+        setGuestProgress(merged);
+        return merged;
       } catch (error) {
         if (String(error?.message || "").includes("401")) {
           clearAuth();
@@ -121,18 +169,28 @@
       unlockedStory: data.unlockedStory,
       unlockedChallenge: data.unlockedChallenge
     });
+    const expectedProgress = sanitizeProgress({
+      unlockedStory: normalizedStage + 1,
+      unlockedChallenge: normalizedStage + 1
+    });
 
     if (!isLoggedIn()) {
       const current = getGuestProgress();
       const localMerged = {
-        unlockedStory: Math.max(current.unlockedStory, merged.unlockedStory),
-        unlockedChallenge: Math.max(current.unlockedChallenge, merged.unlockedChallenge)
+        unlockedStory: Math.max(current.unlockedStory, merged.unlockedStory, expectedProgress.unlockedStory),
+        unlockedChallenge: Math.max(current.unlockedChallenge, merged.unlockedChallenge, expectedProgress.unlockedChallenge)
       };
       setGuestProgress(localMerged);
       return { correct: true, ...localMerged };
     }
 
-    return { correct: true, ...merged };
+    const cloudMerged = {
+      unlockedStory: Math.max(merged.unlockedStory, expectedProgress.unlockedStory),
+      unlockedChallenge: Math.max(merged.unlockedChallenge, expectedProgress.unlockedChallenge)
+    };
+    setGuestProgress(cloudMerged);
+    await updateProgress(cloudMerged);
+    return { correct: true, ...cloudMerged };
   }
 
   function isLoggedIn() {
@@ -173,6 +231,9 @@
     signInWithGoogleIdToken,
     signOut,
     syncProgressAfterSignIn,
-    getLocalProgress: getGuestProgress
+    getLocalProgress: getGuestProgress,
+    getInventory,
+    addInventoryItem,
+    clearInventory
   };
 })();

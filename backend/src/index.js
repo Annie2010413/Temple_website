@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const config = require("./config");
 const { connectDb } = require("./db");
+const { generalLimiter } = require("./middleware/limiters");
 const authRoutes = require("./routes/auth");
 const progressRoutes = require("./routes/progress");
 const challengeRoutes = require("./routes/challenge");
@@ -10,10 +11,14 @@ async function bootstrap() {
   await connectDb();
 
   const app = express();
+  app.set("trust proxy", 1);
+  app.disable("x-powered-by");
   app.use(cors({ origin: config.corsOrigin === "*" ? true : config.corsOrigin }));
-  app.use(express.json());
+  app.use(express.json({ limit: "32kb" }));
+  app.use("/api/", generalLimiter);
 
   app.get("/api/health", (_req, res) => {
+    res.set("Cache-Control", "public, max-age=10");
     res.json({ ok: true, env: config.nodeEnv });
   });
 
