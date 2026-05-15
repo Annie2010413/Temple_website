@@ -242,8 +242,6 @@
     const guestBtn = document.getElementById("guest-start-btn");
     const googleContainer = document.getElementById("google-signin-container");
     const logoutBtn = document.getElementById("logout-btn");
-    const googleClientId = window.PUZZLE_GOOGLE_CLIENT_ID || "";
-
     function refreshAuthStatus() {
       const auth = window.PuzzleState.getAuth();
       if (auth?.user?.name) {
@@ -264,8 +262,9 @@
         setTimeout(setupGoogleButton, 300);
         return;
       }
+      const googleClientId = window.PUZZLE_GOOGLE_CLIENT_ID || "";
       if (!googleClientId) {
-        authStatus.textContent = "請先在 services/puzzle/js/auth-config.js 設定 Google Client ID。";
+        authStatus.textContent = "請在 services/puzzle/js/runtime-config.js 設定 GOOGLE_CLIENT_ID。";
         return;
       }
 
