@@ -310,8 +310,13 @@ function clearErr(id) {
   document.getElementById('err-' + id).style.display = 'none';
 }
 
-// 部署 Apps Script 後，把網頁應用程式網址貼到這裡
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSMaveZNvX4oGhWQsLFdfUnUjmia_earlWG9rVfzpxnVaS0HuiV0fFGvnMLIrHKtnBxA/exec';
+// 後端 API（不再直接打 Apps Script）
+// 本機開發：http://localhost:5502
+// 正式：    Render 部署完成後，把下面的網址改成實際的 service URL
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:5502'
+  : 'https://temple-services-backend.onrender.com'; // ⚠️ 部署後改成你的 Render 網址
+const SCRIPT_URL = API_BASE + '/api/light/apply';
 
 document.getElementById('light-form').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -344,14 +349,17 @@ document.getElementById('light-form').addEventListener('submit', async function(
   errBox.style.display = 'none';
 
   try {
-    await fetch(SCRIPT_URL, {
+    const resp = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         lamp, name, birthday, address, phone, email, amount, transferCode: code
       })
     });
+    const result = await resp.json().catch(() => ({ success: false }));
+    if (!result.success) {
+      throw new Error(result.error || '送出失敗');
+    }
 
     document.getElementById('light-form').style.display = 'none';
     document.getElementById('success-box').style.display = 'block';
