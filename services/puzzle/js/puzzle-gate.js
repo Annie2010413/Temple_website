@@ -30,7 +30,7 @@
   }
 
   function resolveChallengeStage(requested, unlockedChallenge) {
-    const unlocked = Math.max(1, Number(unlockedChallenge) || 1);
+    const unlocked = Math.min(5, Math.max(1, Number(unlockedChallenge) || 1));
     const allowed = Math.min(Math.max(1, requested), unlocked);
     return { allowed, denied: requested !== allowed };
   }
