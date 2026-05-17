@@ -32,12 +32,24 @@
     });
   }
 
+  function resolvePuzzleJsUrl(fileName) {
+    const navScript = document.querySelector('script[src*="nav-user.js"]');
+    if (navScript?.src) {
+      return new URL(fileName, navScript.src).href;
+    }
+    return new URL(`../../js/${fileName}`, window.location.href).href;
+  }
+
   async function ensureGoogleReady() {
     if (googleReadyPromise) return googleReadyPromise;
 
     googleReadyPromise = (async () => {
       if (!window.PUZZLE_GOOGLE_CLIENT_ID) {
-        await loadScript("../../js/auth-config.js");
+        try {
+          await loadScript(resolvePuzzleJsUrl("auth-config.js"));
+        } catch (_error) {
+          // auth-config.js is optional when runtime-config.js sets the client id.
+        }
       }
       if (!window.google?.accounts?.id) {
         await loadScript("https://accounts.google.com/gsi/client");
@@ -59,6 +71,7 @@
     const initial = getInitial(user.name, user.email);
 
     const wrapper = document.createElement("div");
+    wrapper.className = "puzzle-nav__user";
     wrapper.style.position = "relative";
     wrapper.style.marginLeft = "14px";
     wrapper.style.display = "inline-flex";
@@ -239,10 +252,12 @@
 
   function mountUserMenu() {
     if (!window.PuzzleState) return;
-    const slot = document.getElementById("user-nav-slot");
-    if (!slot) return;
-    slot.innerHTML = "";
-    slot.appendChild(createUserMenu());
+    ["user-nav-slot", "user-nav-slot-mobile"].forEach((slotId) => {
+      const slot = document.getElementById(slotId);
+      if (!slot) return;
+      slot.innerHTML = "";
+      slot.appendChild(createUserMenu());
+    });
   }
 
   if (document.readyState === "loading") {

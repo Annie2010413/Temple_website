@@ -1,16 +1,10 @@
 const express = require("express");
 const { authMiddleware } = require("../middleware/auth");
 const { progressReadLimiter, progressWriteLimiter } = require("../middleware/limiters");
-const { progressCache, invalidateProgressCache } = require("../util/progress-cache");
+const { progressCache } = require("../util/progress-cache");
 const Progress = require("../models/Progress");
 
 const router = express.Router();
-const MAX_STORY = 7;
-const MAX_CHALLENGE = 5;
-
-function clampProgress(value, min, max) {
-  return Math.min(max, Math.max(min, Number(value) || min));
-}
 
 router.use(authMiddleware);
 
@@ -45,29 +39,9 @@ router.get("/", progressReadLimiter, async (req, res) => {
   return res.json(payload);
 });
 
-router.put("/", progressWriteLimiter, async (req, res) => {
-  const userId = String(req.user.userId);
-  const nextStory = clampProgress(req.body?.unlockedStory, 1, MAX_STORY);
-  const nextChallenge = clampProgress(req.body?.unlockedChallenge, 1, MAX_CHALLENGE);
-
-  const existing = await Progress.findOne({ userId });
-  const merged = {
-    unlockedStory: clampProgress(Math.max(existing?.unlockedStory || 1, nextStory), 1, MAX_STORY),
-    unlockedChallenge: clampProgress(Math.max(existing?.unlockedChallenge || 1, nextChallenge), 1, MAX_CHALLENGE)
-  };
-
-  const progress = await Progress.findOneAndUpdate(
-    { userId },
-    { $set: merged },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  );
-
-  invalidateProgressCache(userId);
-
-  return res.json({
-    unlockedStory: progress.unlockedStory,
-    unlockedChallenge: progress.unlockedChallenge,
-    updatedAt: progress.updatedAt
+router.put("/", progressWriteLimiter, async (_req, res) => {
+  return res.status(403).json({
+    error: "Direct progress updates are disabled. Complete challenges to advance."
   });
 });
 

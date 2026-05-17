@@ -118,12 +118,13 @@
     100% { transform: translateY(-14px) scale(1); }
 }
 </style>
+<link href="../../css/puzzle-nav.css" rel="stylesheet"/>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-<header class="bg-[#fef9f1] dark:bg-[#1d1c17] border-b border-[#dcc0be]/15 sticky top-0 z-50">
+<header class="puzzle-nav bg-[#f2ede5] dark:bg-[#32302b] border-b border-[#dcc0be]/50 shadow-sm sticky top-0 z-50">
 <div class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
-<div class="text-xl font-bold text-[#6c171a] dark:text-[#fef9f1] font-headline tracking-widest">海清宮</div>
-<nav class="hidden md:flex gap-8 items-center font-headline font-bold tracking-widest text-sm">
+<div class="puzzle-nav__brand text-[#6c171a] dark:text-[#fef9f1]">海清宮</div>
+<nav class="puzzle-nav__links hidden md:flex gap-8 items-center">
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
@@ -134,19 +135,20 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
-<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
-<div class="flex flex-col gap-3 pt-3 font-headline text-sm tracking-wider">
+<div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/40 bg-[#f2ede5] dark:bg-[#32302b]">
+<div class="puzzle-nav__menu flex flex-col gap-3 pt-3">
 <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
 <a class="text-[#6c171a] font-bold" href="../story_map/index.html">遊戲故事</a>
 <a class="text-[#755750] hover:text-[#6c171a]" href="../profile/index.html">我的進度</a>
+<div id="user-nav-slot-mobile" class="pt-3 mt-1 border-t border-[#dcc0be]/30"></div>
 </div>
 </div>
 </header>
 <main id="story-stage" class="relative overflow-hidden flex flex-col items-center">
 <div class="absolute inset-0 z-0 pointer-events-none opacity-20">
-<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80"/>
+<img class="w-full h-full object-cover grayscale sepia" data-alt="atmospheric stone staircase inside an old chinese temple with lantern glow and mist, cinematic perspective looking upward" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1600&q=80" loading="lazy" decoding="async"/>
 </div>
 <div class="cinematic-layer"></div>
 <section class="story-motion-track relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 md:py-14 flex flex-col items-center">
@@ -167,7 +169,7 @@
 
                     </p>
 <div class="py-6 flex justify-center hidden">
-<img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
+<img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" fetchpriority="high" decoding="async" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
 </div>
 <p id="story-paragraph-3">
 
@@ -179,7 +181,7 @@
 
                     </p>
 </article>
-<div class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4">
+<div id="story-nav" class="mt-8 md:mt-10 pt-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 md:gap-4 opacity-0 pointer-events-none transition-opacity duration-500">
 <a id="story-prev-link" href="./index.html?chapter=1" class="group relative inline-flex justify-center items-center gap-3 border border-primary text-primary px-5 md:px-7 py-3 rounded-sm font-headline font-bold text-sm md:text-base tracking-[0.12em] md:tracking-[0.15em] hover:bg-primary/10 transition-all">
 <span class="material-symbols-outlined transition-transform group-hover:-translate-x-2" data-icon="arrow_left_alt">arrow_left_alt</span>
 <span id="story-prev-text">上一章</span>
@@ -216,6 +218,7 @@
 </footer>
 <script src="../../js/runtime-config.js"></script>
 <script src="../../js/state.js"></script>
+<script src="../../js/puzzle-gate.js"></script>
 <script src="../../js/nav-user.js"></script>
 <script>
   const mobileToggle = document.getElementById("mobile-nav-toggle");
@@ -232,6 +235,39 @@
       const delta = rect.bottom - targetBottom;
       window.scrollBy({ top: delta, behavior: "auto" });
     }
+  }
+
+  const STORY_SEEN_KEY = "puzzle_story_seen_chapters";
+
+  function getSeenChapters() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORY_SEEN_KEY) || "[]");
+      if (!Array.isArray(raw)) return [];
+      return raw.map((n) => Number(n)).filter((n) => Number.isInteger(n));
+    } catch (_error) {
+      return [];
+    }
+  }
+
+  function hasSeenChapter(chapter) {
+    return getSeenChapters().includes(Number(chapter));
+  }
+
+  function markChapterSeen(chapter) {
+    const seen = new Set(getSeenChapters());
+    seen.add(Number(chapter));
+    try {
+      localStorage.setItem(STORY_SEEN_KEY, JSON.stringify(Array.from(seen)));
+    } catch (_error) {
+      // Ignore storage errors (e.g. private mode).
+    }
+  }
+
+  function revealStoryNav() {
+    const navEl = document.getElementById("story-nav");
+    if (!navEl) return;
+    navEl.classList.remove("opacity-0", "pointer-events-none");
+    navEl.classList.add("opacity-100");
   }
 
   function typeText(element, text, speed = 35, onTick = null) {
@@ -252,9 +288,10 @@
     });
   }
 
-  async function typeStoryContent(chapter) {
+  async function typeStoryContent(chapter, options = {}) {
+    const { skipTyping = false } = options;
     const stageEl = document.getElementById("story-stage");
-    if (stageEl) {
+    if (stageEl && !skipTyping) {
       stageEl.classList.remove("story-cinematic-on");
       void stageEl.offsetWidth;
       stageEl.classList.add("story-cinematic-on");
@@ -267,6 +304,14 @@
       { id: "story-paragraph-4", text: chapter.p4, speed: 55 },
       { id: "story-highlight", text: chapter.highlight, speed: 62 }
     ];
+
+    if (skipTyping) {
+      for (const item of storyElements) {
+        const el = document.getElementById(item.id);
+        if (el) el.textContent = item.text || "";
+      }
+      return;
+    }
 
     for (const item of storyElements) {
       const el = document.getElementById(item.id);
@@ -294,20 +339,20 @@
   async function loadStoryChapter() {
     clearStoryContent();
     const chapterNumber = Number(new URLSearchParams(window.location.search).get("chapter")) || 1;
+    const access = window.PuzzleGate
+      ? await window.PuzzleGate.ensureStoryChapter(chapterNumber, "./index.html")
+      : { ok: true, progress: await window.PuzzleState.getProgress() };
+    if (!access.ok) return;
+
     const response = await fetch("./chapters.json");
     if (!response.ok) {
       throw new Error("Failed to load chapters.json");
     }
     const chapters = await response.json();
-    const progress = await window.PuzzleState.getProgress();
-    const allowedChapter = Math.min(Math.max(chapterNumber, 1), Math.max(progress.unlockedStory, 1));
-    const chapter = chapters[String(allowedChapter)] || chapters["1"];
+    const progress = access.progress;
+    const chapter = chapters[String(chapterNumber)] || chapters["1"];
     const maxChapter = 5;
-
-    if (allowedChapter !== chapterNumber) {
-      window.location.replace(`./index.html?chapter=${allowedChapter}`);
-      return;
-    }
+    const allowedChapter = chapterNumber;
 
     document.getElementById("chapter-title").textContent = chapter.title;
     document.getElementById("chapter-badge").textContent = chapter.badge;
@@ -322,6 +367,7 @@
       prevLink.setAttribute("aria-hidden", "true");
       prevLink.setAttribute("tabindex", "-1");
       prevLink.onclick = null;
+      nextLink.classList.add("md:ml-auto");
     } else {
       prevLink.style.display = "inline-flex";
       prevLink.style.visibility = "visible";
@@ -330,6 +376,7 @@
       prevLink.href = `./index.html?chapter=${allowedChapter - 1}`;
       prevText.textContent = `返回上一章（第 ${allowedChapter - 1} 章）`;
       prevLink.onclick = null;
+      nextLink.classList.remove("md:ml-auto");
     }
 
     if (allowedChapter <= 5) {
@@ -337,13 +384,11 @@
       nextText.textContent = `進入挑戰：第 ${allowedChapter} 關`;
       nextLink.onclick = async (event) => {
         event.preventDefault();
-        try {
+        if (!window.PuzzleState.isLoggedIn()) {
           await window.PuzzleState.updateProgress({
             unlockedStory: allowedChapter,
             unlockedChallenge: allowedChapter
           });
-        } catch (_error) {
-          // Ignore and continue navigation to avoid blocking user flow.
         }
         window.location.href = `../challenge/index.html?stage=${allowedChapter}`;
       };
@@ -362,12 +407,17 @@
     document.getElementById("mission-text").textContent = chapter.mission;
     document.getElementById("tools-text").textContent = chapter.tools;
     document.getElementById("location-text").textContent = chapter.location;
-    await typeStoryContent(chapter);
+
+    const skipTyping = hasSeenChapter(allowedChapter);
+    await typeStoryContent(chapter, { skipTyping });
+    markChapterSeen(allowedChapter);
+    revealStoryNav();
   }
 
   loadStoryChapter().catch(() => {
     document.getElementById("chapter-title").textContent = "故事載入失敗";
     document.getElementById("story-highlight").textContent = "請使用本機伺服器開啟頁面（例如 Live Server），不要直接以 file:// 開啟。";
+    revealStoryNav();
   });
 </script>
 </body></html>

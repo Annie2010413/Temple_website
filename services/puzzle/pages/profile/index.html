@@ -6,12 +6,13 @@
   <title>我的進度｜海清宮實境解謎</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="../../css/puzzle-nav.css" rel="stylesheet" />
 </head>
 <body class="bg-[#fef9f1] text-[#1d1c17]">
-  <header class="sticky top-0 z-50 bg-[#fef9f1] border-b border-[#dcc0be]/40">
+  <header class="puzzle-nav sticky top-0 z-50 bg-[#f2ede5] border-b border-[#dcc0be]/50 shadow-sm">
     <nav class="flex justify-between items-center w-full px-4 md:px-6 py-3 md:py-4 max-w-7xl mx-auto">
-      <div class="text-xl font-bold text-[#6c171a]" style="font-family:'Noto Serif TC',serif;">海清宮</div>
-      <div class="hidden md:flex gap-8 items-center text-sm font-bold tracking-widest" style="font-family:'Noto Serif TC',serif;">
+      <div class="puzzle-nav__brand text-[#6c171a]">海清宮</div>
+      <div class="puzzle-nav__links hidden md:flex gap-8 items-center">
         <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
         <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
         <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map">遊戲關卡</a>
@@ -22,13 +23,14 @@
         ☰
       </button>
     </nav>
-    <div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/30 bg-[#fef9f1]">
-      <div class="flex flex-col gap-3 pt-3 text-sm tracking-wider" style="font-family:'Noto Serif TC',serif;">
+    <div id="mobile-nav-menu" class="hidden md:hidden px-4 pb-4 border-t border-[#dcc0be]/40 bg-[#f2ede5]">
+      <div class="puzzle-nav__menu flex flex-col gap-3 pt-3">
         <a class="text-[#755750] hover:text-[#6c171a]" href="../../../../index.html">海清宮官網</a>
         <a class="text-[#755750] hover:text-[#6c171a]" href="../homepage/index.html">遊戲介紹</a>
         <a class="text-[#755750] hover:text-[#6c171a]" href="../challenge_map/index.html">遊戲關卡</a>
         <a class="text-[#755750] hover:text-[#6c171a]" href="../story_map/index.html">遊戲故事</a>
         <a class="text-[#6c171a] font-bold" href="../profile/index.html">我的進度</a>
+        <div id="user-nav-slot-mobile" class="pt-3 mt-1 border-t border-[#dcc0be]/30"></div>
       </div>
     </div>
   </header>
@@ -66,7 +68,7 @@
       <div class="px-5 pt-6 pb-5 text-center">
         <p class="text-[11px] tracking-[0.3em] text-[#755750] mb-3" style="font-family:'Noto Serif TC',serif;">道 具 介 紹</p>
         <div class="flex justify-center mb-4">
-          <img id="inventory-modal-image" class="w-28 h-28 object-contain bg-white border border-[#dcc0be]/60" alt="道具圖片"/>
+          <img id="inventory-modal-image" class="w-28 h-28 object-contain bg-white border border-[#dcc0be]/60" alt="道具圖片" loading="lazy" decoding="async"/>
         </div>
         <p id="inventory-modal-name" class="font-black text-[#6c171a] text-2xl mb-2" style="font-family:'Noto Serif TC',serif;">道具名稱</p>
         <p id="inventory-modal-desc" class="text-sm text-[#564241] leading-relaxed">道具描述</p>
