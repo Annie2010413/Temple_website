@@ -235,7 +235,8 @@
       document.getElementById("challenge-progress").textContent = `已解鎖 ${progress.unlockedChallenge} / 5 關`;
 
       document.getElementById("continue-story").href = `../story/index.html?chapter=${Math.max(1, progress.unlockedStory)}`;
-      document.getElementById("continue-challenge").href = `../challenge/index.html?stage=${Math.max(1, progress.unlockedChallenge)}`;
+      const challengeStage = Math.min(5, Math.max(1, progress.unlockedChallenge));
+      document.getElementById("continue-challenge").href = `../challenge/index.html?stage=${challengeStage}`;
 
       await syncInventoryWithCatalog();
       renderInventory();
