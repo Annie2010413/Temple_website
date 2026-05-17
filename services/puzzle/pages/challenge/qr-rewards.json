@@ -2,7 +2,7 @@
   "items": [
     {
       "stage": 4,
-      "hash": "f1d4dad0ffff700338552752184e919f87eaa5a98f0833e99c9d0caac80ec32c",
+      "hash": "d40021a8e705ba1d5a884ef2309c93238b9589f9e52da2b8b7244d3a74fb7a69",
       "title": "第四關卡謎題",
       "image": "./assets/qr/challenge1.png"
     },
@@ -20,7 +20,7 @@
     },
     {
       "stage": 2,
-      "hash": "d40021a8e705ba1d5a884ef2309c93238b9589f9e52da2b8b7244d3a74fb7a69",
+      "hash": "f1d4dad0ffff700338552752184e919f87eaa5a98f0833e99c9d0caac80ec32c",
       "title": "第二關卡謎題",
       "image": "./assets/qr/challenge4.png"
     },

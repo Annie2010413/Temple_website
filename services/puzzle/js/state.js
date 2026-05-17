@@ -3,6 +3,8 @@
   const GUEST_PROGRESS_KEY = "puzzle_guest_progress";
   const INVENTORY_KEY = "puzzle_inventory";
   const API_BASE = window.PUZZLE_API_BASE || "http://localhost:5501";
+  const MAX_STORY = 6;
+  const MAX_CHALLENGE = 5;
 
   function getInventory() {
     try {
@@ -40,8 +42,8 @@
 
   function sanitizeProgress(raw) {
     return {
-      unlockedStory: Math.max(1, Number(raw?.unlockedStory) || 1),
-      unlockedChallenge: Math.max(1, Number(raw?.unlockedChallenge) || 1)
+      unlockedStory: Math.min(MAX_STORY, Math.max(1, Number(raw?.unlockedStory) || 1)),
+      unlockedChallenge: Math.min(MAX_CHALLENGE, Math.max(1, Number(raw?.unlockedChallenge) || 1))
     };
   }
 
