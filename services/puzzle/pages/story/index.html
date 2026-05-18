@@ -163,19 +163,19 @@
 <span id="chapter-badge">壹</span>
                 </div>
 <article class="space-y-6 md:space-y-8 text-on-surface leading-loose text-base sm:text-lg md:text-xl font-headline tracking-wide">
-<p id="story-paragraph-1" class="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
+<p id="story-paragraph-1" class="whitespace-pre-line first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
 
                     </p>
-<p id="story-paragraph-2">
+<p id="story-paragraph-2" class="whitespace-pre-line">
 
                     </p>
 <div class="py-6 flex justify-center hidden">
 <img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" fetchpriority="high" decoding="async" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
 </div>
-<p id="story-paragraph-3">
+<p id="story-paragraph-3" class="whitespace-pre-line">
 
                     </p>
-<p id="story-paragraph-4">
+<p id="story-paragraph-4" class="whitespace-pre-line">
 
                     </p>
 <p id="story-highlight" class="text-on-primary-fixed-variant font-bold italic border-l-4 border-primary/20 pl-6">
@@ -271,22 +271,27 @@
     navEl.classList.add("opacity-100");
   }
 
-  function typeText(element, text, speed = 35, onTick = null) {
-    return new Promise((resolve) => {
-      element.textContent = "";
-      let index = 0;
+  function normalizeStoryText(text) {
+    return String(text || "").replace(/<br\s*\/?>/gi, "\n");
+  }
 
-      const timer = setInterval(() => {
-        element.textContent += text[index];
-        index += 1;
-        if (typeof onTick === "function") onTick();
+  function setParagraphContent(element, text) {
+    element.textContent = normalizeStoryText(text);
+  }
 
-        if (index >= text.length) {
-          clearInterval(timer);
-          resolve();
-        }
-      }, speed);
-    });
+  function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(element, text, speed = 35, onTick = null) {
+    const value = normalizeStoryText(text);
+    element.textContent = "";
+
+    for (let i = 0; i < value.length; i += 1) {
+      element.textContent += value[i];
+      if (typeof onTick === "function") onTick();
+      await wait(speed);
+    }
   }
 
   async function typeStoryContent(chapter, options = {}) {
@@ -309,7 +314,7 @@
     if (skipTyping) {
       for (const item of storyElements) {
         const el = document.getElementById(item.id);
-        if (el) el.textContent = item.text || "";
+        if (el) setParagraphContent(el, item.text || "");
       }
       return;
     }
