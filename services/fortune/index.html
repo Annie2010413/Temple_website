@@ -660,6 +660,7 @@ jbThrowBtn.addEventListener('click', () => {
     closeJiaobei();
     phaseAsk.style.display = 'none';
     phaseTube.style.display = '';
+    drawBtn.disabled = false;
     jbMode = 'throw';
   } else if (jbMode === 'view') {
     // confirm 階段聖筊 → 開示籤詩
