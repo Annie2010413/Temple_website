@@ -162,7 +162,7 @@
      position: relative; 
      height: 600px; /* 稍微增加高度，展現廟宇氣勢 */
      /* 替換下方 url 中的圖片路徑，例如 'images/temple-main.jpg' */
-     background: url('包公廟.png') no-repeat center center;
+     background: url('web_picture/包公廟.png') no-repeat center center;
      background-size: cover;
      background-attachment: fixed; /* 滾動時有視差效果，若不喜歡可刪除 */
      display: flex; 
@@ -533,4 +533,35 @@
      border-radius: 8px;
    }
 
+   .deity-img-wrap {
+    width: 100%;
+    height: 300px;
+    margin: 0 auto 18px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    overflow: hidden;
+  }
+  
+  .deity-img {
+    max-width: 85%;
+    max-height: 95%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  
+    display: block;
+    margin: 0 auto;
+  
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.18));
+  }
+  
+  /* 單獨調整三太子，不會擠到旁邊 */
+  .deity-img-santazi {
+    max-width: 115%;
+    max-height: 115%;
+    transform: none;
+  }
    
