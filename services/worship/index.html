@@ -462,7 +462,7 @@
         <button class="map-hotspot" style="left:68%;top:45%;" onclick="showDeity('songzi')"></button>    <!-- 送子觀音 -->
         <button class="map-hotspot" style="left:18%;top:75%;" onclick="showDeity('santaizi')"></button>  <!-- 三太子 -->
         <button class="map-hotspot" style="left:50%;top:85%;" onclick="showDeity('tiangong')"></button>   <!-- 天公 -->
-        <button class="map-hotspot" style="left:84%;top:75%;" onclick="showDeity('dizang')"></button>    <!-- 地藏王菩薩 -->
+        <button class="map-hotspot" style="left:84%;top:75%;" onclick="showDeity('dizang1f')"></button>   <!-- 地藏王菩薩（一樓） -->
       </div>
     </div>
 
@@ -472,7 +472,7 @@
         <img src="f2.png" alt="二樓神殿地圖">
         <button class="map-hotspot" style="left:49.5%;top:32%;" onclick="showDeity('yuhuang')"></button>   <!-- 玉皇大帝 -->
         <button class="map-hotspot" style="left:26%;top:50%;" onclick="showDeity('tianguan')"></button>  <!-- 天官財神 -->
-        <button class="map-hotspot" style="left:71%;top:50%;" onclick="showDeity('jinmu')"></button>     <!-- 金母娘娘 -->
+        <button class="map-hotspot" style="left:71%;top:50%;" onclick="showDeity('jinmu')"></button>     <!-- 王母娘娘 -->
         <button class="map-hotspot" style="left:50%;top:72%;" onclick="showDeity('xuantian')"></button>  <!-- 玄天上帝 -->
       </div>
     </div>
@@ -482,7 +482,7 @@
       <div class="map-1f-wrap">
         <img src="f3.png" alt="三樓佛殿地圖">
         <button class="map-hotspot" style="left:50%;top:29%;" onclick="showDeity('shijia')"></button>    <!-- 釋迦牟尼佛 -->
-        <button class="map-hotspot" style="left:27%;top:50%;" onclick="showDeity('dizang')"></button>    <!-- 地藏王菩薩 -->
+        <button class="map-hotspot" style="left:27%;top:50%;" onclick="showDeity('dizang3f')"></button>   <!-- 地藏王菩薩（三樓） -->
         <button class="map-hotspot" style="left:73%;top:50%;" onclick="showDeity('guanyin')"></button>   <!-- 觀世音菩薩 -->
         <button class="map-hotspot" style="left:51%;top:71%;" onclick="showDeity('guansheng')"></button> <!-- 關聖帝君 -->
       </div>
@@ -501,7 +501,6 @@
     </div>
     <img class="modal-photo" id="modal-photo" src="" alt="">
     <div class="modal-body">
-      <div class="modal-subtitle" id="modal-subtitle"></div>
       <div class="modal-desc" id="modal-desc"></div>
     </div>
     <div class="modal-actions">
@@ -594,25 +593,26 @@
 <script>
 /* ══════════ 神明資料庫 ══════════ */
 const DEITIES = {
-  baogong:   { name: '包公祖', subtitle: '包青天・閻羅天子', photo: '../../photos/包公.jpg', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。' },
-  songzi:    { name: '送子觀音', subtitle: '大慈大悲觀世音菩薩化身', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
-  caishen:   { name: '財神爺', subtitle: '武財神', photo: '../../photos/包公.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
-  huye:      { name: '虎爺', subtitle: '下壇將軍', photo: '../../photos/虎爺.jpg', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
-  tiangong:  { name: '天公', subtitle: '天公爐', photo: '../../photos/天公.jpg', desc: '天公即玉皇大帝，為道教最高神祇。一樓正殿前方設有天公爐，信眾入廟先敬天公，祈求國泰民安、風調雨順、闔家平安。' },
-  yuhuang:   { name: '玉皇大帝', subtitle: '昊天金闕玉皇上帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。二樓主祀玉皇大帝金身，信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
-  tianguan:  { name: '天官財神', subtitle: '天官賜福', photo: '../../photos/天官財神.jpg', desc: '天官財神衣著皆為手工刺繡，做工精美。天官掌管賜福，信眾祈求財運亨通、福星高照。' },
-  xuantian:  { name: '玄天上帝', subtitle: '北極玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
-  jinmu:     { name: '金母娘娘', subtitle: '瑤池金母・王母娘娘', photo: '../../photos/玄天上帝.jpg', desc: '金母娘娘即瑤池金母（王母娘娘），為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
-  santaizi:  { name: '三太子', subtitle: '中壇元帥・哪吒太子', photo: '../../photos/三太子.jpg', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。' },
-  shijia:    { name: '釋迦牟尼佛', subtitle: '佛祖・世尊', photo: '../../photos/釋迦牟尼.jpg', desc: '佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。' },
-  guanyin:   { name: '觀世音菩薩', subtitle: '大慈大悲救苦救難觀世音菩薩', photo: '../../photos/觀世音菩薩.jpg', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。' },
-  dizang:    { name: '地藏王菩薩', subtitle: '大願地藏・幽冥教主', photo: '../../photos/地藏王菩薩.jpg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。' },
-  guansheng: { name: '關聖帝君', subtitle: '關公・武聖', photo: '../../photos/關聖帝君.jpg', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。' }
+  baogong:   { name: '包公祖', photo: '../../photos/包公.jpg', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。' },
+  songzi:    { name: '送子觀音', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
+  caishen:   { name: '財神爺', photo: '../../photos/財神爺.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
+  huye:      { name: '虎爺', photo: '../../photos/虎爺.jpg', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
+  tiangong:  { name: '天公', photo: '../../photos/天公.jpg', desc: '天公即玉皇大帝，為道教最高神祇。一樓正殿前方設有天公爐，信眾入廟先敬天公，祈求國泰民安、風調雨順、闔家平安。' },
+  yuhuang:   { name: '玉皇大帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。二樓主祀玉皇大帝金身，信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
+  tianguan:  { name: '天官財神', photo: '../../photos/天官財神.jpg', desc: '天官財神掌管賜福，信眾祈求財運亨通、福星高照。' },
+  xuantian:  { name: '玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
+  jinmu:     { name: '王母娘娘', photo: '../../photos/王母娘娘.jpg', desc: '王母娘娘即瑤池王母，為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
+  santaizi:  { name: '三太子', photo: '../../photos/三太子.jpg', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。' },
+  shijia:    { name: '釋迦牟尼佛', photo: '../../photos/釋迦牟尼.jpg', desc: '佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。' },
+  guanyin:   { name: '觀世音菩薩', photo: '../../photos/觀世音菩薩.jpg', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。' },
+  dizang1f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-1f.jpg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。信眾祈求超渡先人、冤親債主化解。' },
+  dizang3f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-3f.jpeg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。' },
+  guansheng: { name: '關聖帝君', photo: '../../photos/關聖帝君.jpg', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。' }
 };
 
 const FLOOR_INFO = {
   1: { name: '一樓', desc: '主祀包公祖，左側財神爺、右側送子觀音，供桌下虎爺，前方另有三太子與天公。' },
-  2: { name: '二樓', desc: '主祀玉皇大帝（天公），左側天官財神，右側金母娘娘與玄天上帝同龕供奉。' },
+  2: { name: '二樓', desc: '主祀玉皇大帝（天公），左側天官財神，右側王母娘娘與玄天上帝同龕供奉。' },
   3: { name: '三樓', desc: '主祀釋迦牟尼佛，右側觀世音菩薩，左側觀音小像、地藏王菩薩，左下關聖帝君。' }
 };
 
@@ -636,7 +636,6 @@ function showDeity(id) {
   currentDeityKey  = id;
   currentDeityName = deity.name;
   document.getElementById('modal-title').textContent = deity.name;
-  document.getElementById('modal-subtitle').textContent = deity.subtitle;
   document.getElementById('modal-photo').src = deity.photo;
   document.getElementById('modal-photo').alt = deity.name;
   document.getElementById('modal-desc').textContent = deity.desc;
