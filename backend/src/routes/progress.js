@@ -5,6 +5,16 @@ const { progressCache } = require("../util/progress-cache");
 const Progress = require("../models/Progress");
 
 const router = express.Router();
+const MAX_STORY = 6;
+const MAX_CHALLENGE = 5;
+
+function sanitizeProgress(progress) {
+  return {
+    unlockedStory: Math.min(MAX_STORY, Math.max(1, Number(progress?.unlockedStory) || 1)),
+    unlockedChallenge: Math.min(MAX_CHALLENGE, Math.max(1, Number(progress?.unlockedChallenge) || 1)),
+    updatedAt: progress?.updatedAt
+  };
+}
 
 router.use(authMiddleware);
 
@@ -15,7 +25,7 @@ router.get("/", progressReadLimiter, async (req, res) => {
   if (cached) {
     res.set("Cache-Control", "private, max-age=10");
     res.set("X-Cache", "HIT");
-    return res.json(cached);
+    return res.json(sanitizeProgress(cached));
   }
 
   let progress = await Progress.findOne({ userId });
@@ -27,11 +37,7 @@ router.get("/", progressReadLimiter, async (req, res) => {
     });
   }
 
-  const payload = {
-    unlockedStory: progress.unlockedStory,
-    unlockedChallenge: progress.unlockedChallenge,
-    updatedAt: progress.updatedAt
-  };
+  const payload = sanitizeProgress(progress);
   progressCache.set(userId, payload);
 
   res.set("Cache-Control", "private, max-age=10");

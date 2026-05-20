@@ -129,6 +129,7 @@
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../homepage/index.html">遊戲介紹</a>
 <a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../challenge_map">遊戲關卡</a>
 <a class="text-[#6c171a] dark:text-[#ba1a1a] border-b-2 border-[#6c171a] pb-1" href="../story_map">遊戲故事</a>
+<a class="text-[#755750] dark:text-[#e7e2da] hover:text-[#6c171a] transition-colors duration-300" href="../profile/index.html">我的進度</a>
 <div id="user-nav-slot"></div>
 </nav>
 <button id="mobile-nav-toggle" class="md:hidden inline-flex items-center justify-center w-10 h-10 border border-[#dcc0be] text-[#6c171a]" aria-label="開啟選單">
@@ -157,24 +158,24 @@
 <span id="chapter-title" class="font-headline text-primary font-bold tracking-[0.18em] md:tracking-[0.3em] text-base md:text-lg uppercase text-center">序章：冥府之鑰</span>
 <div class="w-12 h-px bg-primary/30"></div>
 </div>
-<div class="relative parchment-texture p-4 sm:p-6 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
+<div class="relative parchment-texture p-8 sm:p-8 md:p-10 shadow-2xl rounded-sm border border-outline-variant/10 max-w-3xl w-full" style="border: 1px solid rgba(139, 46, 46, 0.1);">
 <div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-12 h-12 md:w-16 md:h-16 bg-primary flex items-center justify-center text-on-primary font-headline text-xl md:text-2xl font-black rounded-sm shadow-lg">
 <span id="chapter-badge">壹</span>
                 </div>
 <article class="space-y-6 md:space-y-8 text-on-surface leading-loose text-base sm:text-lg md:text-xl font-headline tracking-wide">
-<p id="story-paragraph-1" class="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
+<p id="story-paragraph-1" class="whitespace-pre-line first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:mr-3 first-letter:float-left">
 
                     </p>
-<p id="story-paragraph-2">
+<p id="story-paragraph-2" class="whitespace-pre-line">
 
                     </p>
 <div class="py-6 flex justify-center hidden">
 <img id="story-image" class="rounded-sm shadow-xl grayscale contrast-125 border-4 border-surface-container-high w-full max-w-md" fetchpriority="high" decoding="async" data-alt="close-up of ancient Chinese stone carvings with intricate dragon patterns and weathered textures under dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_5arDhVuKNrBwuDQQKdFzgryfPQjKyL0BJL6tyY7mj6SIt2w9dCrLUxHvjn3DyTmJIAgEo1K5I7jl6-i9-VLm6dZH0O76eonJZwEL8goM4t6Iq2Ms3DVC2SyLcZQC45YWdhe3ZP2SPLJL0UxwxiHl215y-mn4X4un9RJB4OvqPzqkWKE98KzwdbdiCM-IcfrjV2GD2MFxbfrDHxh90weFwNP3UbfcWdStVVd6ZycJY-injCHeI2X7Que0wx3mdtp5fiNVu66YF3-J"/>
 </div>
-<p id="story-paragraph-3">
+<p id="story-paragraph-3" class="whitespace-pre-line">
 
                     </p>
-<p id="story-paragraph-4">
+<p id="story-paragraph-4" class="whitespace-pre-line">
 
                     </p>
 <p id="story-highlight" class="text-on-primary-fixed-variant font-bold italic border-l-4 border-primary/20 pl-6">
@@ -270,22 +271,27 @@
     navEl.classList.add("opacity-100");
   }
 
-  function typeText(element, text, speed = 35, onTick = null) {
-    return new Promise((resolve) => {
-      element.textContent = "";
-      let index = 0;
+  function normalizeStoryText(text) {
+    return String(text || "").replace(/<br\s*\/?>/gi, "\n");
+  }
 
-      const timer = setInterval(() => {
-        element.textContent += text[index];
-        index += 1;
-        if (typeof onTick === "function") onTick();
+  function setParagraphContent(element, text) {
+    element.textContent = normalizeStoryText(text);
+  }
 
-        if (index >= text.length) {
-          clearInterval(timer);
-          resolve();
-        }
-      }, speed);
-    });
+  function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(element, text, speed = 35, onTick = null) {
+    const value = normalizeStoryText(text);
+    element.textContent = "";
+
+    for (let i = 0; i < value.length; i += 1) {
+      element.textContent += value[i];
+      if (typeof onTick === "function") onTick();
+      await wait(speed);
+    }
   }
 
   async function typeStoryContent(chapter, options = {}) {
@@ -308,7 +314,7 @@
     if (skipTyping) {
       for (const item of storyElements) {
         const el = document.getElementById(item.id);
-        if (el) el.textContent = item.text || "";
+        if (el) setParagraphContent(el, item.text || "");
       }
       return;
     }
@@ -351,7 +357,7 @@
     const chapters = await response.json();
     const progress = access.progress;
     const chapter = chapters[String(chapterNumber)] || chapters["1"];
-    const maxChapter = 5;
+    const maxChapter = Math.max(...Object.keys(chapters).map(Number));
     const allowedChapter = chapterNumber;
 
     document.getElementById("chapter-title").textContent = chapter.title;
@@ -393,12 +399,12 @@
         window.location.href = `../challenge/index.html?stage=${allowedChapter}`;
       };
     } else if (allowedChapter >= maxChapter) {
-      nextLink.href = "../challenge_map/index.html";
-      nextText.textContent = "前往關卡地圖";
+      nextLink.href = "../homepage/index.html";
+      nextText.textContent = "旅程結束 · 返回首頁";
       nextLink.onclick = null;
     } else {
-      nextLink.href = "../challenge_map/index.html";
-      nextText.textContent = "前往關卡地圖";
+      nextLink.href = `../story/index.html?chapter=${allowedChapter + 1}`;
+      nextText.textContent = `繼續故事：第 ${allowedChapter + 1} 章`;
       nextLink.onclick = null;
     }
 

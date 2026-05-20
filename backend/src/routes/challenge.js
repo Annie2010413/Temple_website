@@ -6,13 +6,13 @@ const { submitLimiter } = require("../middleware/limiters");
 const { invalidateProgressCache } = require("../util/progress-cache");
 
 const router = express.Router();
-const MAX_STORY = 7;
+const MAX_STORY = 6;
 const MAX_CHALLENGE = 5;
 const ANSWERS = {
   1: "13",
-  2: "靈願善心現",
+  2: "2",
   3: "23322333",
-  4: "2",
+  4: "靈願善心現",
   5: "BE6128"
 };
 
