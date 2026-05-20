@@ -15,6 +15,7 @@ services/puzzle/js/auth-config.js
 
 # Claude Code
 .claude/
+CLAUDE.md
 
 # Misc
 廟的地圖.pdf
