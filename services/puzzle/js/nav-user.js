@@ -85,8 +85,9 @@
       const width = slot?.clientWidth || wrapEl?.clientWidth || window.innerWidth;
       return Math.max(200, Math.min(280, width - 24));
     }
-    const menuWidth = wrapEl?.closest(".puzzle-nav__user-menu")?.clientWidth || 170;
-    return Math.max(150, Math.min(280, menuWidth - 16));
+    const menu = wrapEl?.closest(".puzzle-nav__user-menu");
+    const menuWidth = menu?.clientWidth || 220;
+    return Math.max(200, Math.min(280, menuWidth - 20));
   }
 
   function createUserMenu({ isMobile = false } = {}) {
@@ -177,6 +178,10 @@
         loginBtn.textContent = "載入中...";
         try {
           await ensureGoogleReady();
+          if (!isMobile) {
+            menu.style.minWidth = "220px";
+          }
+          googleBtnWrap.style.display = "block";
           if (!googleRendered) {
             window.google.accounts.id.initialize({
               client_id: window.PUZZLE_GOOGLE_CLIENT_ID,
@@ -185,6 +190,7 @@
                 document.dispatchEvent(new CustomEvent("puzzle-auth-changed"));
               }
             });
+            googleBtnWrap.innerHTML = "";
             window.google.accounts.id.renderButton(googleBtnWrap, {
               theme: "outline",
               size: "medium",
@@ -194,7 +200,6 @@
             });
             googleRendered = true;
           }
-          googleBtnWrap.style.display = "block";
           loginBtn.textContent = "收合 Google 登入";
         } catch (_error) {
           loginBtn.textContent = "Google 登入失敗";

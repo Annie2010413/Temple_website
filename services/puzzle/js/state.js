@@ -5,6 +5,7 @@
   const API_BASE = window.PUZZLE_API_BASE || "http://localhost:5501";
   const MAX_STORY = 6;
   const MAX_CHALLENGE = 5;
+  const DEFAULT_PROGRESS = { unlockedStory: 1, unlockedChallenge: 1 };
 
   function getInventory() {
     try {
@@ -179,14 +180,22 @@
 
   async function syncProgressAfterSignIn() {
     try {
-      return sanitizeProgress(await getCloudProgress());
+      const cloud = sanitizeProgress(await getCloudProgress());
+      setGuestProgress(cloud);
+      return cloud;
     } catch (_error) {
-      return { unlockedStory: 1, unlockedChallenge: 1 };
+      return getGuestProgress();
     }
+  }
+
+  function resetGuestSession() {
+    setGuestProgress(DEFAULT_PROGRESS);
+    clearInventory();
   }
 
   function signOut() {
     clearAuth();
+    resetGuestSession();
   }
 
   window.PuzzleState = {

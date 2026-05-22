@@ -1,6 +1,7 @@
 /* Unified puzzle top navigation */
 .puzzle-nav {
   background-color: #f2ede5;
+  overflow: visible;
 }
 
 .puzzle-nav #mobile-nav-menu {
@@ -23,6 +24,7 @@
   font-size: 0.875rem;
   font-weight: 700;
   letter-spacing: 0.1em;
+  overflow: visible;
 }
 
 .puzzle-nav__menu {
@@ -82,6 +84,12 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   display: none;
   box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Desktop header: room for Google Sign-In iframe (~200px) */
+#user-nav-slot .puzzle-nav__user-menu {
+  min-width: 220px;
 }
 
 .puzzle-nav__user-menu-item {
@@ -112,14 +120,24 @@
 
 .puzzle-nav__user-google {
   display: none;
-  padding: 8px 10px 2px;
+  padding: 8px 6px 4px;
   max-width: 100%;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.puzzle-nav__user-google > div,
-.puzzle-nav__user-google iframe {
+#user-nav-slot .puzzle-nav__user-google {
+  overflow: visible;
+  min-width: 0;
+}
+
+.puzzle-nav__user-google > div {
+  display: flex;
+  justify-content: center;
+}
+
+#user-nav-slot-mobile .puzzle-nav__user-google > div,
+#user-nav-slot-mobile .puzzle-nav__user-google iframe {
   max-width: 100% !important;
 }
 
