@@ -32,7 +32,7 @@ const NEWS = [
 
 ✨ 隨香同行，共沐神恩 ✨
 `,
-    image: '進香行程.png',
+    image: 'news_picture/進香行程.png',
   },
   
   {

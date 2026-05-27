@@ -360,6 +360,11 @@
   <a href="../../index.html#info">交通資訊</a>
   <a href="../../index.html#contact">聯絡我們</a>
   <a href="../../committee.html">管理委員會名單</a>
+  <a href="../../services/puzzle/">　解謎遊戲</a>
+  <a href="../../services/worship/">　線上參拜</a>
+  <a href="../../services/signup/">　活動報名</a>
+  <a href="../../services/light/">　線上點燈</a>
+  <a href="../../services/fortune/">　線上抽籤</a>
 </div>
 
 <div class="fortune-page">
@@ -389,7 +394,7 @@
     <div class="prayer-box">
       <div class="prayer-label">請在心中默念以下禱詞</div>
       <div class="prayer-text">
-        包公在上，弟子<span class="blank">〇〇〇</span>，國曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生（農曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生），住在<span class="blank">〇〇〇〇〇〇</span>，因<span class="blank">〇〇〇</span>一事，懇請包公作主，賜籤指點，以解弟子心中疑惑。如果包公恩准弟子所求，請應一聖筊。
+        包公祖在上，弟子<span class="blank">〇〇〇</span>，國曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生（農曆<span class="blank">〇〇</span>年<span class="blank">〇〇</span>月<span class="blank">〇〇</span>日生），住在<span class="blank">〇〇〇〇〇〇</span>，因<span class="blank">〇〇〇</span>一事，懇請包公祖作主，賜籤指點，以解弟子心中疑惑。如果包公祖恩准弟子所求，請應一聖筊。
       </div>
     </div>
 
@@ -660,6 +665,7 @@ jbThrowBtn.addEventListener('click', () => {
     closeJiaobei();
     phaseAsk.style.display = 'none';
     phaseTube.style.display = '';
+    drawBtn.disabled = false;
     jbMode = 'throw';
   } else if (jbMode === 'view') {
     // confirm 階段聖筊 → 開示籤詩
