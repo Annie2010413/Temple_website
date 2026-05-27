@@ -170,7 +170,7 @@
 .jb-piece {
   width: 96px;
   aspect-ratio: 897 / 1438;
-  background-image: url('聖筊.png');
+  background-image: url('聖筊.webp');
   background-repeat: no-repeat;
   background-size: 200% auto;
   mix-blend-mode: multiply;
@@ -404,14 +404,14 @@
   <!-- ═══ 第一階段：搖籤筒 ═══ -->
   <div id="phaseTube" style="display:none;">
     <div class="tube-wrap" id="tubeWrap" title="點擊搖籤">
-      <img class="tube-img" src="籤筒.png" alt="籤筒">
+      <img class="tube-img" src="籤筒.webp" alt="籤筒">
     </div>
     <button class="draw-btn" id="drawBtn">搖 籤 筒</button>
   </div>
 
   <!-- ═══ 第二階段：抽出籤，等待擲筊確認 ═══ -->
   <div class="stick-area" id="stickArea">
-    <img class="stick-img" src="籤.png" alt="抽出的籤">
+    <img class="stick-img" src="籤.webp" alt="抽出的籤">
     <div class="stick-label" id="stickLabel"></div>
     <div class="stick-hint">請擲筊確認此籤是否為包公祖所指示</div>
     <button class="jiaobei-btn" id="jiaoBtn">擲 筊 確 認</button>
@@ -641,8 +641,8 @@ function resetJbBlocks() {
   const pr = document.getElementById('jb-piece-right');
   pl.classList.remove('throw-left');
   pr.classList.remove('throw-right');
-  pl.style.backgroundImage = "url('聖筊.png')";
-  pr.style.backgroundImage = "url('聖筊.png')";
+  pl.style.backgroundImage = "url('聖筊.webp')";
+  pr.style.backgroundImage = "url('聖筊.webp')";
   document.getElementById('jb-fly-wrap').style.display = 'flex';
   const ri = document.getElementById('jb-result-img');
   ri.classList.remove('landing');
@@ -703,7 +703,7 @@ function doThrowJiaobei() {
   const rand = Math.random();
   let text, imgSrc, isHoly;
   if (rand < 0.50) {
-    imgSrc = '聖筊.png';
+    imgSrc = '聖筊.webp';
     isHoly = true;
     if (jbPurpose === 'ask') {
       text = '聖筊　包公祖恩准賜籤！';
@@ -711,7 +711,7 @@ function doThrowJiaobei() {
       text = '聖筊　包公祖已應允此籤！';
     }
   } else if (rand < 0.75) {
-    imgSrc = '笑筊.png';
+    imgSrc = '笑筊.webp';
     isHoly = false;
     if (jbPurpose === 'ask') {
       text = '笑筊\n包公祖尚未應允，請換個方式再問一次';
@@ -719,7 +719,7 @@ function doThrowJiaobei() {
       text = '笑筊\n此籤尚非包公祖所指示，請重新抽籤';
     }
   } else {
-    imgSrc = '陰筊.png';
+    imgSrc = '陰筊.webp';
     isHoly = false;
     if (jbPurpose === 'ask') {
       text = '陰筊\n包公祖暫不應允，請換個方式再問一次';
