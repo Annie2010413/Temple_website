@@ -6,7 +6,7 @@
       "targetIndex": 0,
       "id": "stage-5-YW8126",
       "name": "YW8126",
-      "image": "./assets/ar/clean_bg_1.png",
+      "image": "./assets/ar/clean_bg_1.webp",
       "description": "YW8126"
     },
     {
@@ -14,7 +14,7 @@
       "targetIndex": 1,
       "id": "stage-5-RD464",
       "name": "RD464",
-      "image": "./assets/ar/clean_bg_2.png",
+      "image": "./assets/ar/clean_bg_2.webp",
       "description": "RD464"
     },
     {
@@ -22,7 +22,7 @@
       "targetIndex": 2,
       "id": "stage-5-GY6106",
       "name": "GY6106",
-      "image": "./assets/ar/clean_bg_3.png",
+      "image": "./assets/ar/clean_bg_3.webp",
       "description": "GY6106"
     },
     {
@@ -30,7 +30,7 @@
       "targetIndex": 3,
       "id": "stage-5-PK112",
       "name": "PK112",
-      "image": "./assets/ar/clean_bg_4.png",
+      "image": "./assets/ar/clean_bg_4.webp",
       "description": "PK112"
     },
     {
@@ -38,7 +38,7 @@
       "targetIndex": 4,
       "id": "stage-5-GN023",
       "name": "GN023",
-      "image": "./assets/ar/clean_bg_5.png",
+      "image": "./assets/ar/clean_bg_5.webp",
       "description": "GN023"
     },
     {
@@ -46,7 +46,7 @@
       "targetIndex": 5,
       "id": "stage-5-puzzle",
       "name": "???",
-      "image": "./assets/ar/clean_bg_6.png",
+      "image": "./assets/ar/clean_bg_6.webp",
       "description": "???"
     }
   ]
