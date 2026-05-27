@@ -282,6 +282,7 @@
 </div>
 
 <script src="../../js/runtime-config.js"></script>
+<script src="../../js/image-url.js"></script>
 <script src="../../js/state.js"></script>
 <script src="../../js/puzzle-gate.js"></script>
 <script src="../../js/nav-user.js"></script>
@@ -494,7 +495,9 @@
 
     const challengeImage = document.getElementById("challenge-image");
     if (stage.image) {
-      challengeImage.src = stage.image;
+      challengeImage.loading = "lazy";
+      challengeImage.decoding = "async";
+      challengeImage.src = window.PuzzleImageUrl?.resolve(stage.image) || stage.image;
       challengeImage.hidden = false;
     } else {
       challengeImage.removeAttribute("src");

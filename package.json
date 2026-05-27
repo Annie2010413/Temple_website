@@ -1,5 +1,11 @@
 {
+  "scripts": {
+    "optimize:images": "node scripts/optimize-puzzle-images.mjs"
+  },
   "dependencies": {
     "mongodb": "^7.2.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
   }
 }
