@@ -316,7 +316,7 @@
     .jb-piece {
       width: 96px;
       aspect-ratio: 897 / 1438; /* 圖寬897×高719，每半片寬=897/2，比例=897:(2×719) */
-      background-image: url('聖筊.png');
+      background-image: url('聖筊.webp');
       background-repeat: no-repeat;
       background-size: 200% auto;
       mix-blend-mode: multiply;
@@ -460,7 +460,7 @@
     <!-- ══════════ 一樓 ══════════ -->
     <div class="floor-scene" id="floor-1" style="display:block; height:auto;">
       <div class="map-1f-wrap">
-        <img src="f1.png" alt="一樓正殿地圖">
+        <img src="f1.webp" alt="一樓正殿地圖">
         <button class="map-hotspot" style="left:50%;top:30%;" onclick="showDeity('baogong')"></button>   <!-- 包公 -->
         <button class="map-hotspot" style="left:31%;top:45%;" onclick="showDeity('caishen')"></button>   <!-- 財神爺 -->
         <button class="map-hotspot" style="left:50%;top:60%;" onclick="showDeity('huye')"></button>      <!-- 虎爺 -->
@@ -474,7 +474,7 @@
     <!-- ══════════ 二樓 ══════════ -->
     <div class="floor-scene" id="floor-2" style="display:none; height:auto;">
       <div class="map-1f-wrap">
-        <img src="f2.png" alt="二樓神殿地圖">
+        <img src="f2.webp" alt="二樓神殿地圖">
         <button class="map-hotspot" style="left:49.5%;top:32%;" onclick="showDeity('yuhuang')"></button>   <!-- 玉皇大帝 -->
         <button class="map-hotspot" style="left:26%;top:50%;" onclick="showDeity('tianguan')"></button>  <!-- 天官財神 -->
         <button class="map-hotspot" style="left:71%;top:50%;" onclick="showDeity('jinmu')"></button>     <!-- 王母娘娘 -->
@@ -485,7 +485,7 @@
     <!-- ══════════ 三樓 ══════════ -->
     <div class="floor-scene" id="floor-3" style="display:none; height:auto;">
       <div class="map-1f-wrap">
-        <img src="f3.png" alt="三樓佛殿地圖">
+        <img src="f3.webp" alt="三樓佛殿地圖">
         <button class="map-hotspot" style="left:50%;top:29%;" onclick="showDeity('shijia')"></button>    <!-- 釋迦牟尼佛 -->
         <button class="map-hotspot" style="left:27%;top:50%;" onclick="showDeity('dizang3f')"></button>   <!-- 地藏王菩薩（三樓） -->
         <button class="map-hotspot" style="left:73%;top:50%;" onclick="showDeity('guanyin')"></button>   <!-- 觀世音菩薩 -->
@@ -527,9 +527,9 @@
       <div class="sticks-wrap" id="sticks-wrap">
         <!-- smoke-wrap 在 sticks-wrap 頂端（top:0 = 香炷尖端） -->
         <div class="smoke-wrap" id="smoke-wrap"></div>
-        <img src="香炷.png" class="stick-img">
+        <img src="香炷.webp" class="stick-img">
       </div>
-      <img src="香爐.png" class="burner-img">
+      <img src="香爐.webp" class="burner-img">
     </div>
 
     <div class="overlay-status" id="incense-status">點擊下方按鈕，恭敬上香</div>
@@ -598,21 +598,21 @@
 <script>
 /* ══════════ 神明資料庫 ══════════ */
 const DEITIES = {
-  baogong:   { name: '包公祖', photo: '../../photos/包公.jpg', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。' },
-  songzi:    { name: '送子觀音', photo: '../../photos/送子觀音.jpg', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
-  caishen:   { name: '財神爺', photo: '../../photos/財神爺.jpg', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
-  huye:      { name: '虎爺', photo: '../../photos/虎爺.jpg', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
-  tiangong:  { name: '天公', photo: '../../photos/天公.jpg', desc: '天公即玉皇大帝，為道教最高神祇。一樓正殿前方設有天公爐，信眾入廟先敬天公，祈求國泰民安、風調雨順、闔家平安。' },
-  yuhuang:   { name: '玉皇大帝', photo: '../../photos/玉皇大帝.jpg', desc: '玉皇大帝為道教最高神祇，統御天界萬神。二樓主祀玉皇大帝金身，信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
-  tianguan:  { name: '天官財神', photo: '../../photos/天官財神.jpg', desc: '天官財神掌管賜福，信眾祈求財運亨通、福星高照。' },
-  xuantian:  { name: '玄天上帝', photo: '../../photos/玄天上帝.jpg', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
-  jinmu:     { name: '王母娘娘', photo: '../../photos/王母娘娘.jpg', desc: '王母娘娘即瑤池王母，為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
-  santaizi:  { name: '三太子', photo: '../../photos/三太子.jpg', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。' },
-  shijia:    { name: '釋迦牟尼佛', photo: '../../photos/釋迦牟尼.jpg', desc: '佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。' },
-  guanyin:   { name: '觀世音菩薩', photo: '../../photos/觀世音菩薩.jpg', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。' },
-  dizang1f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-1f.jpg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。信眾祈求超渡先人、冤親債主化解。' },
-  dizang3f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-3f.jpeg', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。' },
-  guansheng: { name: '關聖帝君', photo: '../../photos/關聖帝君.jpg', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。' }
+  baogong:   { name: '包公祖', photo: '../../photos/包公.webp', desc: '本宮主祀神明。民國59年自雲林四湖三條崙海清宮祖廟分靈而來，為祖廟唯一官方認證之分靈。包公以清廉公正、鐵面無私著稱，「日審陽、夜審陰」，是正義與司法的化身。信眾多祈求是非分明、冤屈昭雪、訴訟順利。' },
+  songzi:    { name: '送子觀音', photo: '../../photos/送子觀音.webp', desc: '送子觀音慈悲為懷，專司護佑求子的善男信女。信眾祈求早生貴子、母子平安、子女健康成長。' },
+  caishen:   { name: '財神爺', photo: '../../photos/財神爺.webp', desc: '財神爺掌管天下財運，保佑信眾財源廣進、生意興隆。與包公同在正殿受信眾參拜。' },
+  huye:      { name: '虎爺', photo: '../../photos/虎爺.webp', desc: '虎爺為神明座騎與護衛，民間相信虎爺能咬錢招財、驅邪鎮煞、保護小孩。廟中虎爺供品有雞蛋等。' },
+  tiangong:  { name: '天公', photo: '../../photos/天公.webp', desc: '天公即玉皇大帝，為道教最高神祇。一樓正殿前方設有天公爐，信眾入廟先敬天公，祈求國泰民安、風調雨順、闔家平安。' },
+  yuhuang:   { name: '玉皇大帝', photo: '../../photos/玉皇大帝.webp', desc: '玉皇大帝為道教最高神祇，統御天界萬神。二樓主祀玉皇大帝金身，信眾敬拜天公祈求國泰民安、風調雨順、闔家平安。' },
+  tianguan:  { name: '天官財神', photo: '../../photos/天官財神.webp', desc: '天官財神掌管賜福，信眾祈求財運亨通、福星高照。' },
+  xuantian:  { name: '玄天上帝', photo: '../../photos/玄天上帝.webp', desc: '玄天上帝為北方之神，鎮煞驅邪、護佑平安。信眾祈求身體健康、護佑平安。' },
+  jinmu:     { name: '王母娘娘', photo: '../../photos/王母娘娘.webp', desc: '王母娘娘即瑤池王母，為道教女仙之最高神祇，掌管女仙，護佑女性平安、賜福延壽。' },
+  santaizi:  { name: '三太子', photo: '../../photos/三太子.webp', desc: '三太子哪吒為五營兵馬之統帥，勇猛善戰、嫉惡如仇。年輕人特別喜愛祈求的神明，保佑事業衝勁、考試順利。' },
+  shijia:    { name: '釋迦牟尼佛', photo: '../../photos/釋迦牟尼.webp', desc: '佛祖慈悲度化眾生，信眾禮佛祈求智慧開啟、消災解厄、離苦得樂。' },
+  guanyin:   { name: '觀世音菩薩', photo: '../../photos/觀世音菩薩.webp', desc: '觀世音菩薩聞聲救苦、大慈大悲。信眾祈求消災解厄、身體健康、子女平安。' },
+  dizang1f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-1f.webp', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。信眾祈求超渡先人、冤親債主化解。' },
+  dizang3f:  { name: '地藏王菩薩', photo: '../../photos/地藏王菩薩-3f.webp', desc: '地藏王菩薩發願「地獄不空，誓不成佛」，掌管冥界渡化幽冥眾生。廟中有大型金色地藏王立像，手持錫杖，莊嚴肅穆。信眾祈求超渡先人、冤親債主化解。' },
+  guansheng: { name: '關聖帝君', photo: '../../photos/關聖帝君.webp', desc: '關聖帝君義薄雲天，為忠義的化身。信眾祈求事業順利、防小人、商場得利。' }
 };
 
 const FLOOR_INFO = {
@@ -800,8 +800,8 @@ function resetJbBlocks() {
   pl.classList.remove('throw-left');
   pr.classList.remove('throw-right');
   // 恢復初始圖片（聖筊為預設待擲狀態）
-  pl.style.backgroundImage = "url('聖筊.png')";
-  pr.style.backgroundImage = "url('聖筊.png')";
+  pl.style.backgroundImage = "url('聖筊.webp')";
+  pr.style.backgroundImage = "url('聖筊.webp')";
   document.getElementById('jb-fly-wrap').style.display = 'flex';
   const ri = document.getElementById('jb-result-img');
   ri.classList.remove('landing');
@@ -834,13 +834,13 @@ function throwJiaobei() {
   let text, imgSrc;
   if (rand < 0.50) {
     text   = '聖筊　神明已應允';
-    imgSrc = '聖筊.png';
+    imgSrc = '聖筊.webp';
   } else if (rand < 0.75) {
     text   = '笑筊\n可能是您的問題敘述不清、事情尚不明朗、問題太急或是神明認為這件事不需特別指示';
-    imgSrc = '笑筊.png';
+    imgSrc = '笑筊.webp';
   } else {
     text   = '陰筊　暫時不許，改天再問';
-    imgSrc = '陰筊.png';
+    imgSrc = '陰筊.webp';
   }
 
   // 左右各自飛出（右側稍延遲 75ms，增加真實感）

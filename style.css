@@ -161,8 +161,8 @@
    #hero {
      position: relative; 
      height: 600px; /* 稍微增加高度，展現廟宇氣勢 */
-     /* 替換下方 url 中的圖片路徑，例如 'images/temple-main.jpg' */
-     background: url('web_picture/包公廟.png') no-repeat center center;
+     /* 替換下方 url 中的圖片路徑，例如 'images/temple-main.webp' */
+     background: url('web_picture/包公廟.webp') no-repeat center center;
      background-size: cover;
      background-attachment: fixed; /* 滾動時有視差效果，若不喜歡可刪除 */
      display: flex; 

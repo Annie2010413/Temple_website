@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "optimize:images": "node scripts/optimize-puzzle-images.mjs"
+    "optimize:puzzle-images": "node scripts/optimize-puzzle-images.mjs",
+    "optimize:site-images": "node scripts/optimize-site-images.mjs",
+    "optimize:images": "node scripts/optimize-puzzle-images.mjs && node scripts/optimize-site-images.mjs"
   },
   "dependencies": {
     "mongodb": "^7.2.0"
