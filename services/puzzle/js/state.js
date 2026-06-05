@@ -92,11 +92,18 @@
 
   async function getProgress() {
     const auth = getAuth();
-    if (!auth?.token) return getGuestProgress();
+    const local = getGuestProgress();
+    if (!auth?.token) return local;
     try {
       const cloud = sanitizeProgress(await getCloudProgress());
-      setGuestProgress(cloud);
-      return cloud;
+      // Never let a stale cloud response roll back progress we already advanced locally
+      // (e.g. right after challenge submit, before the next page gate runs).
+      const merged = sanitizeProgress({
+        unlockedStory: Math.max(local.unlockedStory, cloud.unlockedStory),
+        unlockedChallenge: Math.max(local.unlockedChallenge, cloud.unlockedChallenge)
+      });
+      setGuestProgress(merged);
+      return merged;
     } catch (error) {
       if (String(error?.message || "").includes("401")) {
         clearAuth();
