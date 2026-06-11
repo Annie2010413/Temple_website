@@ -329,7 +329,11 @@ function applyConfig(val) {
   }
 }
 
-function showErr(id) { document.getElementById('err-' + id).style.display = 'block'; }
+function showErr(id, msg) {
+  const el = document.getElementById('err-' + id);
+  if (msg) el.textContent = msg;
+  el.style.display = 'block';
+}
 function clearErr(id) { document.getElementById('err-' + id).style.display = 'none'; }
 
 // 後端 API（不再直接打 Apps Script，由後端代理 + 驗證）
