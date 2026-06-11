@@ -17,7 +17,7 @@ function validate(data) {
   if (!VALID_LAMPS.includes(data.lamp)) errors.push("燈種無效，請從清單選擇");
   if (!data.name || data.name.length < 1 || data.name.length > 30) errors.push("姓名長度需介於 1～30 字");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data.birthday || "")) errors.push("出生年月日格式錯誤（須為 YYYY-MM-DD）");
-  if (!data.address || data.address.length < 5 || data.address.length > 100) errors.push("住址長度需介於 5～100 字（例：新北市三重區重新路一段100號）");
+  if (!data.address || data.address.length < 5 || data.address.length > 100) errors.push("住址長度需介於 5～100 字（例：三重區正義南路89巷29號）");
   if (!/^09\d{8}$/.test(data.phone || "")) errors.push("手機號碼須為 09 開頭共 10 碼（例：0912345678）");
   if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.push("Email 格式錯誤（例：abc@gmail.com）");
   const amount = Number(data.amount);

@@ -335,6 +335,16 @@ function showErr(id, msg) {
 function clearErr(id) {
   document.getElementById('err-' + id).style.display = 'none';
 }
+function scrollToFirstError() {
+  const errs = document.querySelectorAll('.form-err-msg');
+  for (const e of errs) {
+    if (e.style.display === 'block') {
+      const row = e.closest('.form-row') || e;
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+}
 
 // 後端 API（不再直接打 Apps Script）
 // 本機開發：http://localhost:5502
@@ -369,7 +379,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
   else clearErr('birthday');
 
   if (!address) { showErr('address', '請填寫住址'); valid = false; }
-  else if (address.length < 5) { showErr('address', '住址過短，請完整填寫縣市＋區＋街道門號（例：新北市三重區重新路一段100號）'); valid = false; }
+  else if (address.length < 5) { showErr('address', '住址過短，請完整填寫縣市＋區＋街道門號（例：三重區正義南路89巷29號）'); valid = false; }
   else if (address.length > 100) { showErr('address', '住址過長，請勿超過 100 字'); valid = false; }
   else clearErr('address');
 
@@ -389,7 +399,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
   else if (!/^\d{5}$/.test(code)) { showErr('transfer', '匯款後五碼須為 5 位數字（例：12345）'); valid = false; }
   else clearErr('transfer');
 
-  if (!valid) return;
+  if (!valid) { scrollToFirstError(); return; }
 
   const btn = document.getElementById('submit-btn');
   const errBox = document.getElementById('submit-error');
@@ -416,6 +426,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
       btn.textContent = '送出申請';
       errBox.textContent = detail ? '送出失敗：' + detail : fallback;
       errBox.style.display = 'block';
+      errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -427,6 +438,7 @@ document.getElementById('light-form').addEventListener('submit', async function(
     btn.textContent = '送出申請';
     errBox.textContent = '送出失敗，請稍後再試或改撥打廟方電話：(02)8976-1766';
     errBox.style.display = 'block';
+    errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 });
 </script>
