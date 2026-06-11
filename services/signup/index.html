@@ -335,6 +335,16 @@ function showErr(id, msg) {
   el.style.display = 'block';
 }
 function clearErr(id) { document.getElementById('err-' + id).style.display = 'none'; }
+function scrollToFirstError() {
+  const errs = document.querySelectorAll('.form-err-msg');
+  for (const e of errs) {
+    if (e.style.display === 'block') {
+      const row = e.closest('.form-row') || e;
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+}
 
 // 後端 API（不再直接打 Apps Script，由後端代理 + 驗證）
 const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -367,7 +377,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
   if (!amount || Number(amount) <= 0) { showErr('amount'); valid = false; } else clearErr('amount');
   if (!/^\d{5}$/.test(code))    { showErr('transfer'); valid = false; } else clearErr('transfer');
 
-  if (!valid) return;
+  if (!valid) { scrollToFirstError(); return; }
 
   const btn    = document.getElementById('submit-btn');
   const errBox = document.getElementById('submit-error');
@@ -404,6 +414,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
       btn.textContent = '送出申請';
       errBox.textContent = detail ? '送出失敗：' + detail : fallback;
       errBox.style.display = 'block';
+      errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -415,6 +426,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
     btn.textContent = '送出申請';
     errBox.textContent = '送出失敗，請稍後再試或改撥打廟方電話：(02)8976-1766';
     errBox.style.display = 'block';
+    errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 });
 </script>
