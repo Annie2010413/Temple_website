@@ -327,8 +327,10 @@ document.getElementById('lamp-type').addEventListener('change', function() {
   });
 });
 
-function showErr(id) {
-  document.getElementById('err-' + id).style.display = 'block';
+function showErr(id, msg) {
+  const el = document.getElementById('err-' + id);
+  if (msg) el.textContent = msg;
+  el.style.display = 'block';
 }
 function clearErr(id) {
   document.getElementById('err-' + id).style.display = 'none';
@@ -355,14 +357,37 @@ document.getElementById('light-form').addEventListener('submit', async function(
   const amount = document.getElementById('amount').value.trim();
   const code = document.getElementById('transfer-code').value.trim();
 
-  if (!lamp)    { showErr('lamp');     valid = false; } else clearErr('lamp');
-  if (!name)    { showErr('name');     valid = false; } else clearErr('name');
-  if (!birthday){ showErr('birthday'); valid = false; } else clearErr('birthday');
-  if (!address) { showErr('address');  valid = false; } else clearErr('address');
-  if (!/^09\d{8}$/.test(phone)) { showErr('phone'); valid = false; } else clearErr('phone');
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email'); valid = false; } else clearErr('email');
-  if (!amount || Number(amount) <= 0) { showErr('amount'); valid = false; } else clearErr('amount');
-  if (!/^\d{5}$/.test(code))    { showErr('transfer'); valid = false; } else clearErr('transfer');
+  // 與後端規則對齊
+  if (!lamp) { showErr('lamp', '請選擇燈種'); valid = false; } else clearErr('lamp');
+
+  if (!name) { showErr('name', '請輸入姓名'); valid = false; }
+  else if (name.length > 30) { showErr('name', '姓名請勿超過 30 字'); valid = false; }
+  else clearErr('name');
+
+  if (!birthday) { showErr('birthday', '請填寫出生年月日'); valid = false; }
+  else if (!/^\d{4}-\d{2}-\d{2}$/.test(birthday)) { showErr('birthday', '出生年月日格式錯誤，請使用日期選擇器（例：1990-01-15）'); valid = false; }
+  else clearErr('birthday');
+
+  if (!address) { showErr('address', '請填寫住址'); valid = false; }
+  else if (address.length < 5) { showErr('address', '住址過短，請完整填寫縣市＋區＋街道門號（例：新北市三重區重新路一段100號）'); valid = false; }
+  else if (address.length > 100) { showErr('address', '住址過長，請勿超過 100 字'); valid = false; }
+  else clearErr('address');
+
+  if (!phone) { showErr('phone', '請填寫手機號碼'); valid = false; }
+  else if (!/^09\d{8}$/.test(phone)) { showErr('phone', '手機號碼格式錯誤，須為 09 開頭共 10 碼（例：0912345678）'); valid = false; }
+  else clearErr('phone');
+
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('email', 'Email 格式不正確（例：abc@gmail.com）'); valid = false; }
+  else clearErr('email');
+
+  if (!amount) { showErr('amount', '請填寫匯款金額'); valid = false; }
+  else if (Number(amount) <= 0) { showErr('amount', '金額需大於 0'); valid = false; }
+  else if (Number(amount) > 2000) { showErr('amount', '金額超過上限，單筆最高 2000 元，金額較高請來電洽詢'); valid = false; }
+  else clearErr('amount');
+
+  if (!code) { showErr('transfer', '請填寫匯款後五碼'); valid = false; }
+  else if (!/^\d{5}$/.test(code)) { showErr('transfer', '匯款後五碼須為 5 位數字（例：12345）'); valid = false; }
+  else clearErr('transfer');
 
   if (!valid) return;
 
