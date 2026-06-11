@@ -389,8 +389,19 @@ document.getElementById('signup-form').addEventListener('submit', async function
         amount
       })
     });
-    const result = await resp.json().catch(() => ({ success: false }));
-    if (!result.success) throw new Error(result.error || '送出失敗');
+    const result = await resp.json().catch(() => null);
+    if (!result || !result.success) {
+      const detail = result && (
+        (Array.isArray(result.errors) && result.errors.join('、')) ||
+        result.error
+      );
+      const fallback = '送出失敗，請稍後再試或改撥打廟方電話：(02)8976-1766';
+      btn.disabled = false;
+      btn.textContent = '送出申請';
+      errBox.textContent = detail ? '送出失敗：' + detail : fallback;
+      errBox.style.display = 'block';
+      return;
+    }
 
     document.getElementById('signup-form').style.display = 'none';
     document.getElementById('success-box').style.display = 'block';
